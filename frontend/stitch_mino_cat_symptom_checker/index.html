@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mino — Salud preventiva para tu gato</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Tokens ─────────────────────────────────────── */
+    :root {
+      --cream:      #faf8f5;
+      --cream-mid:  #f0ebe3;
+      --terra:      #a84227;
+      --terra-dark: #8a3420;
+      --terra-pale: #f5ede9;
+      --ink:        #2d2420;
+      --ink-soft:   #6b5c57;
+      --white:      #ffffff;
+
+      --ff-serif:   'DM Serif Display', Georgia, serif;
+      --ff-sans:    'DM Sans', system-ui, sans-serif;
+
+      --r-sm:  12px;
+      --r-md:  20px;
+      --r-lg:  32px;
+      --r-xl:  48px;
+    }
+
+    /* ─── Reset ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--cream);
+      color: var(--ink);
+      font-family: var(--ff-sans);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── Layout wrapper ─────────────────────────────── */
+    .page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 20px 60px;
+      max-width: 480px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ─── Header ─────────────────────────────────────── */
+    .site-header {
+      width: 100%;
+      padding: 36px 0 0;
+      text-align: center;
+    }
+    .logo {
+      font-family: var(--ff-serif);
+      font-size: clamp(2.6rem, 10vw, 3.4rem);
+      color: var(--terra);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      user-select: none;
+    }
+    .logo-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--terra);
+      border-radius: 50%;
+      margin-left: 2px;
+      vertical-align: middle;
+      margin-bottom: 8px;
+    }
+
+    /* ─── Hero image ─────────────────────────────────── */
+    .hero-img-wrap {
+      margin-top: 32px;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      background: var(--cream-mid);
+      position: relative;
+      /* Signature element: a subtle warm vignette */
+      box-shadow:
+        0 1px 2px rgba(45,36,32,.04),
+        0 8px 32px rgba(168,66,39,.10),
+        inset 0 0 0 1px rgba(168,66,39,.07);
+    }
+
+    /* Placeholder cat illustration via CSS */
+    .hero-img-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 60%, #e8ddd5 0%, #d9cec6 55%, #c8bdb4 100%);
+    }
+
+    /* Silhouette of a seated cat — pure CSS */
+    .cat-silhouette {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 52%;
+      height: 88%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .cat-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 4px 16px rgba(45,36,32,.18));
+    }
+
+    .placeholder-label {
+      position: absolute;
+      bottom: 16px;
+      right: 18px;
+      font-family: var(--ff-sans);
+      font-size: 0.68rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(250,248,245,.75);
+      backdrop-filter: blur(6px);
+      padding: 4px 10px;
+      border-radius: 99px;
+      border: 1px solid rgba(168,66,39,.12);
+    }
+
+    /* ─── Text block ─────────────────────────────────── */
+    .hero-text {
+      margin-top: 28px;
+      text-align: center;
+    }
+    .hero-text h1 {
+      font-family: var(--ff-serif);
+      font-size: clamp(1.65rem, 6.5vw, 2.05rem);
+      line-height: 1.22;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+    }
+    .hero-text h1 em {
+      font-style: italic;
+      color: var(--terra);
+    }
+    .hero-text .subtitle {
+      margin-top: 14px;
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--ink-soft);
+      max-width: 340px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ─── Trust chip ─────────────────────────────────── */
+    .chip-row {
+      margin-top: 20px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: var(--terra);
+      background: var(--terra-pale);
+      border-radius: 99px;
+      padding: 5px 12px;
+      border: 1px solid rgba(168,66,39,.14);
+    }
+    .chip-icon { font-size: 0.85rem; }
+
+    /* ─── Divider ─────────────────────────────────────── */
+    .divider {
+      width: 40px;
+      height: 1.5px;
+      background: var(--terra);
+      opacity: 0.25;
+      border-radius: 99px;
+      margin: 32px auto 0;
+    }
+
+    /* ─── CTA Stack ──────────────────────────────────── */
+    .cta-stack {
+      margin-top: 28px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 17px 24px;
+      border-radius: var(--r-lg);
+      font-family: var(--ff-sans);
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        transform 120ms ease,
+        box-shadow 120ms ease,
+        background 120ms ease,
+        color 120ms ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active { transform: scale(0.97); }
+
+    /* Primary */
+    .btn-primary {
+      background: var(--terra);
+      color: var(--white);
+      box-shadow:
+        0 2px 8px rgba(168,66,39,.22),
+        0 1px 2px rgba(168,66,39,.14);
+    }
+    .btn-primary:hover {
+      background: var(--terra-dark);
+      box-shadow:
+        0 4px 18px rgba(168,66,39,.30),
+        0 1px 4px rgba(168,66,39,.18);
+    }
+    .btn-primary:focus-visible {
+      outline: 3px solid var(--terra);
+      outline-offset: 3px;
+    }
+
+    /* Ghost */
+    .btn-ghost {
+      background: transparent;
+      color: var(--terra);
+      border: 1.5px solid var(--terra);
+    }
+    .btn-ghost:hover {
+      background: var(--terra-pale);
+    }
+    .btn-ghost:focus-visible {
+      outline: 3px solid var(--terra);
+      outline-offset: 3px;
+    }
+
+    /* Button icon inline */
+    .btn-icon {
+      margin-right: 6px;
+      font-size: 1.05em;
+      vertical-align: -0.1em;
+    }
+
+    /* ─── Footer note ─────────────────────────────────── */
+    .footer-note {
+      margin-top: 36px;
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--ink-soft);
+      opacity: 0.7;
+      letter-spacing: 0.02em;
+    }
+
+    /* ─── Reduced motion ─────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .btn { transition: none; }
+    }
+
+    /* ─── Desktop lift ───────────────────────────────── */
+    @media (min-width: 600px) {
+      .page { padding-bottom: 80px; }
+      .hero-img-wrap { border-radius: var(--r-xl); }
+    }
+  </style>
+</head>
+<body>
+
+<main class="page">
+
+  <!-- ── Header ── -->
+  <header class="site-header" role="banner">
+    <p class="logo">Mino<span class="logo-dot" aria-hidden="true"></span></p>
+  </header>
+
+  <!-- ── Hero image ── -->
+  <div class="hero-img-wrap" role="img" aria-label="Foto de gato realista — placeholder">
+    <div class="cat-silhouette" aria-hidden="true">
+      <!-- Inline SVG cat silhouette for zero-dependency placeholder -->
+      <svg class="cat-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <!-- Body -->
+        <ellipse cx="100" cy="175" rx="62" ry="55" fill="#9e8c84"/>
+        <!-- Head -->
+        <circle cx="100" cy="100" r="46" fill="#b09b91"/>
+        <!-- Left ear -->
+        <polygon points="62,66 48,30 82,60" fill="#b09b91"/>
+        <polygon points="65,63 54,38 78,59" fill="#d4a8a0"/>
+        <!-- Right ear -->
+        <polygon points="138,66 152,30 118,60" fill="#b09b91"/>
+        <polygon points="135,63 146,38 122,59" fill="#d4a8a0"/>
+        <!-- Eyes -->
+        <ellipse cx="82" cy="98" rx="10" ry="11" fill="#2d2420"/>
+        <ellipse cx="118" cy="98" rx="10" ry="11" fill="#2d2420"/>
+        <ellipse cx="82" cy="98" rx="4" ry="7" fill="#1a1410"/>
+        <ellipse cx="118" cy="98" rx="4" ry="7" fill="#1a1410"/>
+        <circle cx="85" cy="95" r="2.5" fill="white" opacity=".7"/>
+        <circle cx="121" cy="95" r="2.5" fill="white" opacity=".7"/>
+        <!-- Nose -->
+        <polygon points="100,112 95,118 105,118" fill="#c97a80"/>
+        <!-- Mouth -->
+        <path d="M95,118 Q100,124 105,118" stroke="#8a5a5e" stroke-width="1.2" fill="none"/>
+        <!-- Whiskers left -->
+        <line x1="85" y1="114" x2="48" y2="108" stroke="#c8bdb4" stroke-width="1.2" opacity=".8"/>
+        <line x1="85" y1="117" x2="48" y2="118" stroke="#c8bdb4" stroke-width="1.2" opacity=".8"/>
+        <line x1="85" y1="120" x2="50" y2="128" stroke="#c8bdb4" stroke-width="1.2" opacity=".6"/>
+        <!-- Whiskers right -->
+        <line x1="115" y1="114" x2="152" y2="108" stroke="#c8bdb4" stroke-width="1.2" opacity=".8"/>
+        <line x1="115" y1="117" x2="152" y2="118" stroke="#c8bdb4" stroke-width="1.2" opacity=".8"/>
+        <line x1="115" y1="120" x2="150" y2="128" stroke="#c8bdb4" stroke-width="1.2" opacity=".6"/>
+        <!-- Tail -->
+        <path d="M155,210 Q190,180 172,148 Q162,130 155,145" stroke="#9e8c84" stroke-width="14" stroke-linecap="round" fill="none"/>
+        <!-- Front paws -->
+        <ellipse cx="78" cy="228" rx="18" ry="10" fill="#9e8c84"/>
+        <ellipse cx="122" cy="228" rx="18" ry="10" fill="#9e8c84"/>
+      </svg>
+    </div>
+    <span class="placeholder-label">Foto de Gato Realista</span>
+  </div>
+
+  <!-- ── Hero text ── -->
+  <section class="hero-text" aria-labelledby="hero-heading">
+    <h1 id="hero-heading">
+      La salud de tu michi no debería ser <em>un misterio</em>.
+    </h1>
+    <p class="subtitle">
+      Prevención silenciosa y asistencia de IA para dueños que aman a sus gatos.
+    </p>
+
+    <div class="chip-row" aria-label="Características principales">
+      <span class="chip"><span class="chip-icon" aria-hidden="true">🐾</span>Bitácora visual</span>
+      <span class="chip"><span class="chip-icon" aria-hidden="true">✨</span>IA Sweete</span>
+      <span class="chip"><span class="chip-icon" aria-hidden="true">🔒</span>Sin datos</span>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <!-- ── CTA Buttons ── -->
+  <nav class="cta-stack" aria-label="Acciones principales">
+    <a href="mino_bienvenida/code.html" class="btn btn-primary">
+      <span class="btn-icon" aria-hidden="true">📋</span>Simular Registro Diario
+    </a>
+    <a href="mino_inicio_funcional/code.html" class="btn btn-ghost">
+      <span class="btn-icon" aria-hidden="true">💬</span>Hablar con SweeteIA (Demo)
+    </a>
+  </nav>
+
+  <p class="footer-note">Demo MVP — Hackathon All-In × Build with Gemini</p>
+
+</main>
+
+</body>
+</html>

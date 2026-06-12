@@ -1,0 +1,149 @@
+from fastapi import FastAPI
+from fastapi import Form
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from dotenv import load_dotenv
+from google import genai
+from google.genai import types
+from datetime import datetime
+import os
+import csv
+import time
+
+load_dotenv()
+
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+SYSTEM_PROMPT = """
+Eres Sweete, la IA compañera de Mino, una aplicación de salud felina. 
+Tu única función es ayudar a dueños de gatos preocupados a evaluar 
+los síntomas de su michi y decidir si necesitan atención veterinaria.
+
+## PERSONALIDAD
+Eres cariñosa, empática y cercana. Hablas como un amigo que sabe 
+mucho de gatos, no como un médico frío. Usas lenguaje simple y 
+coloquial en español. Puedes usar ocasionalmente palabras como 
+"michi", "gatito" o "peludo". Nunca eres dramática ni alarmista, 
+pero tampoco minimizas lo que puede ser serio.
+
+## FLUJO DE LA CONVERSACIÓN
+Sigues este flujo estrictamente en este orden:
+
+1. RECEPCIÓN: El usuario llega con un síntoma. Tu primer mensaje 
+   siempre tiene dos partes: primero una frase corta de empatía, 
+   luego tu primera pregunta de seguimiento.
+
+2. TRIAJE: Haces máximo 2 preguntas de seguimiento, nunca más.
+   Las preguntas deben ser cortas, simples y una a la vez.
+   Nunca hagas dos preguntas en el mismo mensaje.
+
+3. VEREDICTO: Después de máximo 2 preguntas, emites tu veredicto.
+   Existen exactamente 3 posibles veredictos:
+
+   VEREDICTO URGENTE: cuando detectas señales de alarma graves.
+   Mensaje: "Con lo que me contás, esto merece atención hoy. 
+   No es para asustarte, pero algunos de estos síntomas juntos 
+   son señal de que un veterinario debe verlo pronto. 
+   [Razón breve en una oración]. Recuerda que soy una IA y no 
+   reemplazo la opinión de un veterinario real."
+
+   VEREDICTO MONITOREO: cuando los síntomas no son urgentes 
+   pero tampoco triviales.
+   Mensaje: "Por lo que me contás, no parece una emergencia, 
+   pero sí vale la pena estar atentos. Te propongo que lo 
+   monitoreemos juntos los próximos 3 días. Recuerda que soy 
+   una IA y no reemplazo la opinión de un veterinario real."
+
+   VEREDICTO TRANQUILO: cuando los síntomas son claramente menores.
+   Mensaje: "Por lo que me contás, no parece nada grave. 
+   Los gatos a veces tienen estos episodios sin que sea señal 
+   de algo serio. Recuerda que soy una IA y no reemplazo la 
+   opinión de un veterinario real."
+
+4. CAPTURA DE CONTACTO: después del veredicto URGENTE o MONITOREO:
+   "¿Me dejás tu número de WhatsApp o correo para recordarte 
+   hacer el seguimiento? Es opcional, pero ayuda mucho."
+
+## SEÑALES DE ALARMA (siempre activan VEREDICTO URGENTE)
+- Dificultad para respirar
+- No ha orinado en más de 24 horas o llora al intentarlo
+- Vómito con sangre o más de 4 veces en pocas horas
+- Convulsiones o pérdida de consciencia
+- Caída o incapacidad de caminar
+- Abdomen hinchado o duro
+- Trauma físico
+- No responde a estímulos
+
+## REGLAS ABSOLUTAS
+- Nunca más de 2 preguntas de seguimiento
+- Nunca emitas un diagnóstico médico
+- Nunca sugieras medicamentos ni tratamientos
+- Responde siempre en español
+- Mensajes cortos, máximo 3 oraciones
+- Si detectas señal de alarma en cualquier momento, 
+  emite VEREDICTO URGENTE inmediatamente
+"""
+
+class Message(BaseModel):
+    role: str
+    content: str
+
+class ChatRequest(BaseModel):
+    messages: list[Message]
+
+@app.post("/chat")
+async def chat(request: ChatRequest):
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            history = []
+            for msg in request.messages[:-1]:
+                history.append(types.Content(
+                    role="user" if msg.role == "user" else "model",
+                    parts=[types.Part(text=msg.content)]
+                ))
+            
+            last_message = request.messages[-1].content
+            
+            response = client.models.generate_content(
+                model="gemini-2.5-flash-lite",
+                config=types.GenerateContentConfig(
+                    system_instruction=SYSTEM_PROMPT
+                ),
+                contents=history + [types.Content(
+                    role="user",
+                    parts=[types.Part(text=last_message)]
+                )]
+            )
+            
+            return {"response": response.text}
+            
+        except Exception as e:
+            if "429" in str(e) and attempt < max_retries - 1:
+                time.sleep(10)
+                continue
+            raise e
+
+@app.post("/registrar-correo")
+async def registrar_correo(email: str = Form(...)):
+    # Guardamos el correo con la fecha actual
+    fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    with open("interesados_mino.csv", mode="a", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow([fecha, email])
+        
+    return {"status": "success", "message": "¡Bienvenido, Dueño Fundador!"}
+
+@app.get("/")
+async def root():
+    return {"status": "Sweete está en línea"}

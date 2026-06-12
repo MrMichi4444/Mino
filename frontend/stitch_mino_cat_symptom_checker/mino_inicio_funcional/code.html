@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mino - Evaluación de Síntomas</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&amp;family=Quicksand:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#745849",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#faf9f6",
+                        "surface-container-high": "#e9e8e5",
+                        "on-primary-container": "#fffbff",
+                        "on-primary-fixed": "#3a0b00",
+                        "surface-container": "#efeeeb",
+                        "outline-variant": "#ddc0b8",
+                        "primary": "#9d3e1d",
+                        "on-secondary-container": "#795c4d",
+                        "primary-fixed-dim": "#ffb59e",
+                        "surface-tint": "#a0401f",
+                        "surface-dim": "#dbdad7",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#51443e",
+                        "on-secondary-fixed-variant": "#5b4133",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#1a1c1a",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#2a170b",
+                        "on-primary-fixed-variant": "#802909",
+                        "primary-fixed": "#ffdbd0",
+                        "on-surface-variant": "#56423c",
+                        "primary-container": "#bd5533",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#ffb59e",
+                        "secondary-container": "#fed8c4",
+                        "on-background": "#1a1c1a",
+                        "surface-container-low": "#f4f3f1",
+                        "secondary-fixed-dim": "#e4bfac",
+                        "outline": "#8a726b",
+                        "tertiary-fixed": "#f3ded6",
+                        "background": "#faf9f6",
+                        "surface-variant": "#e3e2e0",
+                        "inverse-on-surface": "#f2f1ee",
+                        "on-error": "#ffffff",
+                        "tertiary": "#685953",
+                        "on-tertiary-fixed": "#241914",
+                        "surface": "#faf9f6",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#d6c3bb",
+                        "tertiary-container": "#81716b",
+                        "secondary-fixed": "#ffdbc9",
+                        "surface-container-highest": "#e3e2e0",
+                        "inverse-surface": "#2f312f",
+                        "on-tertiary-container": "#fffbff",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "gutter": "16px",
+                        "2xl": "48px",
+                        "lg": "24px",
+                        "xs": "8px",
+                        "md": "16px",
+                        "base": "4px",
+                        "xl": "32px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "headline-md": ["Quicksand"],
+                        "display-lg-mobile": ["Quicksand"],
+                        "headline-lg": ["Quicksand"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "display-lg": ["Quicksand"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "label-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            /* Mobile-first fluid grid setup */
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .symptom-chip {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .symptom-chip[data-selected="true"] {
+            background-color: theme('colors.primary');
+            color: theme('colors.on-primary');
+            border-color: theme('colors.primary');
+            border-width: 2px;
+            box-shadow: 0 4px 12px rgba(157, 62, 29, 0.2);
+        }
+    </style>
+</head>
+<body class="antialiased w-full max-w-md mx-auto relative px-container-padding py-lg flex flex-col justify-between">
+<!-- Header area -->
+<header class="w-full flex justify-center items-center py-md">
+<h1 class="font-headline-md text-headline-md text-on-surface">Mino</h1>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col items-center justify-start mt-lg space-y-xl">
+<!-- Speech Bubble & Cat Icon Section -->
+<div class="w-full flex flex-col items-start relative">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[32px] rounded-bl-none p-lg shadow-[0_4px_16px_rgba(157,62,29,0.1)] w-[90%] self-end relative z-10">
+<h2 class="font-display-lg-mobile text-display-lg-mobile text-primary leading-tight">¿Qué tiene tu gatito?</h2>
+<div class="absolute -bottom-3 left-0 w-6 h-6 bg-surface-container-lowest border-l border-b border-outline-variant transform -rotate-45 -translate-x-1/2 z-[-1]"></div></div>
+<div class="w-32 h-32 mt-[-32px] relative z-0 ml-lg">
+<img alt="Mino Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyFtaDzjKbHj8V2fUs-oganREu71fnwxiP3iDiCJ8gDadMzQlCovg5sLD3f2ZxvVSYpj6nSNBOnfqhzkN5o2HuXI-rHB3WzvhsJAcuLMJ2XnnAZB1E-nk76h37Oc1vOnkWt5GUdRJlrJSW6L5LSmi5mmj5RUVX5CsYLffwLyg_Q-I-n5Iu2pOXFbZDv3N6Wz-LIWXdEnDbfhpuEgwo9S6bB1DgenUTsVbUPx5pTiZxQebriVSK85gnIA9JvLRlabtxPdUV70V-pXvX"/>
+</div>
+</div>
+<!-- Symptom Grid -->
+<div class="w-full grid grid-cols-2 gap-sm" id="symptom-grid">
+<button class="symptom-chip bg-secondary-container text-on-secondary-container border border-outline-variant rounded-full py-md px-sm font-label-lg text-label-lg text-center flex items-center justify-center h-[56px]" data-selected="false" data-value="Vomitó" onclick="toggleSymptom(this)">
+                Vomitó
+            </button>
+<button class="symptom-chip bg-secondary-container text-on-secondary-container border border-outline-variant rounded-full py-md px-sm font-label-lg text-label-lg text-center flex items-center justify-center h-[56px]" data-selected="false" data-value="Llora mucho" onclick="toggleSymptom(this)">
+                Llora mucho
+            </button>
+<button class="symptom-chip bg-secondary-container text-on-secondary-container border border-outline-variant rounded-full py-md px-sm font-label-lg text-label-lg text-center flex items-center justify-center h-[56px]" data-selected="false" data-value="No come" onclick="toggleSymptom(this)">
+                No come
+            </button>
+<button class="symptom-chip bg-secondary-container text-on-secondary-container border border-outline-variant rounded-full py-md px-sm font-label-lg text-label-lg text-center flex items-center justify-center h-[56px]" data-selected="false" data-value="No bebe" onclick="toggleSymptom(this)">
+                No bebe
+            </button>
+</div>
+<!-- Three dots indicator -->
+<div class="w-full flex justify-start pl-sm mb-[-16px]">
+<button class="text-[#d66844] font-label-lg text-label-lg hover:underline">+ más síntomas</button>
+</div>
+<!-- Input Field -->
+<div class="w-full">
+<input class="w-full bg-surface-bright border border-outline-variant rounded-xl px-md py-lg font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all h-[56px]" id="additional-desc" placeholder="Describe lo que le pasa..." type="text"/>
+</div>
+<div class="flex-1"></div>
+</main>
+<!-- Bottom Action -->
+<footer class="w-full mt-auto pt-lg pb-sm">
+<button class="w-full bg-primary text-on-primary rounded-xl font-label-lg text-label-lg h-[56px] flex items-center justify-center shadow-[0_4px_16px_rgba(157,62,29,0.2)] hover:bg-surface-tint active:scale-95 transition-all" onclick="evaluateSymptoms()">
+            Evaluar a mi gato
+        </button>
+</footer>
+<script>
+        function toggleSymptom(button) {
+            const isSelected = button.getAttribute('data-selected') === 'true';
+            button.setAttribute('data-selected', !isSelected);
+        }
+
+        function evaluateSymptoms() {
+            const selectedChips = document.querySelectorAll('.symptom-chip[data-selected="true"]');
+            const additionalText = document.getElementById('additional-desc').value.trim();
+            
+            const symptoms = Array.from(selectedChips).map(chip => chip.getAttribute('data-value'));
+            
+            if (symptoms.length === 0 && additionalText === "") {
+                alert("Por favor, selecciona al menos un síntoma o describe el problema.");
+                document.getElementById('additional-desc').focus();
+                return;
+            }
+
+            let fullMessage = "";
+            if (symptoms.length > 0) {
+                fullMessage += "Mi gato presenta los siguientes síntomas: " + symptoms.join(", ") + ". ";
+            }
+            if (additionalText !== "") {
+                fullMessage += additionalText;
+            }
+
+            // Almacenar el mensaje para que la pantalla de chat lo use como contexto inicial
+            localStorage.setItem('selectedSymptom', fullMessage);
+            
+            // Navegar a la pantalla de chat
+            window.location.href = 'chat.html';
+        }
+    </script>
+</body></html>

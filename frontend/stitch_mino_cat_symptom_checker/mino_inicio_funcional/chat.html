@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mino - Chat con Sweete</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Quicksand:wght@600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { background-color: #faf9f6; font-family: 'Be Vietnam Pro', sans-serif; }
+  .bubble-sweete { background-color: #ffdbd0; border-radius: 18px 18px 18px 4px; }
+  .bubble-user { background-color: #e9e8e5; border-radius: 18px 18px 4px 18px; }
+  .typing-dot { animation: bounce 1.2s infinite; }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+  }
+  #messages { scroll-behavior: smooth; }
+</style>
+</head>
+<body class="flex flex-col h-screen max-w-md mx-auto">
+
+<!-- Header -->
+<header class="flex items-center px-4 py-3 border-b border-gray-200 bg-white sticky top-0 z-10">
+  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyFtaDzjKbHj8V2fUs-oganREu71fnwxiP3iDiCJ8gDadMzQlCovg5sLD3f2ZxvVSYpj6nSNBOnfqhzkN5o2HuXI-rHB3WzvhsJAcuLMJ2XnnAZB1E-nk76h37Oc1vOnkWt5GUdRJlrJSW6L5LSmi5mmj5RUVX5CsYLffwLyg_Q-I-n5Iu2pOXFbZDv3N6Wz-LIWXdEnDbfhpuEgwo9S6bB1DgenUTsVbUPx5pTiZxQebriVSK85gnIA9JvLRlabtxPdUV70V-pXvX" alt="Sweete" class="w-10 h-10 rounded-full object-contain mr-3"/>
+  <div>
+    <p class="font-semibold text-gray-800" style="font-family: Quicksand">Sweete IA</p>
+    <p class="text-xs text-green-500">● Escuchando a tu michi</p>
+  </div>
+</header>
+
+<!-- Messages -->
+<div class="flex-1 overflow-y-auto px-4 py-4 space-y-3" id="messages"></div>
+
+<!-- Input -->
+<footer class="px-4 py-3 bg-white border-t border-gray-200 flex items-center gap-2 sticky bottom-0">
+  <input 
+    id="user-input"
+    type="text" 
+    placeholder="Escribe tu respuesta..." 
+    class="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+    onkeydown="if(event.key==='Enter') sendMessage()"
+  />
+  <button onclick="sendMessage()" class="bg-[#9d3e1d] text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-[#bd5533] transition-all">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+      <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"/>
+    </svg>
+  </button>
+</footer>
+
+<script>
+  const BACKEND_URL = 'https://sliding-dean-overplay.ngrok-free.dev/chat';
+  let conversationHistory = [];
+  let messageCount = 0;          // ← NUEVO: contador de mensajes enviados
+  const MESSAGE_LIMIT = 6;       // ← NUEVO: límite de mensajes
+
+  function addMessage(text, role) {
+    const messages = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+    div.innerHTML = `
+      <div class="max-w-[80%] px-4 py-2 text-sm text-gray-800 ${role === 'user' ? 'bubble-user' : 'bubble-sweete'}">
+        ${text}
+      </div>`;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function showTyping() {
+    const messages = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.id = 'typing';
+    div.className = 'flex justify-start';
+    div.innerHTML = `
+      <div class="bubble-sweete px-4 py-3 flex gap-1 items-center">
+        <span class="typing-dot w-2 h-2 bg-gray-400 rounded-full block"></span>
+        <span class="typing-dot w-2 h-2 bg-gray-400 rounded-full block"></span>
+        <span class="typing-dot w-2 h-2 bg-gray-400 rounded-full block"></span>
+      </div>`;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function removeTyping() {
+    const typing = document.getElementById('typing');
+    if (typing) typing.remove();
+  }
+
+  // ← NUEVO: bloquea input + botón y abre el modal tras 1500ms
+  function lockChat() {
+    const input = document.getElementById('user-input');
+    const btn = document.querySelector('footer button');
+    input.disabled = true;
+    input.placeholder = 'Evaluación completada...';
+    btn.disabled = true;
+    btn.classList.add('opacity-50', 'cursor-not-allowed');
+    setTimeout(() => {
+      const modal = document.getElementById('modal-fundador');
+      if (modal) modal.style.display = 'flex';
+    }, 1500);
+  }
+
+  async function sendToBackend(message) {
+    conversationHistory.push({ role: 'user', content: message });
+    showTyping();
+    try {
+      const response = await fetch(BACKEND_URL, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        },
+        body: JSON.stringify({ messages: conversationHistory })
+      });
+      const data = await response.json();
+      removeTyping();
+      const sweeteReply = data.response;
+      conversationHistory.push({ role: 'model', content: sweeteReply });
+      addMessage(sweeteReply, 'sweete');
+    } catch (error) {
+      removeTyping();
+      addMessage('Sweete no está disponible en este momento. Intenta de nuevo.', 'sweete');
+    }
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById('user-input');
+    const text = input.value.trim();
+    if (!text) return;            // ignora mensajes vacíos (sin cambios)
+
+    input.value = '';
+    messageCount++;               // ← NUEVO: suma al contador SOLO si el mensaje es válido
+
+    addMessage(text, 'user');
+    await sendToBackend(text);
+
+    // ← NUEVO: si se alcanzó el límite, bloquea el chat
+    if (messageCount >= MESSAGE_LIMIT) {
+      lockChat();
+    }
+  }
+
+  // Al cargar, tomar el síntoma de la pantalla anterior y enviarlo automáticamente
+  window.onload = async function() {
+    const symptom = localStorage.getItem('selectedSymptom');
+    if (symptom) {
+      localStorage.removeItem('selectedSymptom');
+      addMessage(symptom, 'user');
+      await sendToBackend(symptom);
+      // ← NUEVO: el síntoma inicial también cuenta como mensaje del usuario
+      messageCount++;
+      if (messageCount >= MESSAGE_LIMIT) {
+        lockChat();
+      }
+    }
+  };
+
+  
+
+</script>
+
+
+<style>
+  #modal-fundador {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-box {
+    background: #faf8f5;
+    padding: 30px 25px;
+    border-radius: 20px;
+    text-align: center;
+    width: 85%;
+    max-width: 380px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    font-family: sans-serif;
+  }
+  .modal-box h3 { 
+    color: #a84227; 
+    font-family: serif; 
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 10px; 
+  }
+  .modal-box p { 
+    color: #4a4a4a; 
+    font-size: 15px; 
+    line-height: 1.4;
+    margin-bottom: 25px; 
+  }
+  .modal-box input {
+    width: 100%; 
+    padding: 14px; 
+    margin-bottom: 15px;
+    border: 1px solid #ddd; 
+    border-radius: 12px;
+    box-sizing: border-box; 
+    background: #fff;
+    font-size: 15px;
+  }
+  .modal-box input:focus {
+    outline: none;
+    border-color: #a84227;
+  }
+  .modal-box button {
+    width: 100%; 
+    padding: 15px; 
+    background: #a84227;
+    color: #fff; 
+    border: none; 
+    border-radius: 12px;
+    font-weight: bold; 
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+
+<div id="modal-fundador">
+  <div class="modal-box">
+    <h3>¡Registro simulado!</h3>
+    <p>Únete a los 14 dueños fundadores y sé el primero en probar la versión completa de Mino para proteger a tu michi.</p>
+    <input type="email" id="email-input" placeholder="Tu correo electrónico">
+    <button id="btn-unirse">Avisarme cuando esté lista 🐾</button>
+  </div>
+</div>
+
+<script>
+	document.getElementById('btn-unirse').addEventListener('click', async () => {
+    const email = document.getElementById('email-input').value;
+    
+    if (email && email.includes('@')) {
+        const formData = new FormData();
+        formData.append('email', email);
+
+        try {
+            // URL REAL DE TU NGROK APUNTANDO AL ENDPOINT DE CORREOS
+            const response = await fetch('https://sliding-dean-overplay.ngrok-free.dev/registrar-correo', {
+                method: 'POST',
+                headers: {
+                    // ESTO ES CLAVE PARA QUE NGROK NO BLOQUEE LA PETICIÓN
+                    'ngrok-skip-browser-warning': 'true' 
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                alert("¡Gracias! Ahora eres un Dueño Fundador. Te avisaremos pronto.");
+                document.getElementById('modal-fundador').style.display = 'none';
+            }
+        } catch (error) {
+            console.error("Error al guardar:", error);
+        }
+    } else {
+        alert("Por favor, ingresa un correo válido.");
+    }
+   });
+</script>
+
+</body>
+</html>

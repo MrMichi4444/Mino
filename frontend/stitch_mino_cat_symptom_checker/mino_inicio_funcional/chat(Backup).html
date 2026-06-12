@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mino - Chat con Sweete</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Quicksand:wght@600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { background-color: #faf9f6; font-family: 'Be Vietnam Pro', sans-serif; }
+  .bubble-sweete { background-color: #ffdbd0; border-radius: 18px 18px 18px 4px; }
+  .bubble-user { background-color: #e9e8e5; border-radius: 18px 18px 4px 18px; }
+  .typing-dot { animation: bounce 1.2s infinite; }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+  }
+  #messages { scroll-behavior: smooth; }
+</style>
+</head>
+<body class="flex flex-col h-screen max-w-md mx-auto">
+
+<!-- Header -->
+<header class="flex items-center px-4 py-3 border-b border-gray-200 bg-white sticky top-0 z-10">
+  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyFtaDzjKbHj8V2fUs-oganREu71fnwxiP3iDiCJ8gDadMzQlCovg5sLD3f2ZxvVSYpj6nSNBOnfqhzkN5o2HuXI-rHB3WzvhsJAcuLMJ2XnnAZB1E-nk76h37Oc1vOnkWt5GUdRJlrJSW6L5LSmi5mmj5RUVX5CsYLffwLyg_Q-I-n5Iu2pOXFbZDv3N6Wz-LIWXdEnDbfhpuEgwo9S6bB1DgenUTsVbUPx5pTiZxQebriVSK85gnIA9JvLRlabtxPdUV70V-pXvX" alt="Sweete" class="w-10 h-10 rounded-full object-contain mr-3"/>
+  <div>
+    <p class="font-semibold text-gray-800" style="font-family: Quicksand">Sweete IA</p>
+    <p class="text-xs text-green-500">● Escuchando a tu michi</p>
+  </div>
+</header>
+
+<!-- Messages -->
+<div class="flex-1 overflow-y-auto px-4 py-4 space-y-3" id="messages"></div>
+
+<!-- Input -->
+<footer class="px-4 py-3 bg-white border-t border-gray-200 flex items-center gap-2 sticky bottom-0">
+  <input 
+    id="user-input"
+    type="text" 
+    placeholder="Escribe tu respuesta..." 
+    class="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+    onkeydown="if(event.key==='Enter') sendMessage()"
+  />
+  <button onclick="sendMessage()" class="bg-[#9d3e1d] text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-[#bd5533] transition-all">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+      <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"/>
+    </svg>
+  </button>
+</footer>
+
+<script>
+  const BACKEND_URL = 'https://sliding-dean-overplay.ngrok-free.dev/chat';
+  let conversationHistory = [];
+
+  function addMessage(text, role) {
+    const messages = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+    div.innerHTML = `
+      <div class="max-w-[80%] px-4 py-2 text-sm text-gray-800 ${role === 'user' ? 'bubble-user' : 'bubble-sweete'}">
+        ${text}
+      </div>`;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function showTyping() {
+    const messages = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.id = 'typing';
+    div.className = 'flex justify-start';
+    div.innerHTML = `
+      <div class="bubble-sweete px-4 py-3 flex gap-1 items-center">
+        <span class="typing-dot w-2 h-2 bg-gray-400 rounded-full block"></span>
+        <span class="typing-dot w-2 h-2 bg-gray-400 rounded-full block"></span>
+        <span class="typing-dot w-2 h-2 bg-gray-400 rounded-full block"></span>
+      </div>`;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function removeTyping() {
+    const typing = document.getElementById('typing');
+    if (typing) typing.remove();
+  }
+
+  async function sendToBackend(message) {
+    conversationHistory.push({ role: 'user', content: message });
+    showTyping();
+    try {
+      const response = await fetch(BACKEND_URL, {
+ 	method: 'POST',
+  	headers: { 
+    	'Content-Type': 'application/json',
+    	'ngrok-skip-browser-warning': 'true'
+  	},
+  	body: JSON.stringify({ messages: conversationHistory })
+	});
+      const data = await response.json();
+      removeTyping();
+      const sweeteReply = data.response;
+      conversationHistory.push({ role: 'model', content: sweeteReply });
+      addMessage(sweeteReply, 'sweete');
+    } catch (error) {
+      removeTyping();
+      addMessage('Sweete no está disponible en este momento. Intenta de nuevo.', 'sweete');
+    }
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById('user-input');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    addMessage(text, 'user');
+    await sendToBackend(text);
+  }
+
+  // Al cargar, tomar el síntoma de la pantalla anterior y enviarlo automáticamente
+  window.onload = async function() {
+    const symptom = localStorage.getItem('selectedSymptom');
+    if (symptom) {
+      localStorage.removeItem('selectedSymptom');
+      addMessage(symptom, 'user');
+      await sendToBackend(symptom);
+    }
+  };
+</script>
+</body>
+</html>
