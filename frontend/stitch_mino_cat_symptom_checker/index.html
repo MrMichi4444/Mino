@@ -95,15 +95,6 @@
         inset 0 0 0 1px rgba(168,66,39,.07);
     }
 
-    /* Placeholder cat illustration via CSS */
-    .hero-img-wrap::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 50% 60%, #e8ddd5 0%, #d9cec6 55%, #c8bdb4 100%);
-    }
-
     /* Silhouette of a seated cat — pure CSS */
     .cat-silhouette {
       position: absolute;
@@ -301,47 +292,12 @@
   </header>
 
   <!-- ── Hero image ── -->
-  <div class="hero-img-wrap" role="img" aria-label="Foto de gato realista — placeholder">
-    <div class="cat-silhouette" aria-hidden="true">
-      <!-- Inline SVG cat silhouette for zero-dependency placeholder -->
-      <svg class="cat-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" fill="none">
-        <!-- Body -->
-        <ellipse cx="100" cy="175" rx="62" ry="55" fill="#9e8c84"/>
-        <!-- Head -->
-        <circle cx="100" cy="100" r="46" fill="#b09b91"/>
-        <!-- Left ear -->
-        <polygon points="62,66 48,30 82,60" fill="#b09b91"/>
-        <polygon points="65,63 54,38 78,59" fill="#d4a8a0"/>
-        <!-- Right ear -->
-        <polygon points="138,66 152,30 118,60" fill="#b09b91"/>
-        <polygon points="135,63 146,38 122,59" fill="#d4a8a0"/>
-        <!-- Eyes -->
-        <ellipse cx="82" cy="98" rx="10" ry="11" fill="#2d2420"/>
-        <ellipse cx="118" cy="98" rx="10" ry="11" fill="#2d2420"/>
-        <ellipse cx="82" cy="98" rx="4" ry="7" fill="#1a1410"/>
-        <ellipse cx="118" cy="98" rx="4" ry="7" fill="#1a1410"/>
-        <circle cx="85" cy="95" r="2.5" fill="white" opacity=".7"/>
-        <circle cx="121" cy="95" r="2.5" fill="white" opacity=".7"/>
-        <!-- Nose -->
-        <polygon points="100,112 95,118 105,118" fill="#c97a80"/>
-        <!-- Mouth -->
-        <path d="M95,118 Q100,124 105,118" stroke="#8a5a5e" stroke-width="1.2" fill="none"/>
-        <!-- Whiskers left -->
-        <line x1="85" y1="114" x2="48" y2="108" stroke="#c8bdb4" stroke-width="1.2" opacity=".8"/>
-        <line x1="85" y1="117" x2="48" y2="118" stroke="#c8bdb4" stroke-width="1.2" opacity=".8"/>
-        <line x1="85" y1="120" x2="50" y2="128" stroke="#c8bdb4" stroke-width="1.2" opacity=".6"/>
-        <!-- Whiskers right -->
-        <line x1="115" y1="114" x2="152" y2="108" stroke="#c8bdb4" stroke-width="1.2" opacity=".8"/>
-        <line x1="115" y1="117" x2="152" y2="118" stroke="#c8bdb4" stroke-width="1.2" opacity=".8"/>
-        <line x1="115" y1="120" x2="150" y2="128" stroke="#c8bdb4" stroke-width="1.2" opacity=".6"/>
-        <!-- Tail -->
-        <path d="M155,210 Q190,180 172,148 Q162,130 155,145" stroke="#9e8c84" stroke-width="14" stroke-linecap="round" fill="none"/>
-        <!-- Front paws -->
-        <ellipse cx="78" cy="228" rx="18" ry="10" fill="#9e8c84"/>
-        <ellipse cx="122" cy="228" rx="18" ry="10" fill="#9e8c84"/>
-      </svg>
-    </div>
-    <span class="placeholder-label">Foto de Gato Realista</span>
+  <div class="hero-img-wrap">
+    <img 
+      src="../../src/images/cute_fluffy_cat.jpg" 
+      alt="Gato sano y feliz" 
+      style="width: auto; height: 100%; object-fit: contain; padding-top: 0px;"
+    >
   </div>
 
   <!-- ── Hero text ── -->
@@ -353,10 +309,43 @@
       Prevención silenciosa y asistencia de IA para dueños que aman a sus gatos.
     </p>
 
+
+    <form class="captura-correo" action="/registrar-correo" method="POST">
+    <input type="email" name="correo" placeholder="Tu mejor correo..." required>
+    <button type="submit">Avisarme del lanzamiento</button>
+</form>
+
+<style>
+/* Estilos rápidos para que combine con tu diseño */
+.captura-correo {
+    display: flex;
+    gap: 10px;
+    margin: 20px auto;
+    max-width: 350px;
+}
+.captura-correo input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-family: inherit;
+}
+.captura-correo button {
+    background-color: #A34332; /* El color de tu botón actual */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+
+
     <div class="chip-row" aria-label="Características principales">
       <span class="chip"><span class="chip-icon" aria-hidden="true">🐾</span>Bitácora visual</span>
       <span class="chip"><span class="chip-icon" aria-hidden="true">✨</span>IA Sweete</span>
-      <span class="chip"><span class="chip-icon" aria-hidden="true">🔒</span>Sin datos</span>
+      <span class="chip"><span class="chip-icon" aria-hidden="true">💎</span>Dueños Fundador</span>
     </div>
   </section>
 
