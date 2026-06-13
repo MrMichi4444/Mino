@@ -365,5 +365,16 @@
 
 </main>
 
+<script>
+	function despertarServidor(){
+		const backendUrl = "https:mino-backend-vs9z.onrender.com/";
+		fetch(backendUrl)
+			.then(response => console.log("Servidor despierto!!!"))
+			.catch(error => console.log("Despertando servidor en segundo plano..."));
+	}
+	window.addEventListener('load', despertarServidor);
+
+</script>
+
 </body>
 </html>
