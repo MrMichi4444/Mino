@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi import Form
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from google import genai
@@ -10,7 +12,10 @@ import os
 import csv
 import time
 
+
 load_dotenv()
+
+router = APIRouter()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
@@ -99,6 +104,21 @@ class Message(BaseModel):
 
 class ChatRequest(BaseModel):
     messages: list[Message]
+
+
+@router.get("/descargar-csv")
+def descargar_csv():
+    # ATENCIÓN: Si este archivo está en una subcarpeta, verifica bien 
+    # desde dónde se está ejecutando Render para poner la ruta relativa correcta al CSV.
+    ruta_archivo = "datos.csv" 
+    
+    if os.path.exists(ruta_archivo):
+        return FileResponse(
+            path=ruta_archivo, 
+            filename="exportacion_mino.csv",
+            media_type='text/csv'
+        )
+    return {"error": "El archivo no se encontró."}
 
 @app.post("/chat")
 async def chat(request: ChatRequest):
