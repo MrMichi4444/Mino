@@ -10,11 +10,15 @@ from datetime import datetime
 import os
 import csv
 import time
+import urllib.request
+import json
 
 load_dotenv()
 
 # Inicializamos el cliente de Gemini
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/https://discordapp.com/api/webhooks/1515851144662880447/Aa1Dy7zMMwogTpoMtfLEAR17GIVFAMh1jD4RN9pfpy3-uEf51wl7jkb-Z9ZgJXNkHREA"
 
 app = FastAPI()
 
@@ -165,3 +169,32 @@ async def registrar_correo(email: str = Form(...)):
 @app.get("/")
 async def root():
     return {"status": "Sweete está en línea"}
+
+@app.post("/registrar-correo")
+async def registrar_correo(email: str = Form(...)):
+    
+    # 2. Armamos el mensaje que llegará a Discord
+    payload = {
+        "content": f"🐾 **¡Nuevo Dueño Fundador de Mino!**\nEmail: `{email}`"
+    }
+    
+    # 3. Enviamos la petición HTTP a Discord (usando librerías nativas de Python)
+    req = urllib.request.Request(
+        DISCORD_WEBHOOK_URL, 
+        data=json.dumps(payload).encode('utf-8'), 
+        headers={
+            'Content-Type': 'application/json', 
+            'User-Agent': 'MinoBot'
+        }
+    )
+    
+    try:
+        # Ejecutamos el envío
+        urllib.request.urlopen(req)
+        print(f"Correo {email} enviado a Discord exitosamente.")
+    except Exception as e:
+        print(f"Error al enviar a Discord: {e}")
+        # Si Discord falla por algo, el usuario no se da cuenta y la app sigue funcionando
+        
+    return {"status": "success", "message": "Correo registrado con éxito"}
+
