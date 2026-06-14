@@ -310,9 +310,9 @@
     </p>
 
 
-    <form class="captura-correo" action="https://mino-backend-vs9z.onrender.com/registrar-correo" method="POST">
+    <form id="form-registro" class="captura-correo">
     <input type="email" name="correo" placeholder="Tu mejor correo..." required>
-    <button type="submit">Avisarme del lanzamiento</button>
+    <button type="submit" id="btn-submit">Avisarme del lanzamiento</button>
 </form>
 
 <style>
@@ -373,6 +373,45 @@
 			.catch(error => console.log("Despertando servidor en segundo plano..."));
 	}
 	window.addEventListener('load', despertarServidor);
+
+    // ─── 2. Interceptar el envío del correo ───
+    document.getElementById('form-registro').addEventListener('submit', async function(event) {
+        // Esto es CRÍTICO: Evita que la página te mande a la pantalla blanca
+        event.preventDefault(); 
+
+        const form = this;
+        const btn = document.getElementById('btn-submit');
+        const formData = new FormData(form);
+
+        // Cambiamos el texto del botón para que el usuario sepa que está cargando
+        btn.innerText = "Guardando... 🐾";
+        btn.disabled = true;
+        btn.style.opacity = "0.7";
+
+        try {
+            const response = await fetch("https://mino-backend-vs9z.onrender.com/registrar-correo", {
+                method: "POST",
+                body: formData // Enviamos el FormData porque tu FastAPI espera Form(...)
+            });
+
+            if (response.ok) {
+                // ¡Éxito! Cambiamos el botón a un mensaje de confirmación
+                btn.innerText = "¡Listo, gracias!";
+                btn.style.backgroundColor = "#2d2420"; // Un color oscuro para que note el cambio
+                btn.style.opacity = "1";
+                form.reset(); // Limpiamos la caja de texto
+            } else {
+                btn.innerText = "Hubo un error 😿";
+                btn.disabled = false;
+                btn.style.opacity = "1";
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            btn.innerText = "Error de conexión";
+            btn.disabled = false;
+            btn.style.opacity = "1";
+        }
+    });
 
 </script>
 
