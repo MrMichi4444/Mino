@@ -24,6 +24,9 @@
 </head>
 <body class="flex flex-col h-screen max-w-md mx-auto">
 
+<a href="../index.html" class="fixed top-4 left-4 z-[100] w-10 h-10 bg-white/80 backdrop-blur-md border border-gray-200 rounded-full flex items-center justify-center text-[#9d3e1d] shadow-sm hover:bg-[#ffdbd0] transition-colors active:scale-95" aria-label="Volver al inicio">
+  <span class="material-symbols-outlined" style="font-size: 22px;">home</span>
+</a>
 <!-- Header -->
 <header class="flex items-center px-4 py-3 border-b border-gray-200 bg-white sticky top-0 z-10">
   <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyFtaDzjKbHj8V2fUs-oganREu71fnwxiP3iDiCJ8gDadMzQlCovg5sLD3f2ZxvVSYpj6nSNBOnfqhzkN5o2HuXI-rHB3WzvhsJAcuLMJ2XnnAZB1E-nk76h37Oc1vOnkWt5GUdRJlrJSW6L5LSmi5mmj5RUVX5CsYLffwLyg_Q-I-n5Iu2pOXFbZDv3N6Wz-LIWXdEnDbfhpuEgwo9S6bB1DgenUTsVbUPx5pTiZxQebriVSK85gnIA9JvLRlabtxPdUV70V-pXvX" alt="Sweete" class="w-10 h-10 rounded-full object-contain mr-3"/>
@@ -231,6 +234,9 @@
     <p>Únete a los 14 dueños fundadores y sé el primero en probar la versión completa de Mino para proteger a tu michi.</p>
     <input type="email" id="email-input" placeholder="Tu correo electrónico">
     <button id="btn-unirse">Avisarme cuando esté lista 🐾</button>
+    <button id="btn-dismiss-chat" style="background: transparent; color: #6b5c57; border: none; margin-top: 15px; font-size: 14px; text-decoration: underline; cursor: pointer; width: 100%;">
+  Ya me registré o no deseo probarla
+</button>
   </div>
 </div>
 
@@ -264,6 +270,23 @@
         alert("Por favor, ingresa un correo válido.");
     }
    });
+
+  const btnDismissChat = document.getElementById('btn-dismiss-chat');
+  const modalChat = document.getElementById('modal-fundador'); // Asegúrate de poner tu ID real
+
+  if(btnDismissChat && modalChat) {
+      btnDismissChat.addEventListener('click', () => {
+          // Ocultamos el modal (por si el cambio de página tarda unos milisegundos)
+          modalChat.style.display = 'none';
+          
+          // Si guardabas mensajes en localStorage, los limpias aquí para el próximo tester
+          // localStorage.removeItem('mino_historial_chat');
+          
+          // ¡Aquí está la magia! Redirigimos a la pantalla inicial del simulador
+          window.location.href = 'code.html';
+      });
+  }
+
 </script>
 
 </body>
