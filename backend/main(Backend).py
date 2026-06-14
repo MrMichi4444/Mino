@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi import Form
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -11,9 +12,11 @@ import os
 import csv
 import time
 
+
 load_dotenv()
 
-# Inicializamos el cliente de Gemini
+router = APIRouter()
+
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 app = FastAPI()
@@ -24,10 +27,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# DEFINIMOS LA RUTA ABSOLUTA AQUÍ PARA QUE RENDER NO SE PIERDA
-DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
-RUTA_CSV = os.path.join(DIRECTORIO_ACTUAL, "interesados_mino.csv")
 
 SYSTEM_PROMPT = """
 Eres Sweete, la IA compañera de Mino, una aplicación de salud felina. 
@@ -106,16 +105,20 @@ class Message(BaseModel):
 class ChatRequest(BaseModel):
     messages: list[Message]
 
-# Cambiado a @app.get y utilizando la RUTA_CSV
-@app.get("/descargar-csv")
+
+@router.get("/descargar-csv")
 def descargar_csv():
-    if os.path.exists(RUTA_CSV):
+    # ATENCIÓN: Si este archivo está en una subcarpeta, verifica bien 
+    # desde dónde se está ejecutando Render para poner la ruta relativa correcta al CSV.
+    ruta_archivo = "interesados_mino.csv" 
+    
+    if os.path.exists(ruta_archivo):
         return FileResponse(
-            path=RUTA_CSV, 
-            filename="interesados_mino.csv",
+            path=ruta_archivo, 
+            filename="exportacion_mino.csv",
             media_type='text/csv'
         )
-    return {"error": f"El archivo no se encontró. El sistema buscó en: {RUTA_CSV}"}
+    return {"error": "El archivo no se encontró."}
 
 @app.post("/chat")
 async def chat(request: ChatRequest):
@@ -155,8 +158,7 @@ async def registrar_correo(email: str = Form(...)):
     # Guardamos el correo con la fecha actual
     fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # Cambiado para usar RUTA_CSV
-    with open(RUTA_CSV, mode="a", newline="") as file:
+    with open("interesados_mino.csv", mode="a", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([fecha, email])
         
