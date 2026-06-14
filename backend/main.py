@@ -110,7 +110,7 @@ class ChatRequest(BaseModel):
 def descargar_csv():
     # ATENCIÓN: Si este archivo está en una subcarpeta, verifica bien 
     # desde dónde se está ejecutando Render para poner la ruta relativa correcta al CSV.
-    ruta_archivo = "datos.csv" 
+    ruta_archivo = "interesados_mino.csv" 
     
     if os.path.exists(ruta_archivo):
         return FileResponse(
