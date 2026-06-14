@@ -18,7 +18,7 @@ load_dotenv()
 # Inicializamos el cliente de Gemini
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL) 
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")) 
 
 app = FastAPI()
 
