@@ -18,7 +18,7 @@ load_dotenv()
 # Inicializamos el cliente de Gemini
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/https://discordapp.com/api/webhooks/1515851144662880447/Aa1Dy7zMMwogTpoMtfLEAR17GIVFAMh1jD4RN9pfpy3-uEf51wl7jkb-Z9ZgJXNkHREA"
+DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1515851144662880447/Aa1Dy7zMMwogTpoMtfLEAR17GIVFAMh1jD4RN9pfpy3-uEf51wl7jkb-Z9ZgJXNkHREA"
 
 app = FastAPI()
 
@@ -156,29 +156,20 @@ async def chat(request: ChatRequest):
 
 @app.post("/registrar-correo")
 async def registrar_correo(email: str = Form(...)):
-    # Guardamos el correo con la fecha actual
+    # --- PARTE 1: Guardar en CSV local ---
     fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    # Cambiado para usar RUTA_CSV
-    with open(RUTA_CSV, mode="a", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow([fecha, email])
-        
-    return {"status": "success", "message": "¡Bienvenido, Dueño Fundador!"}
+    try:
+        with open(RUTA_CSV, mode="a", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow([fecha, email])
+    except Exception as e:
+        print(f"Error al escribir en CSV: {e}")
 
-@app.get("/")
-async def root():
-    return {"status": "Sweete está en línea"}
-
-@app.post("/registrar-correo")
-async def registrar_correo(email: str = Form(...)):
-    
-    # 2. Armamos el mensaje que llegará a Discord
+    # --- PARTE 2: Notificar a Discord ---
     payload = {
         "content": f"🐾 **¡Nuevo Dueño Fundador de Mino!**\nEmail: `{email}`"
     }
     
-    # 3. Enviamos la petición HTTP a Discord (usando librerías nativas de Python)
     req = urllib.request.Request(
         DISCORD_WEBHOOK_URL, 
         data=json.dumps(payload).encode('utf-8'), 
@@ -189,12 +180,9 @@ async def registrar_correo(email: str = Form(...)):
     )
     
     try:
-        # Ejecutamos el envío
         urllib.request.urlopen(req)
         print(f"Correo {email} enviado a Discord exitosamente.")
     except Exception as e:
         print(f"Error al enviar a Discord: {e}")
-        # Si Discord falla por algo, el usuario no se da cuenta y la app sigue funcionando
         
     return {"status": "success", "message": "Correo registrado con éxito"}
-
