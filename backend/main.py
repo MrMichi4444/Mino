@@ -18,7 +18,7 @@ load_dotenv()
 # Inicializamos el cliente de Gemini
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1515851144662880447/Aa1Dy7zMMwogTpoMtfLEAR17GIVFAMh1jD4RN9pfpy3-uEf51wl7jkb-Z9ZgJXNkHREA"
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL) 
 
 app = FastAPI()
 
