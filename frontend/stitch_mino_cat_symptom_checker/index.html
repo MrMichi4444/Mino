@@ -275,6 +275,7 @@
     @media (prefers-reduced-motion: reduce) {
       .btn { transition: none; }
       .btn-attention { animation: none; }
+      .story-scroll-hint { animation: none; }
     }
 
     /* ─── Desktop lift ───────────────────────────────── */
@@ -439,6 +440,39 @@
   animation: btn-attention-bounce 0.6s ease-in-out;
 }
 
+  .story-scroll-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin: 28px auto 0;
+  color: var(--terra);
+  opacity: 0.55;
+  animation: scroll-bounce 2.2s ease-in-out infinite;
+}
+.story-scroll-hint svg { width: 16px; height: 16px; }
+
+@media (min-width: 880px) {
+  .story-scroll-hint { display: none; }
+
+.story-scroll-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin: 28px auto 0;
+  color: var(--terra);
+  opacity: 0.55;
+  animation: scroll-bounce 2.2s ease-in-out infinite;
+}
+.story-scroll-hint svg { width: 16px; height: 16px; }
+
+@media (min-width: 880px) {
+  .story-scroll-hint { display: none; }
+}}
+
   </style>
 
 <script type="text/javascript">
@@ -565,6 +599,13 @@
       <p class="story-copy">Es una bitácora inteligente donde registras fácilmente sus hábitos diarios. Tú solo anotas si comió diferente, si durmió más o si cambió su rutina en el arenero. Mino analiza ese historial en el fondo y encuentra las correlaciones invisibles para alertarte de posibles problemas (como el fallo renal) mucho antes de que sean una urgencia.</p>
 
       <a href="#form-registro" class="btn btn-primary story-cta">Empieza a prevenir hoy</a>
+
+      <span class="story-scroll-hint" aria-hidden="true">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="6 9 12 15 18 9"></polyline>
+  </svg>
+</span>
+
     </div>
 
     <div class="story-visual">
