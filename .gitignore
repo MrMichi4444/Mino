@@ -3,6 +3,7 @@
 
 # Archivos de datos locales
 interesados_mino.csv
+Documentacion/
 
 # Python y entornos virtuales
 __pycache__/
@@ -11,3 +12,4 @@ venv/
 env/
 
 GoogleApiKey.txt
+

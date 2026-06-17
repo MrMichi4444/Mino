@@ -40,6 +40,7 @@
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
     /* ─── Layout wrapper ─────────────────────────────── */
@@ -273,6 +274,7 @@
     /* ─── Reduced motion ─────────────────────────────── */
     @media (prefers-reduced-motion: reduce) {
       .btn { transition: none; }
+      .btn-attention { animation: none; }
     }
 
     /* ─── Desktop lift ───────────────────────────────── */
@@ -280,6 +282,166 @@
       .page { padding-bottom: 80px; }
       .hero-img-wrap { border-radius: var(--r-xl); }
     }
+
+    /* ─── Hero section wrapper + scroll cue ───────────── */
+.hero-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  min-height: clamp(560px, 88dvh, 760px);
+}
+
+.scroll-cue {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--terra);
+  background: var(--terra-pale);
+  border: 1px solid rgba(168,66,39,.16);
+  text-decoration: none;
+  animation: scroll-bounce 2.2s ease-in-out infinite;
+}
+.scroll-cue svg { width: 18px; height: 18px; }
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50%      { transform: translate(-50%, 7px); }
+}
+
+/* ─── Story section (post-hero) ───────────────────── */
+
+.story-text {
+  text-align: center;
+}
+
+.story-section {
+  width: 100vw;              /* antes: width: 100%; */
+  background: var(--white);
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: clamp(64px, 11vw, 104px) 24px;
+}
+
+.story-grid {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  gap: 48px;
+}
+
+@media (min-width: 880px) {
+  .story-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 64px;
+  }
+}
+
+.story-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 14px;
+}
+
+.story-title {
+  font-family: var(--ff-serif);
+  font-size: clamp(1.7rem, 5vw, 2.35rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 22px;
+}
+
+.story-copy {
+  max-width: 460px;
+  margin: 0 auto 20px;
+}
+
+.story-lead {
+  font-family: var(--ff-serif);
+  font-style: italic;
+  font-size: 1.18rem;
+  line-height: 1.5;
+  color: var(--terra-dark);
+  max-width: 460px;
+  margin: 28px auto 24px;
+  padding-top: 24px;
+  position: relative;
+}
+.story-lead::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 1.5px;
+  background: var(--terra);
+  opacity: .35;
+}
+
+.story-cta {
+  display: inline-block;
+  width: auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+.story-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--r-xl);
+  background: var(--cream-mid);
+  border: 1.5px dashed rgba(168,66,39,.28);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  padding: 32px;
+}
+
+.story-placeholder-icon { font-size: 2.6rem; }
+
+.story-placeholder-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 220px;
+  letter-spacing: 0.01em;
+}
+
+@media (min-width: 880px) {
+  .story-placeholder { aspect-ratio: 4 / 5; }
+}
+
+  @keyframes btn-attention-bounce {
+  0%   { transform: scale(1); }
+  20%  { transform: scale(1.08); }
+  40%  { transform: scale(0.95); }
+  60%  { transform: scale(1.04); }
+  80%  { transform: scale(0.98); }
+  100% { transform: scale(1); }
+}
+
+.btn-attention {
+  animation: btn-attention-bounce 0.6s ease-in-out;
+}
+
   </style>
 
 <script type="text/javascript">
@@ -306,6 +468,8 @@
 
 <main class="page">
 
+
+  <div class="hero-section" id="hero">
   <!-- ── Header ── -->
   <header class="site-header" role="banner">
     <p class="logo">Mino<span class="logo-dot" aria-hidden="true"></span></p>
@@ -368,8 +532,10 @@
       <span class="chip"><span class="chip-icon" aria-hidden="true">💎</span>Dueños Fundador</span>
     </div>
   </section>
+  
+  </div>
 
-  <div class="divider" aria-hidden="true"></div>
+   <div class="divider" aria-hidden="true"></div>
 
   <!-- ── CTA Buttons ── -->
   <nav class="cta-stack" aria-label="Acciones principales">
@@ -380,6 +546,39 @@
       <span class="btn-icon" aria-hidden="true">💬</span>Hablar con SweeteIA (Demo)
     </a>
   </nav>
+
+   <a href="#historia" class="scroll-cue" aria-label="Descubre más">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </a>
+
+
+    <section class="story-section" id="historia" aria-labelledby="story-heading">
+  <div class="story-grid">
+
+    <div class="story-text">
+      <p class="story-eyebrow">Nuestra historia</p>
+      <h2 id="story-heading" class="story-title">El amor que inspiró la prevención</h2>
+
+      <p class="story-copy">Los gatos son expertos por naturaleza en ocultar su dolor. Para cuando nosotros notamos que algo anda mal, a veces es demasiado tarde (una lección que aprendimos de la manera más dura con nuestra gatita Sweetie).</p>
+
+      <p class="story-lead">Mino no es solo una app, es el traductor de tu michi.</p>
+
+      <p class="story-copy">Es una bitácora inteligente donde registras fácilmente sus hábitos diarios. Tú solo anotas si comió diferente, si durmió más o si cambió su rutina en el arenero. Mino analiza ese historial en el fondo y encuentra las correlaciones invisibles para alertarte de posibles problemas (como el fallo renal) mucho antes de que sean una urgencia.</p>
+
+      <a href="#form-registro" class="btn btn-primary story-cta">Empieza a prevenir hoy</a>
+    </div>
+
+    <div class="story-visual">
+      <div class="story-placeholder">
+        <span class="story-placeholder-icon" aria-hidden="true">🧊</span>
+        <p class="story-placeholder-label">Espacio reservado para la ilustración del iceberg<br>(síntomas visibles vs. análisis de IA)</p>
+      </div>
+    </div>
+
+  </div>
+</section>
 
   <p class="footer-note">Demo MVP — Hackathon All-In × Build with Gemini</p>
 
@@ -436,6 +635,61 @@
             btn.style.opacity = "1";
         }
     });
+
+  document.addEventListener('DOMContentLoaded', () => {
+  const scrollCue   = document.querySelector('.scroll-cue');
+  const storyCta    = document.querySelector('.story-cta');
+  const storySection = document.getElementById('historia');
+  const emailForm   = document.getElementById('form-registro');
+  const emailInput  = emailForm ? emailForm.querySelector('input[type="email"]') : null;
+
+  // ── 1. Flecha del Hero: bajar hasta la sección de historia ──
+  if (scrollCue && storySection) {
+    scrollCue.addEventListener('click', (e) => {
+      e.preventDefault(); // tomamos control en vez del salto nativo del href
+      storySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  // ── 2. Botón "Empieza a prevenir hoy": subir y enfocar el input ──
+  if (storyCta && emailForm && emailInput) {
+    storyCta.addEventListener('click', (e) => {
+      e.preventDefault();
+      emailForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      enfocarCuandoTermineElScroll(emailInput);
+    });
+  }
+
+  // Helper: espera a que el smooth scroll termine antes de hacer focus().
+  // Si se hace focus() mientras el scroll sigue animando, Safari en particular
+  // corta la animación a medias y se ve un salto brusco feo.
+  function enfocarCuandoTermineElScroll(input) {
+  const submitBtn = document.getElementById('btn-submit');
+
+  function enfocarYPulsar() {
+    input.focus({ preventScroll: true });
+    if (submitBtn) dispararPulso(submitBtn);
+  }
+
+  if ('onscrollend' in window) {
+    window.addEventListener('scrollend', enfocarYPulsar, { once: true });
+  } else {
+    setTimeout(enfocarYPulsar, 700);
+  }
+}
+
+// Agrega la clase de animación y la quita sola al terminar,
+// para poder volver a dispararla si el usuario repite el flujo
+// (sin removerla, la segunda vez no se reproduciría porque la clase ya estaría puesta).
+function dispararPulso(el) {
+  el.classList.remove('btn-attention'); // por si quedó de un disparo anterior
+  void el.offsetWidth;                  // truco para forzar reflow y que el navegador "note" el remove antes de volver a agregar
+  el.classList.add('btn-attention');
+  el.addEventListener('animationend', () => {
+    el.classList.remove('btn-attention');
+  }, { once: true });
+}
+});
 
 </script>
 
