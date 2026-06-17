@@ -473,6 +473,20 @@
   .story-scroll-hint { display: none; }
 }}
 
+.iceberg-image {
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    display: block;
+    margin: 0px auto;
+    
+    /* --- ESTO ES LO QUE REDONDEA LOS BORDES --- */
+    border-radius: 20px; 
+    
+    /* Opcional: Una sombra suave para que resalte del fondo como una tarjeta */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); 
+}
+
   </style>
 
 <script type="text/javascript">
@@ -610,8 +624,7 @@
 
     <div class="story-visual">
       <div class="story-placeholder">
-        <span class="story-placeholder-icon" aria-hidden="true">🧊</span>
-        <p class="story-placeholder-label">Espacio reservado para la ilustración del iceberg<br>(síntomas visibles vs. análisis de IA)</p>
+        <img src="../../src/images/iceberg.png" alt="Ilustración del Iceberg de Mino: síntomas visibles vs. análisis profundo de IA" class="iceberg-image">
       </div>
     </div>
 
