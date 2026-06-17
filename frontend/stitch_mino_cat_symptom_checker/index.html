@@ -294,15 +294,12 @@
 }
 
 .scroll-cue {
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 38px;
-  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin: 28px auto 0;
   border-radius: 50%;
   color: var(--terra);
   background: var(--terra-pale);
@@ -313,8 +310,8 @@
 .scroll-cue svg { width: 18px; height: 18px; }
 
 @keyframes scroll-bounce {
-  0%, 100% { transform: translate(-50%, 0); }
-  50%      { transform: translate(-50%, 7px); }
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(7px); }
 }
 
 /* ─── Story section (post-hero) ───────────────────── */
