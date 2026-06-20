@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
-from datetime import datetime
+from datetime import datetime, date
 from supabase import create_client, Client
 import os
 import csv
@@ -272,3 +272,81 @@ async def registrar_correo(email: str = Form(...)):
         print(f"Error al enviar a Discord: {e}")
         
     return {"status": "success", "message": "Correo registrado con éxito"}
+
+class RegistroRequest(BaseModel):
+    fecha: date
+    energia: int | None = None
+    comida: int | None = None
+    agua: int | None = None
+    caja_arena: int | None = None
+    animo: int | None = None
+    notas: str | None = None
+
+@app.post("/registro")
+async def guardar_registro(data: RegistroRequest, user=Depends(get_current_user)):
+    # Obtener el gato del usuario
+    gato = supabase.table("gatos").select("id").eq("usuario_id", user.id).execute()
+    if not gato.data:
+        raise HTTPException(status_code=404, detail="No tienes un gato registrado")
+    
+    gato_id = gato.data[0]["id"]
+    
+    payload = {
+        "gato_id": gato_id,
+        "fecha": str(data.fecha),
+        "energia": data.energia,
+        "comida": data.comida,
+        "agua": data.agua,
+        "caja_arena": data.caja_arena,
+        "animo": data.animo,
+        "notas": data.notas,
+        "updated_at": "now()"
+    }
+    
+    # UPSERT: crea si no existe, actualiza si ya existe para esa fecha
+    res = supabase.table("registros_diarios").upsert(
+        payload,
+        on_conflict="gato_id,fecha"
+    ).execute()
+    
+    return res.data[0]
+
+@app.get("/registros")
+async def obtener_registros(dias: int = 7, user=Depends(get_current_user)):
+    gato = supabase.table("gatos").select("id").eq("usuario_id", user.id).execute()
+    if not gato.data:
+        raise HTTPException(status_code=404, detail="No tienes un gato registrado")
+    
+    gato_id = gato.data[0]["id"]
+    
+    # Calcular fecha límite
+    from datetime import timedelta
+    fecha_limite = str(date.today() - timedelta(days=dias))
+    
+    res = supabase.table("registros_diarios") \
+        .select("*") \
+        .eq("gato_id", gato_id) \
+        .gte("fecha", fecha_limite) \
+        .order("fecha", desc=False) \
+        .execute()
+    
+    return res.data
+
+@app.get("/registro/{fecha}")
+async def obtener_registro_por_fecha(fecha: str, user=Depends(get_current_user)):
+    gato = supabase.table("gatos").select("id").eq("usuario_id", user.id).execute()
+    if not gato.data:
+        raise HTTPException(status_code=404, detail="No tienes un gato registrado")
+    
+    gato_id = gato.data[0]["id"]
+    
+    res = supabase.table("registros_diarios") \
+        .select("*") \
+        .eq("gato_id", gato_id) \
+        .eq("fecha", fecha) \
+        .execute()
+    
+    if not res.data:
+        raise HTTPException(status_code=404, detail="No hay registro para esa fecha")
+    
+    return res.data[0]
