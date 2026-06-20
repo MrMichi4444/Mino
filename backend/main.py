@@ -1,12 +1,13 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Header, HTTPException, status, Form, FastAPI, Depends, Security
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from datetime import datetime
 from supabase import create_client, Client
-from fastapi import Header, HTTPException, status, Form, FastAPI, Depends
 import os
 import csv
 import time
@@ -19,6 +20,14 @@ load_dotenv()
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL") 
+
+app = FastAPI(
+    title="Mino API",
+    description="Backend de Mino - Salud felina",
+    version="1.0.0",
+)
+
+security = HTTPBearer()
 
 app = FastAPI()
 
@@ -114,9 +123,9 @@ class Message(BaseModel):
 class ChatRequest(BaseModel):
     messages: list[Message]
 
-async def get_current_user(authorization: str = Header(...)):
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Security(security)):
     try:
-        token = authorization.replace("Bearer ", "")
+        token = credentials.credentials
         user = supabase.auth.get_user(token)
         return user.user
     except:
