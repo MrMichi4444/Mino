@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from datetime import datetime
+from supabase import create_client, Client
+from fastapi import Header, HTTPException
 import os
 import csv
 import time
@@ -28,6 +30,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
 # DEFINIMOS LA RUTA ABSOLUTA AQUÍ PARA QUE RENDER NO SE PIERDA
 DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
@@ -109,6 +115,79 @@ class Message(BaseModel):
 
 class ChatRequest(BaseModel):
     messages: list[Message]
+
+async def get_current_user(authorization: str = Header(...)):
+    try:
+        token = authorization.replace("Bearer ", "")
+        user = supabase.auth.get_user(token)
+        return user.user
+    except:
+        raise HTTPException(status_code=401, detail="Token inválido")
+
+class AuthRequest(BaseModel):
+    email: str
+    password: str
+
+@app.post("/auth/registro")
+async def registro(data: AuthRequest):
+    try:
+        res = supabase.auth.sign_up({"email": data.email, "password": data.password})
+        return {"user_id": res.user.id, "email": res.user.email}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/auth/login")
+async def login(data: AuthRequest):
+    try:
+        res = supabase.auth.sign_in_with_password({"email": data.email, "password": data.password})
+        return {
+            "access_token": res.session.access_token,
+            "user_id": res.user.id
+        }
+    except Exception as e:
+        raise HTTPException(status_code=401, detail="Credenciales inválidas")
+
+# --- ENDPOINTS DE GATO ---
+
+class GatoRequest(BaseModel):
+    nombre: str
+    fecha_nacimiento: str | None = None
+    raza: str | None = None
+
+@app.post("/gato")
+async def crear_gato(data: GatoRequest, user=Depends(get_current_user)):
+    # Verificar que no tenga ya un gato
+    existente = supabase.table("gatos").select("id").eq("usuario_id", user.id).execute()
+    if existente.data:
+        raise HTTPException(status_code=400, detail="Ya tienes un gato registrado")
+    
+    res = supabase.table("gatos").insert({
+        "usuario_id": user.id,
+        "nombre": data.nombre,
+        "fecha_nacimiento": data.fecha_nacimiento,
+        "raza": data.raza
+    }).execute()
+    return res.data[0]
+
+@app.get("/gato")
+async def obtener_gato(user=Depends(get_current_user)):
+    res = supabase.table("gatos").select("*").eq("usuario_id", user.id).execute()
+    if not res.data:
+        raise HTTPException(status_code=404, detail="No tienes un gato registrado")
+    return res.data[0]
+
+@app.patch("/gato")
+async def editar_gato(data: GatoRequest, user=Depends(get_current_user)):
+    gato = supabase.table("gatos").select("id").eq("usuario_id", user.id).execute()
+    if not gato.data:
+        raise HTTPException(status_code=404, detail="No tienes un gato registrado")
+    
+    res = supabase.table("gatos").update({
+        "nombre": data.nombre,
+        "fecha_nacimiento": data.fecha_nacimiento,
+        "raza": data.raza
+    }).eq("id", gato.data[0]["id"]).execute()
+    return res.data[0]
 
 # Cambiado a @app.get y utilizando la RUTA_CSV
 @app.get("/descargar-csv")
