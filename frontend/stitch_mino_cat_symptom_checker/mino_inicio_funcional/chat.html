@@ -139,7 +139,7 @@
     btn.disabled = true;
     btn.classList.add('opacity-50', 'cursor-not-allowed');
     setTimeout(() => {
-      const modal = document.getElementById('modal-fundador');
+      const modal = document.getElementById('modal-auth');
       if (modal) modal.style.display = 'flex';
     }, 1500);
   }
@@ -265,64 +265,229 @@
   }
 </style>
 
-<div id="modal-fundador">
-  <div class="modal-box">
-    <h3>¡Registro simulado!</h3>
-    <p>Únete a los 14 dueños fundadores y sé el primero en probar la versión completa de Mino para proteger a tu michi.</p>
-    <input type="email" id="email-input" placeholder="Tu correo electrónico">
-    <button id="btn-unirse">Avisarme cuando esté lista 🐾</button>
-    <button id="btn-dismiss-chat" style="background: transparent; color: #6b5c57; border: none; margin-top: 15px; font-size: 14px; text-decoration: underline; cursor: pointer; width: 100%;">
-  Ya me registré o no deseo probarla
-</button>
+<div id="modal-auth" style="display:none" class="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
+    <h2 class="font-bold text-2xl text-[#9d3e1d] mb-1" style="font-family: Quicksand">Bienvenido a Mino 🐾</h2>
+    <p class="text-sm text-gray-600 mb-6">Inicia sesión para guardar este reporte en la bitácora de tu michi.</p>
+    
+    <input id="auth-email" type="email" placeholder="Correo electrónico"
+      class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-3 text-sm focus:outline-none focus:border-[#9d3e1d]">
+    
+    <input id="auth-password" type="password" placeholder="Contraseña"
+      class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 text-sm focus:outline-none focus:border-[#9d3e1d]">
+    
+    <button id="btn-login" onclick="handleLogin()" class="w-full bg-[#9d3e1d] text-white rounded-xl py-3 text-sm font-semibold mb-3 active:scale-95 transition-transform">
+      Iniciar sesión
+    </button>
+    
+    <button id="btn-registro-auth" onclick="handleRegistro()" class="w-full border border-[#9d3e1d] text-[#9d3e1d] rounded-xl py-3 text-sm font-semibold active:scale-95 transition-transform">
+      Crear cuenta
+    </button>
+    
+    <p class="text-[11px] leading-tight text-gray-500 mt-4 text-center opacity-80">
+      Al crear tu cuenta, aceptas recibir recordatorios ocasionales para la bitácora de tu michi. Cero spam, lo prometemos.
+    </p>
+
+    <p id="auth-error" class="text-red-600 text-xs mt-3 text-center hidden"></p>
   </div>
 </div>
 
 <script>
-	document.getElementById('btn-unirse').addEventListener('click', async () => {
-    const email = document.getElementById('email-input').value;
+  const BACKEND_URL = 'https://mino-backend-vs9z.onrender.com/chat';
+  const API_BASE = 'https://mino-backend-vs9z.onrender.com';
+  let conversationHistory = [];
+
+  // ==========================================
+  // LÓGICA DE LÍMITES Y TEMPORIZADOR (10 MIN)
+  // ==========================================
+  function puedeEnviarMensaje() {
+    let count = parseInt(localStorage.getItem('sweete_msg_count') || '0');
+    let lastTime = parseInt(localStorage.getItem('sweete_last_time') || '0');
+    const now = Date.now();
     
-    if (email && email.includes('@')) {
-        const formData = new FormData();
-        formData.append('email', email);
-
-        try {
-            // URL REAL DE TU NGROK APUNTANDO AL ENDPOINT DE CORREOS
-            const response = await fetch('https://mino-backend-vs9z.onrender.com/registrar-correo', {
-                method: 'POST',
-                headers: {
-                    // ESTO ES CLAVE PARA QUE NGROK NO BLOQUEE LA PETICIÓN
-                    'ngrok-skip-browser-warning': 'true' 
-                },
-                body: formData
-            });
-
-            if (response.ok) {
-                alert("¡Gracias! Ahora eres un Dueño Fundador. Te avisaremos pronto.");
-                document.getElementById('modal-fundador').style.display = 'none';
-            }
-        } catch (error) {
-            console.error("Error al guardar:", error);
-        }
-    } else {
-        alert("Por favor, ingresa un correo válido.");
+    // Si pasaron más de 10 minutos (600,000 ms), reiniciamos
+    if (now - lastTime > 600000) {
+        count = 0;
     }
-   });
-
-  const btnDismissChat = document.getElementById('btn-dismiss-chat');
-  const modalChat = document.getElementById('modal-fundador'); // Asegúrate de poner tu ID real
-
-  if(btnDismissChat && modalChat) {
-      btnDismissChat.addEventListener('click', () => {
-          // Ocultamos el modal (por si el cambio de página tarda unos milisegundos)
-          modalChat.style.display = 'none';
-          
-          // Si guardabas mensajes en localStorage, los limpias aquí para el próximo tester
-          // localStorage.removeItem('mino_historial_chat');
-          
-          // ¡Aquí está la magia! Redirigimos a la pantalla inicial del simulador
-          window.location.href = 'code.html';
-      });
+    
+    if (count >= 6) {
+        finalizarChat();
+        return false;
+    }
+    
+    localStorage.setItem('sweete_msg_count', count + 1);
+    localStorage.setItem('sweete_last_time', now);
+    return true;
   }
+
+  function finalizarChat() {
+    const token = localStorage.getItem('mino_token');
+    
+    if (token) {
+        // Si ya tiene sesión, va directo a su bitácora
+        window.location.href = 'bitacora.html'; 
+    } else {
+        // Bloqueamos input y mostramos el modal de Auth
+        const input = document.getElementById('user-input');
+        const btn = document.querySelector('footer button');
+        input.disabled = true;
+        input.placeholder = 'Evaluación completada...';
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+        
+        document.getElementById('modal-auth').style.display = 'flex';
+        addMessage("¡Hasta aquí llego por ahora! Inicia sesión para guardar este reporte en tu bitácora y seguir platicando.", "sweete");
+    }
+  }
+
+  // ==========================================
+  // INTERFAZ DEL CHAT
+  // ==========================================
+  function addMessage(text, role) {
+    const messages = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+    div.innerHTML = `
+      <div class="max-w-[80%] px-4 py-2 text-sm text-gray-800 ${role === 'user' ? 'bubble-user' : 'bubble-sweete'}">
+        ${text}
+      </div>`;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function showTyping() {
+    const messages = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.id = 'typing';
+    div.className = 'flex justify-start';
+    div.innerHTML = `
+      <div class="bubble-sweete px-4 py-3 flex gap-1 items-center">
+        <span class="typing-dot w-2 h-2 bg-gray-400 rounded-full block"></span>
+        <span class="typing-dot w-2 h-2 bg-gray-400 rounded-full block"></span>
+        <span class="typing-dot w-2 h-2 bg-gray-400 rounded-full block"></span>
+      </div>`;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function removeTyping() {
+    const typing = document.getElementById('typing');
+    if (typing) typing.remove();
+  }
+
+  async function sendToBackend(message) {
+    conversationHistory.push({ role: 'user', content: message });
+    showTyping();
+    try {
+      const response = await fetch(BACKEND_URL, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        },
+        body: JSON.stringify({ messages: conversationHistory })
+      });
+      const data = await response.json();
+      removeTyping();
+      const sweeteReply = data.response;
+      conversationHistory.push({ role: 'model', content: sweeteReply });
+      addMessage(sweeteReply, 'sweete');
+    } catch (error) {
+      removeTyping();
+      addMessage('Sweete no está disponible en este momento. Intenta de nuevo.', 'sweete');
+    }
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById('user-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    if (!puedeEnviarMensaje()) return;
+
+    input.value = '';
+    addMessage(text, 'user');
+    await sendToBackend(text);
+    
+    // Revisamos si este fue el último mensaje permitido
+    let count = parseInt(localStorage.getItem('sweete_msg_count') || '0');
+    if (count >= 6) {
+        setTimeout(finalizarChat, 1500);
+    }
+  }
+
+  window.onload = async function() {
+    const symptom = localStorage.getItem('selectedSymptom');
+    if (symptom) {
+      localStorage.removeItem('selectedSymptom');
+      
+      if (puedeEnviarMensaje()) {
+        addMessage(symptom, 'user');
+        await sendToBackend(symptom);
+        
+        let count = parseInt(localStorage.getItem('sweete_msg_count') || '0');
+        if (count >= 6) {
+            setTimeout(finalizarChat, 1500);
+        }
+      }
+    }
+  };
+
+  // ==========================================
+  // LÓGICA DE AUTH (Conectado a la Bitácora)
+  // ==========================================
+  async function handleLogin() {
+    const email = document.getElementById('auth-email').value;
+    const password = document.getElementById('auth-password').value;
+    const errorEl = document.getElementById('auth-error');
+    const btn = document.getElementById('btn-login');
+    
+    errorEl.classList.add('hidden');
+    btn.textContent = 'Conectando... 🐾';
+
+    try {
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      localStorage.setItem('mino_token', data.access_token);
+      window.location.href = 'bitacora.html'; // Redirige al éxito
+    } catch {
+      errorEl.textContent = 'Correo o contraseña incorrectos';
+      errorEl.classList.remove('hidden');
+      btn.textContent = 'Iniciar sesión';
+    }
+  }
+
+  async function handleRegistro() {
+    const email = document.getElementById('auth-email').value;
+    const password = document.getElementById('auth-password').value;
+    const errorEl = document.getElementById('auth-error');
+    const btn = document.getElementById('btn-registro-auth');
+    
+    errorEl.classList.add('hidden');
+    btn.textContent = 'Creando cuenta... 🐾';
+
+    try {
+      const res = await fetch(`${API_BASE}/auth/registro`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      if (!res.ok) throw new Error();
+      await handleLogin(); // Si se crea, lo logueamos directo
+    } catch {
+      errorEl.textContent = 'Error al crear la cuenta';
+      errorEl.classList.remove('hidden');
+      btn.textContent = 'Crear cuenta';
+    }
+  }
+
+  document.getElementById('btn-login')?.addEventListener('click', handleLogin);
+  document.getElementById('btn-registro-auth')?.addEventListener('click', handleRegistro);
 
 </script>
 
