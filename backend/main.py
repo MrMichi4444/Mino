@@ -160,6 +160,7 @@ class GatoRequest(BaseModel):
     nombre: str
     fecha_nacimiento: str | None = None
     raza: str | None = None
+    telefono: str | None = None
 
 @app.post("/gato")
 async def crear_gato(data: GatoRequest, user=Depends(get_current_user)):
@@ -172,7 +173,8 @@ async def crear_gato(data: GatoRequest, user=Depends(get_current_user)):
         "usuario_id": user.id,
         "nombre": data.nombre,
         "fecha_nacimiento": data.fecha_nacimiento,
-        "raza": data.raza
+        "raza": data.raza,
+        "telefono": data.telefono  # <-- Lo mandamos a la base de datos
     }).execute()
     return res.data[0]
 
@@ -192,7 +194,8 @@ async def editar_gato(data: GatoRequest, user=Depends(get_current_user)):
     res = supabase.table("gatos").update({
         "nombre": data.nombre,
         "fecha_nacimiento": data.fecha_nacimiento,
-        "raza": data.raza
+        "raza": data.raza,
+        "telefono": data.telefono  # <-- Permitimos que lo actualicen
     }).eq("id", gato.data[0]["id"]).execute()
     return res.data[0]
 
