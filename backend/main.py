@@ -135,6 +135,10 @@ class AuthRequest(BaseModel):
     email: str
     password: str
 
+@app.get("/")
+async def root():
+    return {"status": "ok", "message": "Mino API está despierta 🐾"}
+
 @app.post("/auth/registro")
 async def registro(data: AuthRequest):
     try:

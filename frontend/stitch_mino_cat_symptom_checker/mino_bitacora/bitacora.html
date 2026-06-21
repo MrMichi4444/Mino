@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -188,8 +189,8 @@
 <main class="pt-20 pb-32 px-gutter min-h-screen max-w-md mx-auto">
 <!-- Welcome Section -->
 <section class="mt-4 mb-8">
-<h2 id="saludo-dueno" class="font-display-lg-mobile text-display-lg-mobile text-on-surface leading-tight">¡Hola Fer!</h2>
-<p id="pregunta-michi" class="font-headline-md text-headline-md text-secondary mt-1">¿Cómo está Mino hoy?</p>
+<h2 id="saludo-dueno" class="font-display-lg-mobile text-display-lg-mobile text-on-surface leading-tight">¡Hola []!</h2>
+<p id="pregunta-michi" class="font-headline-md text-headline-md text-secondary mt-1">¿Cómo está [] hoy?</p>
 </section>
 <!-- Illustration / Mood Indicator -->
 <div class="relative w-full h-48 mb-8 rounded-3xl overflow-hidden shadow-md group">
@@ -213,15 +214,15 @@
 <div class="w-2/3 flex justify-between gap-1">
 <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
 <span class="material-symbols-outlined text-on-secondary-container">bed</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Descansando</span>
+<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Bajo</span>
 </button>
 <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
 <span class="material-symbols-outlined text-on-secondary-container">potted_plant</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Tranquilo</span>
+<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Normal</span>
 </button>
 <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
 <span class="material-symbols-outlined text-on-secondary-container">bolt</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Activo</span>
+<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Alto</span>
 </button>
 </div>
 </article>
@@ -233,26 +234,51 @@
 </div>
 <div class="w-2/3 flex justify-between gap-1">
 <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">restaurant</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Comió bien</span>
-</button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">flatware</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Poco apetito</span>
-</button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
 <span class="material-symbols-outlined text-on-secondary-container">no_meals</span>
 <span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Sin apetito</span>
 </button>
+<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+<span class="material-symbols-outlined text-on-secondary-container">flatware</span>
+<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Poco</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+<span class="material-symbols-outlined text-on-secondary-container">restaurant</span>
+<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Comió bien</span>
+</button>
 </div>
 </article>
-<!-- Card 3: Caja de Arena -->
+<!-- Card 3: Agua -->
+<article class="peach-card p-4 rounded-2xl flex items-center gap-4">
+<div class="w-1/3">
+<h3 class="font-headline-md text-on-surface">Agua</h3>
+<p class="text-label-sm text-on-surface-variant">Hidratación del día</p>
+</div>
+<div class="w-2/3 flex justify-between gap-1">
+<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+<span class="material-symbols-outlined text-on-secondary-container">water_drop</span>
+<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Poco</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+<span class="material-symbols-outlined text-on-secondary-container">water_drop</span>
+<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Normal</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+<span class="material-symbols-outlined text-on-secondary-container">waves</span>
+<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Mucho</span>
+</button>
+</div>
+</article>
+<!-- Card 4: Caja de Arena -->
 <article class="peach-card p-4 rounded-2xl flex items-center gap-4">
 <div class="w-1/3">
 <h3 class="font-headline-md text-on-surface">Caja de Arena</h3>
 <p class="text-label-sm text-on-surface-variant">Frecuencia de uso</p>
 </div>
 <div class="w-2/3 flex justify-between gap-1">
+<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+<span class="material-symbols-outlined text-on-secondary-container">hourglass_empty</span>
+<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Poco uso</span>
+</button>
 <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
 <span class="material-symbols-outlined text-on-secondary-container">check_circle</span>
 <span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Normal</span>
@@ -261,13 +287,9 @@
 <span class="material-symbols-outlined text-on-secondary-container">history</span>
 <span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Frecuente</span>
 </button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">hourglass_empty</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Poco uso</span>
-</button>
 </div>
 </article>
-<!-- Card 4: Ánimo -->
+<!-- Card 5: Ánimo -->
 <article class="peach-card p-4 rounded-2xl flex items-center gap-4">
 <div class="w-1/3">
 <h3 class="font-headline-md text-on-surface">Ánimo</h3>
@@ -275,16 +297,16 @@
 </div>
 <div class="w-2/3 flex justify-between gap-1">
 <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">mood</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Feliz</span>
+<span class="material-symbols-outlined text-on-secondary-container">sentiment_very_dissatisfied</span>
+<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Triste</span>
 </button>
 <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
 <span class="material-symbols-outlined text-on-secondary-container">sentiment_neutral</span>
 <span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Neutro</span>
 </button>
 <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">sentiment_very_dissatisfied</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Triste</span>
+<span class="material-symbols-outlined text-on-secondary-container">mood</span>
+<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Feliz</span>
 </button>
 </div>
 </article>
@@ -296,35 +318,91 @@
             </button>
 </div>
 </main>
+<!-- SECCIÓN SALUD / HISTORIAL -->
+<section id="seccion-salud" style="display:none" class="px-gutter pt-20 pb-32">
+  <h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">Historial de salud</h2>
+  <p class="text-body-sm text-on-surface-variant mb-6">Últimos 7 días de <span id="nombre-michi-salud">tu michi</span></p>
+
+  <!-- Selector de métrica -->
+  <div class="flex gap-2 overflow-x-auto hide-scrollbar mb-6 pb-1">
+    <button onclick="cambiarMetrica('energia')" data-metrica="energia"
+      class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
+      ⚡ Energía
+    </button>
+    <button onclick="cambiarMetrica('comida')" data-metrica="comida"
+      class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
+      🍽️ Comida
+    </button>
+    <button onclick="cambiarMetrica('agua')" data-metrica="agua"
+      class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
+      💧 Agua
+    </button>
+    <button onclick="cambiarMetrica('caja_arena')" data-metrica="caja_arena"
+      class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
+      🪣 Arena
+    </button>
+    <button onclick="cambiarMetrica('animo')" data-metrica="animo"
+      class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
+      😻 Ánimo
+    </button>
+  </div>
+
+  <!-- Gráfica -->
+  <div class="peach-card rounded-2xl p-4">
+    <canvas id="grafica-metrica" height="220"></canvas>
+  </div>
+
+  <!-- Estado vacío -->
+  <div id="grafica-vacia" style="display:none" class="peach-card rounded-2xl p-8 text-center mt-4">
+    <span class="material-symbols-outlined text-4xl text-on-surface-variant">bar_chart</span>
+    <p class="text-body-sm text-on-surface-variant mt-2">Aún no hay registros suficientes.<br>¡Empieza a registrar hoy!</p>
+  </div>
+</section>
+
+<!-- MODAL PERFIL -->
+<div id="modal-perfil" style="display:none" class="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-lg" id="modal-avatar-letra"></div>
+      <div>
+        <p class="font-headline-md text-on-surface" id="modal-nombre-dueno"></p>
+        <p class="text-label-sm text-on-surface-variant" id="modal-email-dueno"></p>
+      </div>
+    </div>
+    <button id="btn-cerrar-sesion" class="w-full border border-error text-error rounded-xl py-3 font-label-lg active:scale-95 transition-transform">
+      Cerrar sesión
+    </button>
+  </div>
+</div>
+
 <!-- Bottom Navigation Bar -->
 <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface rounded-t-xl shadow-[0_-4px_16px_rgba(157,62,29,0.1)]">
-<!-- Home (Active) -->
-<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-3 py-1.5 transition-all active:scale-90" href="#">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
-<span class="font-label-sm text-label-sm">Home</span>
-</a>
-<!-- SweeteIA -->
-<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:bg-surface-container-high transition-all active:scale-90" href="#">
-<div class="w-6 h-6 flex items-center justify-center"><img src="../../../src/images/SweeteIcon.png" alt="SweeteIA" class="w-6 h-6 object-contain" style="filter: brightness(0) saturate(100%) invert(33%) sepia(13%) saturate(1584%) hue-rotate(336deg) brightness(94%) contrast(86%);"></div>
-<span class="font-label-sm text-label-sm">SweeteIA</span>
-</a>
-<!-- Salud -->
-<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:bg-surface-container-high transition-all active:scale-90" href="#">
-<span class="material-symbols-outlined">monitor_heart</span>
-<span class="font-label-sm text-label-sm">Salud</span>
-</a>
-<!-- Calendario -->
-<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:bg-surface-container-high transition-all active:scale-90" href="#">
-<span class="material-symbols-outlined">calendar_today</span>
-<span class="font-label-sm text-label-sm">Calendario</span>
-</a>
-<!-- Perfil -->
-<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:bg-surface-container-high transition-all active:scale-90" href="#">
-<span class="material-symbols-outlined">person</span>
-<span class="font-label-sm text-label-sm">Perfil</span>
-</a>
-</nav>
-<script>
+  <!-- Home (Active) -->
+  <a id="tab-home" class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-3 py-1.5 transition-all active:scale-90 cursor-pointer">
+    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+    <span class="font-label-sm text-label-sm">Home</span>
+  </a>
+  <!-- SweeteIA -->
+  <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 opacity-30 cursor-not-allowed pointer-events-none" >
+    <div class="w-6 h-6 flex items-center justify-center"><img src="../../../src/images/SweeteIcon.png" alt="SweeteIA" class="w-6 h-6 object-contain" style="filter: brightness(0) saturate(100%) invert(33%) sepia(13%) saturate(1584%) hue-rotate(336deg) brightness(94%) contrast(86%);"></div>
+    <span class="font-label-sm text-label-sm">SweeteIA</span>
+  </a>
+  <!-- Salud -->
+  <a id="tab-salud" class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:bg-surface-container-high transition-all active:scale-90 cursor-pointer">
+    <span class="material-symbols-outlined">monitor_heart</span>
+    <span class="font-label-sm text-label-sm">Salud</span>
+  </a>
+  <!-- Calendario (inactivo) -->
+  <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 opacity-30 cursor-not-allowed pointer-events-none">
+    <span class="material-symbols-outlined">calendar_today</span>
+    <span class="font-label-sm text-label-sm">Calendario</span>
+  </a>
+  <!-- Perfil (inactivo) -->
+  <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 opacity-30 cursor-not-allowed pointer-events-none">
+    <span class="material-symbols-outlined">person</span>
+    <span class="font-label-sm text-label-sm">Perfil</span>
+  </a>
+</nav><script>
         function toggleActive(btn) {
             // Find sibling buttons in the same container
             const container = btn.parentElement;
@@ -435,175 +513,526 @@
   </div>
 </div>
 
+<!-- MODAL DE AUTH -->
+<div id="modal-auth" style="display:none" class="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
+    <h2 class="font-headline-lg text-primary mb-1">Bienvenido a Mino 🐾</h2>
+    <p class="text-body-sm text-on-surface-variant mb-6">Inicia sesión para guardar el historial de tu michi</p>
+    <input id="auth-email" type="email" placeholder="Correo electrónico"
+      class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
+    <input id="auth-password" type="password" placeholder="Contraseña"
+      class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-4 text-body-md focus:outline-none focus:border-primary">
+    <button id="btn-login" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg mb-3 active:scale-95 transition-transform">
+      Iniciar sesión
+    </button>
+    <button id="btn-registro-auth" class="w-full border border-primary text-primary rounded-xl py-3 font-label-lg active:scale-95 transition-transform">
+      Crear cuenta
+    </button>
+
+    <p class="text-[11px] leading-tight text-on-surface-variant mt-4 text-center opacity-80">
+      Al crear tu cuenta, aceptas recibir recordatorios ocasionales para la bitácora de tu michi. Cero spam, lo prometemos.
+    </p>
+    <p id="auth-error" class="text-error text-body-sm mt-3 text-center hidden"></p>
+  </div>
+</div>
+
+<!-- MODAL ONBOARDING: NOMBRE DEL GATO -->
+<div id="modal-onboarding" style="display:none" class="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
+    <h2 class="font-headline-lg text-primary mb-1">¡Bienvenido a Mino! 🐾</h2>
+    <p class="text-body-sm text-on-surface-variant mb-4">Cuéntanos sobre tu michi para empezar a cuidarlo.</p>
+    
+    <input id="onboarding-nombre" type="text" placeholder="Nombre de tu gato"
+      class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
+    
+    <input id="onboarding-raza" type="text" placeholder="Raza (opcional)"
+      class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-4 text-body-md focus:outline-none focus:border-primary">
+
+    <div class="bg-primary-fixed/20 p-3 rounded-xl mb-4 border border-primary-fixed">
+      <p class="text-label-sm text-on-surface-variant mb-2"><strong>Reto de 3 días:</strong> Déjanos tu WhatsApp para enviarte un recordatorio y ayudarte a desbloquear el Perfil Base de tu michi.</p>
+      <input id="onboarding-telefono" type="tel" placeholder="WhatsApp (10 dígitos)" maxlength="10"
+        class="w-full border border-outline-variant rounded-xl px-4 py-3 text-body-md focus:outline-none focus:border-primary">
+    </div>
+
+    <button id="btn-guardar-gato" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg active:scale-95 transition-transform">
+      Empezar a cuidar a mi michi
+    </button>
+    <p id="onboarding-error" class="text-error text-body-sm mt-3 text-center hidden"></p>
+  </div>
+</div>
 <script>
-  // 0. DECLARAMOS LOS ELEMENTOS
-  const btnGuardar = document.getElementById('btn-guardar-registro');
-  const modal = document.getElementById('modal-fundador');
-  const preguntaMichi = document.getElementById('pregunta-michi');
-  const saludoDueno = document.getElementById('saludo-dueno');
-  const avatarDueno = document.getElementById('avatar-dueno');
+// ============================================
+// CONFIGURACIÓN
+// ============================================
+const API = 'https://mino-backend-vs9z.onrender.com';
 
-  // 1. VARIABLES DE ESTADO Y MEMORIA
-  let diaActual = parseInt(localStorage.getItem('mino_dia_simulacion')) || 1;
-  let puntuacionAcumulada = parseInt(localStorage.getItem('mino_puntos')) || 0;
+// ============================================
+// MAPEO DE CHIPS → VALORES NUMÉRICOS
+// ============================================
 
-  const nombreDueno = localStorage.getItem('mino_nombre_dueno');
-  const nombreMichi = localStorage.getItem('mino_nombre_michi') || 'Mino';
 
-  // 2. ACTUALIZAR INTERFAZ INICIAL
-  if (nombreDueno) {
-      saludoDueno.textContent = `¡Hola ${nombreDueno}!`;
-      avatarDueno.textContent = nombreDueno.charAt(0).toUpperCase();
+// ============================================
+// ESTADO GLOBAL
+// ============================================
+let token = localStorage.getItem('mino_token');
+let nombreMichi = localStorage.getItem('mino_nombre_michi') || 'tu michi';
+let nombreDueno = localStorage.getItem('mino_nombre_dueno') || '';
+
+// ============================================
+// HELPERS
+// ============================================
+function authHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  };
+}
+
+async function apiGet(path) {
+  const res = await fetch(`${API}${path}`, { headers: authHeaders() });
+  if (!res.ok) throw await res.json();
+  return res.json();
+}
+
+async function apiPost(path, body) {
+  const res = await fetch(`${API}${path}`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw await res.json();
+  return res.json();
+}
+
+function fechaHoy() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function mostrarToast(mensaje, esError = false) {
+  const toast = document.createElement('div');
+  toast.textContent = mensaje;
+  toast.className = `fixed bottom-24 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-white text-body-sm font-label-lg shadow-lg z-[300] transition-all`;
+  toast.style.backgroundColor = esError ? '#ba1a1a' : '#9d3e1d';
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2500);
+}
+
+// ============================================
+// CHIPS — leer y preseleccionar
+// ============================================
+
+// toggleActive ya existía en tu HTML, la conservamos igual
+function toggleActive(btn) {
+  // Desactivar otros chips de la misma card
+  const card = btn.closest('article');
+  card.querySelectorAll('button').forEach(b => {
+    b.classList.remove('active-chip');
+  });
+  btn.classList.add('active-chip');
+}
+
+// ============================================
+// MAPEO DE CHIPS → VALORES NUMÉRICOS (CORREGIDO)
+// ============================================
+const TEXTO_A_VALOR = {
+  energia:    { 'Bajo': 1, 'Normal': 2, 'Alto': 3 },
+  comida:     { 'Sin apetito': 1, 'Poco': 2, 'Comió bien': 3 },
+  agua:       { 'Poco': 1, 'Normal': 2, 'Mucho': 3 },
+  caja_arena: { 'Poco uso': 1, 'Normal': 2, 'Frecuente': 3 },
+  animo:      { 'Triste': 1, 'Neutro': 2, 'Feliz': 3 }
+};
+
+function leerChips() {
+  const secciones = {
+    energia:    document.querySelector('article:nth-of-type(1)'),
+    comida:     document.querySelector('article:nth-of-type(2)'),
+    agua:       document.querySelector('article:nth-of-type(3)'),
+    caja_arena: document.querySelector('article:nth-of-type(4)'),
+    animo:      document.querySelector('article:nth-of-type(5)'),
+  };
+	
+  const resultado = {};
+  for (const [metrica, seccion] of Object.entries(secciones)) {
+    const chipActivo = seccion?.querySelector('.active-chip span:last-child');
+    if (chipActivo) {
+      const texto = chipActivo.textContent.trim();
+      // Buscamos el valor dentro de la métrica específica
+      resultado[metrica] = TEXTO_A_VALOR[metrica][texto] ?? 2;
+    }
   }
-  if (preguntaMichi) {
-      preguntaMichi.textContent = `¿Cómo está ${nombreMichi} hoy? (Día ${diaActual}/3)`;
-  }
+  return resultado;
+}
 
-  // --- MINI MODELO DETERMINISTA ---
-  function evaluarSintomas() {
-      // Leemos el texto de los botones que tengan la clase 'active-chip'
-      const chipsActivos = document.querySelectorAll('.active-chip span:last-child');
-      let puntosHoy = 0;
-      
-      chipsActivos.forEach(chip => {
-          const valor = chip.textContent.trim();
-          
-          // Síntomas graves (2 puntos)
-          if (['Descansando', 'Sin apetito', 'Poco uso', 'Triste'].includes(valor)) {
-              puntosHoy += 2;
-          }
-          // Síntomas leves (1 punto)
-          else if (['Tranquilo', 'Poco apetito', 'Frecuente', 'Neutro'].includes(valor)) {
-              puntosHoy += 1;
-          }
-          // Si son síntomas normales (Activo, Comió bien, Normal, Feliz), suman 0.
-      });
-      return puntosHoy;
-  }
+function preseleccionarChips(registro) {
+  const indiceArticle = { energia: 0, comida: 1, agua: 2, caja_arena: 3, animo: 4 };
+  const valorATexto = {
+    energia:    { 1: 'Bajo', 2: 'Normal', 3: 'Alto' },
+    comida:     { 1: 'Sin apetito', 2: 'Poco', 3: 'Comió bien' },
+    agua:       { 1: 'Poco', 2: 'Normal', 3: 'Mucho' },
+    caja_arena: { 1: 'Poco uso', 2: 'Normal', 3: 'Frecuente' },
+    animo:      { 1: 'Triste', 2: 'Neutro', 3: 'Feliz' },
+  };
 
-  // 3. CONTROL DEL BOTÓN GUARDAR
-  if(btnGuardar) {
-    btnGuardar.addEventListener('click', function(evento) {
-      evento.preventDefault(); 
-      
-      // Verificamos si seleccionó al menos un estado
-      const seleccionados = document.querySelectorAll('.active-chip').length;
-      if(seleccionados === 0) {
-          alert("Por favor, selecciona cómo está el michi hoy antes de guardar.");
-          return;
-      }
-
-      // Calculamos y sumamos los puntos del día
-      const puntosDeHoy = evaluarSintomas();
-      puntuacionAcumulada += puntosDeHoy;
-      localStorage.setItem('mino_puntos', puntuacionAcumulada);
-      
-      if (diaActual < 3) {
-          // AVANZAR DE DÍA
-          diaActual++;
-          localStorage.setItem('mino_dia_simulacion', diaActual);
-          
-          btnGuardar.textContent = "Guardando...";
-          setTimeout(() => {
-              window.location.reload();
-          }, 400);
-
-      } else {
-          // ¡DÍA 3! EVALUACIÓN FINAL DEL MODELO
-          const tituloModal = modal.querySelector('h3');
-          const textoModal = modal.querySelector('p');
-          
-          // LÓGICA DE DIAGNÓSTICO (Máximo posible en 3 días: 24 puntos)
-          if (puntuacionAcumulada >= 8) {
-              // RIESGO ALTO
-              tituloModal.textContent = "🚨 Análisis Sweete: Urgente";
-              tituloModal.style.color = "#ba1a1a"; // Rojo
-              textoModal.innerHTML = `<strong>VEREDICTO URGENTE:</strong> Tras 3 días, ${nombreMichi} acumula síntomas de alerta constantes. <strong>Se recomienda revisión veterinaria.</strong><br><br>Sé el primero en probar la versión completa de Mino:`;
-          } 
-          else if (puntuacionAcumulada >= 4) {
-              // RIESGO MEDIO
-              tituloModal.textContent = "⚠️ Análisis Sweete: Monitoreo";
-              tituloModal.style.color = "#bd5533"; // Naranja
-              textoModal.innerHTML = `<strong>VEREDICTO MONITOREO:</strong> ${nombreMichi} ha tenido variaciones en su comportamiento. No parece crítico, pero requiere vigilancia.<br><br>Sé el primero en probar la versión completa de Mino:`;
-          } 
-          else {
-              // SANO
-              tituloModal.textContent = "✅ Análisis Sweete: Tranquilo";
-              tituloModal.style.color = "#2d2420"; // Color normal
-              textoModal.innerHTML = `<strong>VEREDICTO TRANQUILO:</strong> Los registros indican que ${nombreMichi} está sano y estable. ¡Excelente trabajo preventivo!<br><br>Sé el primero en probar la versión completa de Mino:`;
-          }
-          
-          // Mostramos el modal
-          modal.style.display = 'flex';
-          
-          // Limpiamos la memoria para que el siguiente juez empiece limpio
-          localStorage.removeItem('mino_dia_simulacion');
-          localStorage.removeItem('mino_puntos');
-      }
+  for (const [metrica, idx] of Object.entries(indiceArticle)) {
+    const valor = registro[metrica];
+    if (!valor) continue;
+    const textoEsperado = valorATexto[metrica][valor];
+    const article = document.querySelectorAll('article')[idx];
+    article?.querySelectorAll('button').forEach(btn => {
+      const texto = btn.querySelector('span:last-child')?.textContent.trim();
+      if (texto === textoEsperado) btn.classList.add('active-chip');
     });
   }
 
-  // --- CÓDIGO DE REGISTRO DE CORREO DEL MODAL ---
-  const btnUnirse = document.getElementById('btn-unirse');
-  if(btnUnirse) {
-      btnUnirse.addEventListener('click', async () => {
-        const email = document.getElementById('email-input').value;
-        const btnTextoOriginal = btnUnirse.textContent;
-        
-        if (email && email.includes('@')) {
-            btnUnirse.textContent = "Guardando... 🐾";
-            btnUnirse.disabled = true;
-            
-            const formData = new FormData();
-            formData.append('email', email); // Ajusta a 'correo' si Render falla
+  const notasInput = document.getElementById('notas-input');
+  if (notasInput && registro.notas) notasInput.value = registro.notas;
+}
 
-            try {
-                const response = await fetch('https://mino-backend-vs9z.onrender.com/registrar-correo', {
-                    method: 'POST',
-                    headers: {
-                        'ngrok-skip-browser-warning': 'true' 
-                    },
-                    body: formData
-                });
+// ============================================
+// GUARDAR REGISTRO
+// ============================================
+async function guardarRegistro() {
+  const chips = leerChips();
+  const notas = document.getElementById('notas-input')?.value || '';
 
-                if (response.ok) {
-                    alert("¡Gracias! Ahora eres un Dueño Fundador.");
-                    modal.style.display = 'none';
-                    btnUnirse.textContent = btnTextoOriginal;
-                    btnUnirse.disabled = false;
-                } else {
-                    alert("Hubo un problema de conexión con el servidor.");
-                    btnUnirse.textContent = btnTextoOriginal;
-                    btnUnirse.disabled = false;
-                }
-            } catch (error) {
-                console.error("Error al guardar:", error);
-                alert("Error de red. Asegúrate de que el servidor esté activo.");
-                btnUnirse.textContent = btnTextoOriginal;
-                btnUnirse.disabled = false;
+  if (Object.keys(chips).length === 0) {
+    mostrarToast('Selecciona al menos un estado', true);
+    return;
+  }
+
+  const btnGuardar = document.getElementById('btn-guardar-registro');
+  btnGuardar.textContent = 'Guardando...';
+  btnGuardar.disabled = true;
+
+  try {
+    await apiPost('/registro', { fecha: fechaHoy(), ...chips, notas });
+    mostrarToast('✅ Registro guardado');
+  } catch (e) {
+    mostrarToast('❌ Error al guardar', true);
+  } finally {
+    btnGuardar.textContent = 'Guardar registro';
+    btnGuardar.disabled = false;
+  }
+}
+
+// ============================================
+// AUTH
+// ============================================
+function mostrarPantallaAuth() {
+  document.getElementById('modal-auth').style.display = 'flex';
+}
+
+function ocultarPantallaAuth() {
+  document.getElementById('modal-auth').style.display = 'none';
+}
+
+async function handleLogin() {
+  const email = document.getElementById('auth-email').value;
+  const password = document.getElementById('auth-password').value;
+  const errorEl = document.getElementById('auth-error');
+  errorEl.classList.add('hidden');
+
+  try {
+    const res = await fetch(`${API}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    token = data.access_token;
+    localStorage.setItem('mino_token', token);
+    ocultarPantallaAuth();
+    await init();
+  } catch {
+    errorEl.textContent = 'Correo o contraseña incorrectos';
+    errorEl.classList.remove('hidden');
+  }
+}
+
+async function handleRegistro() {
+  const email = document.getElementById('auth-email').value;
+  const password = document.getElementById('auth-password').value;
+  const errorEl = document.getElementById('auth-error');
+  errorEl.classList.add('hidden');
+
+  try {
+    await fetch(`${API}/auth/registro`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    await handleLogin();
+  } catch {
+    errorEl.textContent = 'Error al crear la cuenta';
+    errorEl.classList.remove('hidden');
+  }
+}
+
+// ============================================
+// INIT
+// ============================================
+async function init() {
+  const saludoDueno = document.getElementById('saludo-dueno');
+  const preguntaMichi = document.getElementById('pregunta-michi');
+  const avatarDueno = document.getElementById('avatar-dueno');
+
+  if (!token) {
+    mostrarPantallaAuth();
+    return;
+  }
+
+  try {
+    const gato = await apiGet('/gato');
+    // Sacar nombre del correo
+const tokenData = JSON.parse(atob(token.split('.')[1]));
+const correo = tokenData.email || '';
+nombreDueno = correo.split('@')[0];
+// Capitalizar primera letra
+nombreDueno = nombreDueno.charAt(0).toUpperCase() + nombreDueno.slice(1);
+localStorage.setItem('mino_nombre_dueno', nombreDueno);
+
+if (saludoDueno) saludoDueno.textContent = `¡Hola ${nombreDueno}!`;
+if (avatarDueno) avatarDueno.textContent = nombreDueno.charAt(0).toUpperCase();
+    nombreMichi = gato.nombre;
+    localStorage.setItem('mino_nombre_michi', nombreMichi);
+
+    if (preguntaMichi) preguntaMichi.textContent = `¿Cómo está ${nombreMichi} hoy?`;
+    if (nombreDueno) {
+      if (saludoDueno) saludoDueno.textContent = `¡Hola ${nombreDueno}!`;
+      if (avatarDueno) avatarDueno.textContent = nombreDueno.charAt(0).toUpperCase();
+    }
+
+    try {
+      const registroHoy = await apiGet(`/registro/${fechaHoy()}`);
+      preseleccionarChips(registroHoy);
+    } catch {
+      // Sin registro hoy, está bien
+    }
+
+  } catch (e) {
+    // 404 = no tiene gato aún → onboarding
+    // 401 = token inválido → login
+    if (e.detail === 'No tienes un gato registrado') {
+      document.getElementById('modal-onboarding').style.display = 'flex';
+    } else {
+      localStorage.removeItem('mino_token');
+      mostrarPantallaAuth();
+    }
+  }
+}
+// ============================================
+// EVENT LISTENERS
+// ============================================
+document.addEventListener('click', function(e) {
+  if (e.target.closest('#btn-guardar-registro')) {
+    guardarRegistro();
+  }
+});
+
+document.getElementById('btn-login')
+  ?.addEventListener('click', handleLogin);
+
+document.getElementById('btn-registro-auth')
+  ?.addEventListener('click', handleRegistro);
+
+// Modal fundador (conservamos el dismiss)
+document.getElementById('btn-dismiss')?.addEventListener('click', () => {
+  document.getElementById('modal-fundador').style.display = 'none';
+});
+
+document.getElementById('btn-guardar-gato')?.addEventListener('click', async () => {
+  const nombre = document.getElementById('onboarding-nombre').value.trim();
+  const raza = document.getElementById('onboarding-raza').value.trim();
+  const telefono = document.getElementById('onboarding-telefono').value.trim(); // <-- NUEVO
+  const errorEl = document.getElementById('onboarding-error');
+
+  if (!nombre) {
+    errorEl.textContent = 'El nombre de tu michi es obligatorio';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  try {
+    // Agregamos el teléfono al JSON que viaja a FastAPI
+    await apiPost('/gato', { 
+      nombre, 
+      raza: raza || null,
+      telefono: telefono || null // <-- NUEVO
+    });
+    
+    document.getElementById('modal-onboarding').style.display = 'none';
+    await init();
+  } catch {
+    errorEl.textContent = 'Error al guardar, intenta de nuevo';
+    errorEl.classList.remove('hidden');
+  }
+});
+// ============================================
+// NAVEGACIÓN HOME ↔ SALUD
+// ============================================
+const seccionHome = document.querySelector('main');
+const seccionSalud = document.getElementById('seccion-salud');
+const tabHome = document.getElementById('tab-home');
+const tabSalud = document.getElementById('tab-salud');
+
+function mostrarHome() {
+  seccionHome.style.display = '';
+  seccionSalud.style.display = 'none';
+  tabHome.classList.add('bg-secondary-container', 'text-on-secondary-container');
+  tabHome.classList.remove('text-on-surface-variant');
+  tabSalud.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+  tabSalud.classList.add('text-on-surface-variant');
+}
+
+function mostrarSalud() {
+  seccionHome.style.display = 'none';
+  seccionSalud.style.display = '';
+  tabSalud.classList.add('bg-secondary-container', 'text-on-secondary-container');
+  tabSalud.classList.remove('text-on-surface-variant');
+  tabHome.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+  tabHome.classList.add('text-on-surface-variant');
+  // Cargar gráfica con métrica default
+  cambiarMetrica('energia');
+  // Actualizar nombre del michi
+  document.getElementById('nombre-michi-salud').textContent = nombreMichi;
+}
+
+tabHome.addEventListener('click', mostrarHome);
+tabSalud.addEventListener('click', mostrarSalud);
+
+// ============================================
+// GRÁFICAS CON CHART.JS
+// ============================================
+let graficaActual = null;
+let metricaActual = 'energia';
+
+const ETIQUETAS_METRICA = {
+  energia: 'Energía', comida: 'Comida',
+  agua: 'Agua', caja_arena: 'Caja de Arena', animo: 'Ánimo'
+};
+
+function cambiarMetrica(metrica) {
+  metricaActual = metrica;
+
+  // Actualizar estilos del selector
+  document.querySelectorAll('.metrica-btn').forEach(btn => {
+    if (btn.dataset.metrica === metrica) {
+      btn.classList.add('bg-primary', 'text-white', 'border-primary');
+      btn.classList.remove('text-on-surface-variant', 'border-outline-variant');
+    } else {
+      btn.classList.remove('bg-primary', 'text-white', 'border-primary');
+      btn.classList.add('text-on-surface-variant', 'border-outline-variant');
+    }
+  });
+
+  cargarGrafica(metrica);
+}
+
+async function cargarGrafica(metrica) {
+  try {
+    const registros = await apiGet('/registros?dias=7');
+
+    const graficaVacia = document.getElementById('grafica-vacia');
+    const canvasEl = document.getElementById('grafica-metrica');
+
+    if (!registros || registros.length === 0) {
+      canvasEl.style.display = 'none';
+      graficaVacia.style.display = '';
+      return;
+    }
+
+    canvasEl.style.display = '';
+    graficaVacia.style.display = 'none';
+
+    // Preparar datos
+    const labels = registros.map(r => {
+      const [, mes, dia] = r.fecha.split('-');
+      return `${dia}/${mes}`;
+    });
+    const valores = registros.map(r => r[metrica] ?? null);
+
+    // Destruir gráfica anterior si existe
+    if (graficaActual) graficaActual.destroy();
+
+    graficaActual = new Chart(canvasEl, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: ETIQUETAS_METRICA[metrica],
+          data: valores,
+          borderColor: '#9d3e1d',
+          backgroundColor: 'rgba(157, 62, 29, 0.08)',
+          borderWidth: 7, // Línea un poco más gruesa
+          pointBackgroundColor: '#9d3e1d',
+          pointBorderColor: '#ffffff', // Borde blanco para que resalte
+          pointBorderWidth: 2, // Grosor del borde blanco
+          pointRadius: 10, // Puntos más grandes
+          pointHoverRadius: 15, // Aún más grandes al pasar el dedo/mouse
+          fill: true,
+          tension: 0.3,
+          spanGaps: true
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          // Dentro de cargarGrafica(), reemplaza las options.scales.y por:
+y: {
+  min: 1,
+  max: 3,
+  ticks: {
+    stepSize: 1,
+    callback: val => ({ 1: '😿 Bajo', 2: '😐 Normal', 3: '😸 Alto' })[val] || val
+  },
+  grid: { color: 'rgba(0,0,0,0.05)' }
+},
+          x: {
+            grid: { display: false }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => {
+                const emojis = ['', '😿', '😾', '😐', '😸', '😻'];
+                return `${ETIQUETAS_METRICA[metrica]}: ${emojis[ctx.raw] || ctx.raw}`;
+              }
             }
-        } else {
-            alert("Por favor, ingresa un correo válido.");
+          }
         }
-      });
-  }
+      }
+    });
 
-// --- CÓDIGO PARA CERRAR EL MODAL (DISMISS) ---
-  const btnDismiss = document.getElementById('btn-dismiss');
-  if(btnDismiss) {
-      btnDismiss.addEventListener('click', () => {
-          // Ocultamos el modal
-          modal.style.display = 'none';
-          
-          // Limpiamos la memoria de la simulación para reiniciar el ciclo
-          localStorage.removeItem('mino_dia_simulacion');
-          localStorage.removeItem('mino_puntos');
-          
-          // Recargamos para que el título vuelva a decir "Día 1" de forma limpia
-          window.location.reload();
-      });
+  } catch (e) {
+    console.error('Error cargando gráfica:', e);
   }
+}
 
+// MODAL PERFIL
+document.getElementById('avatar-dueno')?.addEventListener('click', () => {
+  const tokenData = JSON.parse(atob(token.split('.')[1]));
+  document.getElementById('modal-avatar-letra').textContent = nombreDueno.charAt(0).toUpperCase();
+  document.getElementById('modal-nombre-dueno').textContent = nombreDueno;
+  document.getElementById('modal-email-dueno').textContent = tokenData.email || '';
+  document.getElementById('modal-perfil').style.display = 'flex';
+});
+
+document.getElementById('btn-cerrar-sesion')?.addEventListener('click', () => {
+  localStorage.removeItem('mino_token');
+  localStorage.removeItem('mino_nombre_dueno');
+  localStorage.removeItem('mino_nombre_michi');
+  token = null;
+  document.getElementById('modal-perfil').style.display = 'none';
+  mostrarPantallaAuth();
+});
+
+document.getElementById('modal-perfil')?.addEventListener('click', function(e) {
+  if (e.target === this) this.style.display = 'none';
+});
+
+init();
 </script>
-
 </body></html>
