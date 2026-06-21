@@ -135,6 +135,7 @@ class AuthRequest(BaseModel):
     email: str
     password: str
 
+@app.head("/")
 @app.get("/")
 async def root():
     return {"status": "ok", "message": "Mino API está despierta 🐾"}
