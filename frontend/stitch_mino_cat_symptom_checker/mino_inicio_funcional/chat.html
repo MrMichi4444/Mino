@@ -213,7 +213,7 @@
     
     if (token) {
         // Si ya tiene sesión, va directo a su bitácora
-        window.location.href = 'bitacora.html'; 
+        window.location.href = '../mino_bitacora/bitacora.html'; 
     } else {
         // Bloqueamos input y mostramos el modal de Auth
         const input = document.getElementById('user-input');
@@ -342,7 +342,7 @@
       if (!res.ok) throw new Error();
       const data = await res.json();
       localStorage.setItem('mino_token', data.access_token);
-      window.location.href = 'bitacora.html'; // Redirige al éxito
+      window.location.href = '../mino_bitacora/bitacora.html'; // Redirige al éxito
     } catch {
       errorEl.textContent = 'Correo o contraseña incorrectos';
       errorEl.classList.remove('hidden');
