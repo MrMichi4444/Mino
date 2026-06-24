@@ -158,6 +158,52 @@ async def login(data: AuthRequest):
     except Exception as e:
         raise HTTPException(status_code=401, detail="Credenciales inválidas")
 
+# --- MODELOS PARA RECUPERACIÓN ---
+class SolicitudCodigoRequest(BaseModel):
+    email: str
+
+class RestablecerPasswordRequest(BaseModel):
+    email: str
+    codigo: str
+    nueva_password: str
+
+# --- ENDPOINTS DE RECUPERACIÓN ---
+@app.post("/auth/solicitar-codigo")
+async def solicitar_codigo(data: SolicitudCodigoRequest):
+    try:
+        supabase.auth.reset_password_for_email(data.email)
+        return {"status": "success", "message": "Código enviado."}
+    except Exception as e:
+        error_str = str(e).lower()
+        # Detectamos si Supabase bloquea por límite de envíos (Rate Limit)
+        if "rate limit" in error_str or "too many requests" in error_str or "exceeded" in error_str:
+            raise HTTPException(status_code=429, detail="Límite de correos alcanzado. Por favor, espera 60 segundos.")
+        
+        # Si es otro error, respondemos éxito igual por seguridad (evita que ataquen adivinando correos)
+        return {"status": "success", "message": "Código enviado."}
+
+@app.post("/auth/restablecer-password")
+async def restablecer_password(data: RestablecerPasswordRequest):
+    try:
+        res = supabase.auth.verify_otp({
+            "email": data.email,
+            "token": data.codigo,
+            "type": "recovery"
+        })
+        supabase.auth.update_user({
+            "password": data.nueva_password
+        })
+        return {"status": "success", "message": "Contraseña actualizada correctamente"}
+    except Exception as e:
+        error_str = str(e)
+        # Filtramos los errores para no dar siempre el mismo mensaje
+        if "different from the old password" in error_str:
+            raise HTTPException(status_code=400, detail="La nueva contraseña debe ser diferente a la actual.")
+        elif "expired or is invalid" in error_str:
+            raise HTTPException(status_code=400, detail="El código es incorrecto o ya expiró.")
+        else:
+            raise HTTPException(status_code=400, detail="Error al restablecer. Revisa tus datos.")
+
 # --- ENDPOINTS DE GATO ---
 
 class GatoRequest(BaseModel):

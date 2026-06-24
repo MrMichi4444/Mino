@@ -518,20 +518,70 @@
   <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
     <h2 class="font-headline-lg text-primary mb-1">Bienvenido a Mino 🐾</h2>
     <p class="text-body-sm text-on-surface-variant mb-6">Inicia sesión para guardar el historial de tu michi</p>
-    <input id="auth-email" type="email" placeholder="Correo electrónico"
-      class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
-    <input id="auth-password" type="password" placeholder="Contraseña"
-      class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-4 text-body-md focus:outline-none focus:border-primary">
-    <button id="btn-login" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg mb-3 active:scale-95 transition-transform">
-      Iniciar sesión
-    </button>
-    <button id="btn-registro-auth" class="w-full border border-primary text-primary rounded-xl py-3 font-label-lg active:scale-95 transition-transform">
-      Crear cuenta
-    </button>
+    
+    <div id="auth-normal">
+      <input id="auth-email" type="email" placeholder="Correo electrónico"
+        class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
+      
+      <div class="relative w-full mb-4">
+        <input id="auth-password" type="password" placeholder="Contraseña"
+          class="w-full border border-outline-variant rounded-xl px-4 py-3 pr-12 text-body-md focus:outline-none focus:border-primary">
+        <button type="button" id="btn-toggle-password" class="absolute inset-y-0 right-0 px-3 flex items-center text-on-surface-variant hover:text-primary transition-colors active:scale-95">
+          <span id="icono-password" class="material-symbols-outlined text-[20px]">visibility</span>
+        </button>
+      </div>
 
-    <p class="text-[11px] leading-tight text-on-surface-variant mt-4 text-center opacity-80">
-      Al crear tu cuenta, aceptas recibir recordatorios ocasionales para la bitácora de tu michi. Cero spam, lo prometemos.
-    </p>
+      <button id="btn-login" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg mb-3 active:scale-95 transition-transform">
+        Iniciar sesión
+      </button>
+      <button id="btn-registro-auth" class="w-full border border-primary text-primary rounded-xl py-3 font-label-lg active:scale-95 transition-transform">
+        Crear cuenta
+      </button>
+      
+      <button id="btn-olvide-password" class="w-full text-center text-label-sm text-primary mt-4 underline active:scale-95 transition-transform">
+        ¿Olvidaste tu contraseña?
+      </button>
+
+      <p class="text-[11px] leading-tight text-on-surface-variant mt-4 text-center opacity-80">
+        Al crear tu cuenta, aceptas recibir recordatorios ocasionales para la bitácora de tu michi. Cero spam, lo prometemos.
+      </p>
+    </div>
+
+    <div id="auth-recuperacion" style="display: none;">
+      <p class="text-body-sm text-on-surface-variant mb-4 text-center">Ingresa tu correo para recibir un código de 8 dígitos.</p>
+      
+      <div id="recuperacion-paso-1">
+        <input id="recuperacion-email" type="email" placeholder="Tu correo electrónico"
+          class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
+        <button id="btn-enviar-codigo" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg mb-3 active:scale-95 transition-transform">
+          Enviar código
+        </button>
+      </div>
+
+      <!-- Paso 2: Ingresar código y nueva contraseña -->
+      <div id="recuperacion-paso-2" style="display: none;">
+        <input id="recuperacion-codigo" type="text" placeholder="Código de 8 dígitos" maxlength="8"
+          class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary text-center tracking-widest font-bold">
+        <input id="recuperacion-nueva-password" type="password" placeholder="Escribe tu nueva contraseña"
+          class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
+        <button id="btn-guardar-nueva-password" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg mb-3 active:scale-95 transition-transform">
+          Guardar y entrar
+        </button>
+
+        <!-- PARCHE: BOTÓN REENVIAR -->
+        <div class="text-center mt-2 mb-4">
+          <button id="btn-reenviar-codigo" class="text-label-sm text-primary underline active:scale-95 disabled:opacity-50 disabled:no-underline transition-opacity">
+            No recibí el código. Reenviar.
+          </button>
+          <p id="timer-reenvio" class="text-[11px] text-on-surface-variant hidden mt-1">Por favor espera <span id="segundos-reenvio" class="font-bold">60</span>s para pedir otro.</p>
+        </div>
+      </div>
+
+      <button id="btn-volver-login" class="w-full text-center text-label-sm text-on-surface-variant mt-2 active:scale-95 transition-transform">
+        Volver a inicio de sesión
+      </button>
+    </div>
+
     <p id="auth-error" class="text-error text-body-sm mt-3 text-center hidden"></p>
   </div>
 </div>
@@ -564,7 +614,7 @@
 // ============================================
 // CONFIGURACIÓN
 // ============================================
-const API = 'https://mino-backend-vs9z.onrender.com';
+const API = 'http://localhost:8000';
 
 // ============================================
 // MAPEO DE CHIPS → VALORES NUMÉRICOS
@@ -1031,6 +1081,184 @@ document.getElementById('btn-cerrar-sesion')?.addEventListener('click', () => {
 
 document.getElementById('modal-perfil')?.addEventListener('click', function(e) {
   if (e.target === this) this.style.display = 'none';
+});
+
+// ============================================
+// UX: MOSTRAR/OCULTAR CONTRASEÑA
+// ============================================
+document.getElementById('btn-toggle-password')?.addEventListener('click', () => {
+  const passwordInput = document.getElementById('auth-password');
+  const iconoElement = document.getElementById('icono-password');
+  
+  if (passwordInput.type === 'password') {
+    passwordInput.type = 'text';
+    iconoElement.textContent = 'visibility_off'; // Cambia el icono al ojo tachado
+  } else {
+    passwordInput.type = 'password';
+    iconoElement.textContent = 'visibility'; // Vuelve al ojo normal
+  }
+});
+
+// ============================================
+// RECUPERACIÓN DE CONTRASEÑA (OTP)
+// ============================================
+const authNormal = document.getElementById('auth-normal');
+const authRecuperacion = document.getElementById('auth-recuperacion');
+const recPaso1 = document.getElementById('recuperacion-paso-1');
+const recPaso2 = document.getElementById('recuperacion-paso-2');
+const errorAuth = document.getElementById('auth-error');
+
+// Navegación dentro del modal
+document.getElementById('btn-olvide-password')?.addEventListener('click', () => {
+  authNormal.style.display = 'none';
+  authRecuperacion.style.display = 'block';
+  recPaso1.style.display = 'block';
+  recPaso2.style.display = 'none';
+  errorAuth.classList.add('hidden');
+});
+
+document.getElementById('btn-volver-login')?.addEventListener('click', () => {
+  authRecuperacion.style.display = 'none';
+  authNormal.style.display = 'block';
+  errorAuth.classList.add('hidden');
+});
+
+// Paso 1: Solicitar código
+// Función helper para atrapar errores del backend
+async function extraerError(res) {
+  try {
+    const errorData = await res.json();
+    return errorData.detail || 'Ocurrió un error';
+  } catch {
+    return 'Ocurrió un error de conexión';
+  }
+}
+
+// Lógica del temporizador (60 segundos)
+function iniciarTimerReenvio() {
+  const btnReenviar = document.getElementById('btn-reenviar-codigo');
+  const timerText = document.getElementById('timer-reenvio');
+  const spanSegundos = document.getElementById('segundos-reenvio');
+  
+  btnReenviar.disabled = true;
+  timerText.classList.remove('hidden');
+  
+  let segundos = 60;
+  spanSegundos.textContent = segundos;
+  
+  const intervalo = setInterval(() => {
+    segundos--;
+    spanSegundos.textContent = segundos;
+    
+    if (segundos <= 0) {
+      clearInterval(intervalo);
+      btnReenviar.disabled = false;
+      timerText.classList.add('hidden');
+    }
+  }, 1000);
+}
+
+// Paso 1: Solicitar código (Reutilizable para el botón de reenvío)
+async function solicitarCodigoOTP() {
+  const email = document.getElementById('recuperacion-email').value.trim();
+  if (!email) {
+    errorAuth.textContent = 'Ingresa tu correo';
+    errorAuth.classList.remove('hidden');
+    return false;
+  }
+  
+  try {
+    const res = await fetch(`${API}/auth/solicitar-codigo`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    
+    if (!res.ok) {
+      const errorMsg = await extraerError(res);
+      throw new Error(errorMsg);
+    }
+    
+    mostrarToast('Código enviado a tu correo');
+    iniciarTimerReenvio(); // Arranca el bloqueo de 60s
+    return true;
+  } catch (e) {
+    errorAuth.textContent = e.message;
+    errorAuth.classList.remove('hidden');
+    return false;
+  }
+}
+
+// Evento: Clic en primer envío
+document.getElementById('btn-enviar-codigo')?.addEventListener('click', async (e) => {
+  const btn = e.target;
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
+  
+  const exito = await solicitarCodigoOTP();
+  if (exito) {
+    recPaso1.style.display = 'none';
+    recPaso2.style.display = 'block';
+    errorAuth.classList.add('hidden');
+  }
+  
+  btn.textContent = 'Enviar código';
+  btn.disabled = false;
+});
+
+// Evento: Clic en botón de reenvío
+document.getElementById('btn-reenviar-codigo')?.addEventListener('click', async () => {
+  errorAuth.classList.add('hidden');
+  await solicitarCodigoOTP();
+});
+
+// Paso 2: Enviar código + nueva contraseña
+document.getElementById('btn-guardar-nueva-password')?.addEventListener('click', async () => {
+  const email = document.getElementById('recuperacion-email').value.trim();
+  const codigo = document.getElementById('recuperacion-codigo').value.trim();
+  const nueva_password = document.getElementById('recuperacion-nueva-password').value;
+  
+  if (!codigo || !nueva_password) {
+    errorAuth.textContent = 'Llena todos los campos';
+    errorAuth.classList.remove('hidden');
+    return;
+  }
+
+  const btn = document.getElementById('btn-guardar-nueva-password');
+  btn.textContent = 'Guardando...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${API}/auth/restablecer-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, codigo, nueva_password })
+    });
+    
+    // Si el backend tiró un error (ej. contraseña igual), disparamos el catch con el mensaje
+    if (!res.ok) {
+      const errorMsg = await extraerError(res);
+      throw new Error(errorMsg);
+    }
+    
+    mostrarToast('Contraseña actualizada con éxito');
+    
+    document.getElementById('auth-email').value = email;
+    document.getElementById('auth-password').value = nueva_password;
+    
+    authRecuperacion.style.display = 'none';
+    authNormal.style.display = 'block';
+    
+    await handleLogin();
+    
+  } catch (e) {
+    // Imprime el error exacto que mandó FastAPI ("La nueva contraseña debe ser diferente...", etc.)
+    errorAuth.textContent = e.message; 
+    errorAuth.classList.remove('hidden');
+  } finally {
+    btn.textContent = 'Guardar y entrar';
+    btn.disabled = false;
+  }
 });
 
 init();
