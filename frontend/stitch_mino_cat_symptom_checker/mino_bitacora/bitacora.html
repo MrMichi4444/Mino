@@ -310,6 +310,18 @@
 </button>
 </div>
 </article>
+<!-- Card 6: Notas -->
+<article class="peach-card p-4 rounded-2xl flex flex-col gap-3">
+  <div class="flex items-center gap-2">
+    <span class="material-symbols-outlined text-on-surface-variant">edit_note</span>
+    <div>
+      <h3 class="font-headline-md text-on-surface">Notas</h3>
+      <p class="text-label-sm text-on-surface-variant">Observaciones del día (Opcional)</p>
+    </div>
+  </div>
+  <textarea id="notas-input" rows="3" placeholder="¿Notaste algo inusual hoy con tu michi? Vómitos, comportamiento extraño..." 
+    class="w-full border border-outline-variant rounded-xl px-4 py-3 text-body-md focus:outline-none focus:border-primary resize-none bg-surface/50 placeholder:text-outline"></textarea>
+</article>
 </div>
 <!-- Action Button -->
 <div class="mt-8">
@@ -357,6 +369,9 @@
     <span class="material-symbols-outlined text-4xl text-on-surface-variant">bar_chart</span>
     <p class="text-body-sm text-on-surface-variant mt-2">Aún no hay registros suficientes.<br>¡Empieza a registrar hoy!</p>
   </div>
+
+  <div id="feed-notas" class="mt-8 mb-4">
+   </div>
 </section>
 
 <!-- MODAL PERFIL -->
@@ -1001,6 +1016,41 @@ async function cargarGrafica(metrica) {
       return `${dia}/${mes}`;
     });
     const valores = registros.map(r => r[metrica] ?? null);
+
+    // --- NUEVO: LÓGICA DEL FEED DE NOTAS ---
+    const feedNotas = document.getElementById('feed-notas');
+    if (feedNotas) {
+      // Limpiamos el contenedor y ponemos el título
+      feedNotas.innerHTML = '<h3 class="font-headline-md text-on-surface mb-4">Diario de observaciones</h3>';
+      
+      // Filtramos solo los registros que traen texto en la nota y los volteamos (del más reciente al más viejo)
+      const registrosConNota = registros.filter(r => r.notas && r.notas.trim() !== '').reverse();
+
+      if (registrosConNota.length === 0) {
+        feedNotas.innerHTML += `
+          <div class="text-center py-4 opacity-70">
+            <span class="material-symbols-outlined text-3xl text-on-surface-variant mb-2">edit_off</span>
+            <p class="text-body-sm text-on-surface-variant">No hay notas en los últimos 7 días.</p>
+          </div>
+        `;
+      } else {
+        // Armamos el HTML para cada nota respetando tu clase .peach-card
+        registrosConNota.forEach(r => {
+          const [, mes, dia] = r.fecha.split('-');
+          const notaHTML = `
+            <article class="peach-card p-4 rounded-2xl flex flex-col gap-2 mb-3">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="material-symbols-outlined text-primary text-[18px]">calendar_today</span>
+                <span class="text-label-sm text-primary font-bold">${dia}/${mes}</span>
+              </div>
+              <p class="text-body-md text-on-surface leading-relaxed">${r.notas}</p>
+            </article>
+          `;
+          feedNotas.innerHTML += notaHTML;
+        });
+      }
+    }
+    // --- FIN DE LA LÓGICA DEL FEED ---
 
     // Destruir gráfica anterior si existe
     if (graficaActual) graficaActual.destroy();
