@@ -142,8 +142,34 @@ async def root():
 @app.post("/auth/registro")
 async def registro(data: AuthRequest):
     try:
+        # 1. Supabase crea el usuario
         res = supabase.auth.sign_up({"email": data.email, "password": data.password})
+        
+        # 2. Notificación a Discord reciclada
+        payload = {
+            "content": f"🚀 **¡NUEVO USUARIO EN MINO!**\nAcaba de crear cuenta: `{data.email}`"
+        }
+        
+        req = urllib.request.Request(
+            DISCORD_WEBHOOK_URL, 
+            data=json.dumps(payload).encode('utf-8'), 
+            headers={
+                'Content-Type': 'application/json', 
+                'User-Agent': 'MinoBot'
+            }
+        )
+        
+        # Lo envolvemos en un try/except para que si Discord falla, 
+        # no le marque error al usuario que se está registrando.
+        try:
+            urllib.request.urlopen(req)
+            print(f"Alerta de nuevo usuario enviada a Discord para {data.email}")
+        except Exception as e:
+            print(f"Error al enviar webhook a Discord: {e}")
+
+        # 3. Retornamos el éxito al frontend
         return {"user_id": res.user.id, "email": res.user.email}
+        
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -293,38 +319,6 @@ async def chat(request: ChatRequest):
                 continue
             raise e
 
-@app.post("/registrar-correo")
-async def registrar_correo(email: str = Form(...)):
-    # --- PARTE 1: Guardar en CSV local ---
-    fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    try:
-        with open(RUTA_CSV, mode="a", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow([fecha, email])
-    except Exception as e:
-        print(f"Error al escribir en CSV: {e}")
-
-    # --- PARTE 2: Notificar a Discord ---
-    payload = {
-        "content": f"🐾 **¡Nuevo Dueño Fundador de Mino!**\nEmail: `{email}`"
-    }
-    
-    req = urllib.request.Request(
-        DISCORD_WEBHOOK_URL, 
-        data=json.dumps(payload).encode('utf-8'), 
-        headers={
-            'Content-Type': 'application/json', 
-            'User-Agent': 'MinoBot'
-        }
-    )
-    
-    try:
-        urllib.request.urlopen(req)
-        print(f"Correo {email} enviado a Discord exitosamente.")
-    except Exception as e:
-        print(f"Error al enviar a Discord: {e}")
-        
-    return {"status": "success", "message": "Correo registrado con éxito"}
 
 class RegistroRequest(BaseModel):
     fecha: date
