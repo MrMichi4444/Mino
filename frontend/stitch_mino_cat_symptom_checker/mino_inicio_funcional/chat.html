@@ -156,25 +156,70 @@
 <div id="modal-auth" style="display:none" class="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4">
   <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
     <h2 class="font-bold text-2xl text-[#9d3e1d] mb-1" style="font-family: Quicksand">Bienvenido a Mino 🐾</h2>
-    <p class="text-sm text-gray-600 mb-6">Inicia sesión para guardar este reporte en la bitácora de tu michi.</p>
+    <p class="text-sm text-gray-600 mb-6">Inicia sesión para guardar este reporte en la bitácora.</p>
     
-    <input id="auth-email" type="email" placeholder="Correo electrónico"
-      class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-3 text-sm focus:outline-none focus:border-[#9d3e1d]">
-    
-    <input id="auth-password" type="password" placeholder="Contraseña"
-      class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 text-sm focus:outline-none focus:border-[#9d3e1d]">
-    
-    <button id="btn-login" onclick="handleLogin()" class="w-full bg-[#9d3e1d] text-white rounded-xl py-3 text-sm font-semibold mb-3 active:scale-95 transition-transform">
-      Iniciar sesión
-    </button>
-    
-    <button id="btn-registro-auth" onclick="handleRegistro()" class="w-full border border-[#9d3e1d] text-[#9d3e1d] rounded-xl py-3 text-sm font-semibold active:scale-95 transition-transform">
-      Crear cuenta
-    </button>
-    
-    <p class="text-[11px] leading-tight text-gray-500 mt-4 text-center opacity-80">
-      Al crear tu cuenta, aceptas recibir recordatorios ocasionales para la bitácora de tu michi. Cero spam, lo prometemos.
-    </p>
+    <!-- VISTA NORMAL (LOGIN/REGISTRO) -->
+    <div id="auth-normal">
+      <input id="auth-email" type="email" placeholder="Correo electrónico"
+        class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-3 text-sm focus:outline-none focus:border-[#9d3e1d]">
+      
+      <div class="relative w-full mb-4">
+        <input id="auth-password" type="password" placeholder="Contraseña"
+          class="w-full border border-gray-300 rounded-xl px-4 py-3 pr-12 text-sm focus:outline-none focus:border-[#9d3e1d]">
+        <button type="button" id="btn-toggle-password" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-[#9d3e1d] transition-colors active:scale-95">
+          <span id="icono-password" class="material-symbols-outlined text-[20px]">visibility</span>
+        </button>
+      </div>
+
+      <button id="btn-login" class="w-full bg-[#9d3e1d] text-white rounded-xl py-3 text-sm font-semibold mb-3 active:scale-95 transition-transform">
+        Iniciar sesión
+      </button>
+      <button id="btn-registro-auth" class="w-full border border-[#9d3e1d] text-[#9d3e1d] rounded-xl py-3 text-sm font-semibold active:scale-95 transition-transform">
+        Crear cuenta
+      </button>
+
+      <button id="btn-olvide-password" class="w-full text-center text-xs text-[#9d3e1d] mt-4 underline active:scale-95 transition-transform">
+        ¿Olvidaste tu contraseña?
+      </button>
+
+      <p class="text-[11px] leading-tight text-gray-500 mt-4 text-center opacity-80">
+        Al crear tu cuenta, aceptas recibir recordatorios ocasionales. Cero spam, lo prometemos.
+      </p>
+    </div>
+
+    <!-- VISTA DE RECUPERACIÓN (OTP) -->
+    <div id="auth-recuperacion" style="display: none;">
+      <p class="text-sm text-gray-600 mb-4 text-center">Ingresa tu correo para recibir un código de 8 dígitos.</p>
+      
+      <div id="recuperacion-paso-1">
+        <input id="recuperacion-email" type="email" placeholder="Tu correo electrónico"
+          class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-3 text-sm focus:outline-none focus:border-[#9d3e1d]">
+        <button id="btn-enviar-codigo" class="w-full bg-[#9d3e1d] text-white rounded-xl py-3 text-sm font-semibold mb-3 active:scale-95 transition-transform">
+          Enviar código
+        </button>
+      </div>
+
+      <div id="recuperacion-paso-2" style="display: none;">
+        <input id="recuperacion-codigo" type="text" placeholder="Código de 8 dígitos" maxlength="8"
+          class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-3 text-sm focus:outline-none focus:border-[#9d3e1d] text-center tracking-widest font-bold">
+        <input id="recuperacion-nueva-password" type="password" placeholder="Escribe tu nueva contraseña"
+          class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-3 text-sm focus:outline-none focus:border-[#9d3e1d]">
+        <button id="btn-guardar-nueva-password" class="w-full bg-[#9d3e1d] text-white rounded-xl py-3 text-sm font-semibold mb-3 active:scale-95 transition-transform">
+          Guardar y entrar
+        </button>
+
+        <div class="text-center mt-2 mb-4">
+          <button id="btn-reenviar-codigo" class="text-xs text-[#9d3e1d] underline active:scale-95 disabled:opacity-50 disabled:no-underline transition-opacity">
+            No recibí el código. Reenviar.
+          </button>
+          <p id="timer-reenvio" class="text-[11px] text-gray-500 hidden mt-1">Por favor espera <span id="segundos-reenvio" class="font-bold">60</span>s para pedir otro.</p>
+        </div>
+      </div>
+
+      <button id="btn-volver-login" class="w-full text-center text-xs text-gray-500 mt-2 active:scale-95 transition-transform">
+        Volver a inicio de sesión
+      </button>
+    </div>
 
     <p id="auth-error" class="text-red-600 text-xs mt-3 text-center hidden"></p>
   </div>
@@ -376,6 +421,162 @@
 
   document.getElementById('btn-login')?.addEventListener('click', handleLogin);
   document.getElementById('btn-registro-auth')?.addEventListener('click', handleRegistro);
+
+  // ============================================
+  // UX: MOSTRAR/OCULTAR CONTRASEÑA
+  // ============================================
+  document.getElementById('btn-toggle-password')?.addEventListener('click', () => {
+    const passwordInput = document.getElementById('auth-password');
+    const iconoElement = document.getElementById('icono-password');
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      iconoElement.textContent = 'visibility_off';
+    } else {
+      passwordInput.type = 'password';
+      iconoElement.textContent = 'visibility';
+    }
+  });
+
+  // ============================================
+  // RECUPERACIÓN DE CONTRASEÑA (OTP)
+  // ============================================
+  const authNormal = document.getElementById('auth-normal');
+  const authRecuperacion = document.getElementById('auth-recuperacion');
+  const recPaso1 = document.getElementById('recuperacion-paso-1');
+  const recPaso2 = document.getElementById('recuperacion-paso-2');
+  const errorAuth = document.getElementById('auth-error');
+
+  function mostrarToast(mensaje, esError = false) {
+    const toast = document.createElement('div');
+    toast.textContent = mensaje;
+    toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-white text-sm shadow-lg z-[300] transition-all';
+    toast.style.backgroundColor = esError ? '#ba1a1a' : '#9d3e1d';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2500);
+  }
+
+  async function extraerError(res) {
+    try {
+      const errorData = await res.json();
+      return errorData.detail || 'Ocurrió un error';
+    } catch {
+      return 'Ocurrió un error de conexión';
+    }
+  }
+
+  function iniciarTimerReenvio() {
+    const btnReenviar = document.getElementById('btn-reenviar-codigo');
+    const timerText = document.getElementById('timer-reenvio');
+    const spanSegundos = document.getElementById('segundos-reenvio');
+    btnReenviar.disabled = true;
+    timerText.classList.remove('hidden');
+    let segundos = 60;
+    spanSegundos.textContent = segundos;
+    const intervalo = setInterval(() => {
+      segundos--;
+      spanSegundos.textContent = segundos;
+      if (segundos <= 0) {
+        clearInterval(intervalo);
+        btnReenviar.disabled = false;
+        timerText.classList.add('hidden');
+      }
+    }, 1000);
+  }
+
+  async function solicitarCodigoOTP() {
+    const email = document.getElementById('recuperacion-email').value.trim();
+    if (!email) {
+      errorAuth.textContent = 'Ingresa tu correo';
+      errorAuth.classList.remove('hidden');
+      return false;
+    }
+    try {
+      const res = await fetch(`${API_BASE}/auth/solicitar-codigo`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      if (!res.ok) throw new Error(await extraerError(res));
+      mostrarToast('Código enviado a tu correo');
+      iniciarTimerReenvio();
+      return true;
+    } catch (e) {
+      errorAuth.textContent = e.message;
+      errorAuth.classList.remove('hidden');
+      return false;
+    }
+  }
+
+  document.getElementById('btn-olvide-password')?.addEventListener('click', () => {
+    authNormal.style.display = 'none';
+    authRecuperacion.style.display = 'block';
+    recPaso1.style.display = 'block';
+    recPaso2.style.display = 'none';
+    errorAuth.classList.add('hidden');
+  });
+
+  document.getElementById('btn-volver-login')?.addEventListener('click', () => {
+    authRecuperacion.style.display = 'none';
+    authNormal.style.display = 'block';
+    errorAuth.classList.add('hidden');
+  });
+
+  document.getElementById('btn-enviar-codigo')?.addEventListener('click', async (e) => {
+    const btn = e.target;
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+    const exito = await solicitarCodigoOTP();
+    if (exito) {
+      recPaso1.style.display = 'none';
+      recPaso2.style.display = 'block';
+      errorAuth.classList.add('hidden');
+    }
+    btn.textContent = 'Enviar código';
+    btn.disabled = false;
+  });
+
+  document.getElementById('btn-reenviar-codigo')?.addEventListener('click', async () => {
+    errorAuth.classList.add('hidden');
+    await solicitarCodigoOTP();
+  });
+
+  document.getElementById('btn-guardar-nueva-password')?.addEventListener('click', async () => {
+    const email = document.getElementById('recuperacion-email').value.trim();
+    const codigo = document.getElementById('recuperacion-codigo').value.trim();
+    const nueva_password = document.getElementById('recuperacion-nueva-password').value;
+    
+    if (!codigo || !nueva_password) {
+      errorAuth.textContent = 'Llena todos los campos';
+      errorAuth.classList.remove('hidden');
+      return;
+    }
+
+    const btn = document.getElementById('btn-guardar-nueva-password');
+    btn.textContent = 'Guardando...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(`${API_BASE}/auth/restablecer-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, codigo, nueva_password })
+      });
+      if (!res.ok) throw new Error(await extraerError(res));
+      
+      mostrarToast('Contraseña actualizada con éxito');
+      document.getElementById('auth-email').value = email;
+      document.getElementById('auth-password').value = nueva_password;
+      authRecuperacion.style.display = 'none';
+      authNormal.style.display = 'block';
+      await handleLogin();
+    } catch (e) {
+      errorAuth.textContent = e.message; 
+      errorAuth.classList.remove('hidden');
+    } finally {
+      btn.textContent = 'Guardar y entrar';
+      btn.disabled = false;
+    }
+  });
 
 </script>
 
