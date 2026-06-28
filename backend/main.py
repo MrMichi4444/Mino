@@ -139,6 +139,18 @@ class AuthRequest(BaseModel):
 async def root():
     return {"status": "ok", "message": "Mino API está despierta 🐾"}
 
+class LogError(BaseModel):
+    mensaje: str
+    contexto: str
+    usuario_email: str | None = None
+
+@app.post("/log-error")
+async def registrar_error(log: LogError):
+    # Aquí puedes hacer que te mande un mensaje de Telegram, 
+    # un correo, o simplemente imprimirlo en la consola del servidor (Render)
+    print(f"🚨 ERROR FRONTEND [{log.contexto}]: {log.mensaje} - Usuario: {log.usuario_email}")
+    return {"status": "ok"}
+
 @app.post("/auth/registro")
 async def registro(data: AuthRequest):
     try:

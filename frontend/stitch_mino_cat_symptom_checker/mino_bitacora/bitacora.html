@@ -1,1316 +1,1336 @@
-<!DOCTYPE html><html class="light" lang="es" style=""><head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>Mino - Bitácora de Salud</title>
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&amp;family=Be+Vietnam+Pro:wght@100..900&amp;display=swap" rel="stylesheet">
-<!-- Material Symbols -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "inverse-primary": "#ffb59e",
-                        "primary-fixed-dim": "#ffb59e",
-                        "on-tertiary-fixed-variant": "#51443e",
-                        "surface-bright": "#faf9f6",
-                        "on-tertiary-fixed": "#241914",
-                        "secondary-container": "#fed8c4",
-                        "tertiary-container": "#81716b",
-                        "tertiary": "#685953",
-                        "on-surface": "#1a1c1a",
-                        "on-error-container": "#93000a",
-                        "error": "#ba1a1a",
-                        "surface-container-highest": "#e3e2e0",
-                        "on-error": "#ffffff",
-                        "on-tertiary": "#ffffff",
-                        "tertiary-fixed": "#f3ded6",
-                        "inverse-on-surface": "#f2f1ee",
-                        "on-secondary-fixed-variant": "#5b4133",
-                        "secondary-fixed-dim": "#e4bfac",
-                        "secondary-fixed": "#ffdbc9",
-                        "outline": "#8a726b",
-                        "tertiary-fixed-dim": "#d6c3bb",
-                        "surface-container-high": "#e9e8e5",
-                        "on-tertiary-container": "#fffbff",
-                        "on-primary-container": "#fffbff",
-                        "primary-container": "#bd5533",
-                        "on-surface-variant": "#56423c",
-                        "surface-container": "#efeeeb",
-                        "surface-container-low": "#f4f3f1",
-                        "primary-fixed": "#ffdbd0",
-                        "on-background": "#1a1c1a",
-                        "secondary": "#745849",
-                        "primary": "#9d3e1d",
-                        "surface": "#faf9f6",
-                        "error-container": "#ffdad6",
-                        "surface-dim": "#dbdad7",
-                        "background": "#faf9f6",
-                        "on-secondary-fixed": "#2a170b",
-                        "on-primary-fixed": "#3a0b00",
-                        "on-primary-fixed-variant": "#802909",
-                        "surface-tint": "#a0401f",
-                        "inverse-surface": "#2f312f",
-                        "on-secondary-container": "#795c4d",
-                        "surface-container-lowest": "#ffffff",
-                        "on-secondary": "#ffffff",
-                        "on-primary": "#ffffff",
-                        "surface-variant": "#e3e2e0",
-                        "outline-variant": "#ddc0b8"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "xl": "32px",
-                        "lg": "24px",
-                        "xs": "8px",
-                        "md": "16px",
-                        "base": "4px",
-                        "gutter": "16px",
-                        "2xl": "48px",
-                        "container-padding": "20px",
-                        "sm": "12px"
-                    },
-                    "fontFamily": {
-                        "headline-md": ["Quicksand"],
-                        "body-sm": ["Be Vietnam Pro"],
-                        "body-md": ["Be Vietnam Pro"],
-                        "label-lg": ["Be Vietnam Pro"],
-                        "headline-lg": ["Quicksand"],
-                        "label-sm": ["Be Vietnam Pro"],
-                        "body-lg": ["Be Vietnam Pro"],
-                        "display-lg": ["Quicksand"],
-                        "display-lg-mobile": ["Quicksand"]
-                    },
-                    "fontSize": {
-                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
-                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
-                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
-                        "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
-                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
-                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                        "display-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}]
-                    }
-                },
-            },
-        }
-    </script>
-<style>
-        body {
-            background-color: #faf9f6;
-            color: #1a1c1a;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            user-select: none;
-        }
-        .active-chip {
-            background-color: #9d3e1d !important;
-            color: #ffffff !important;
-        }
-        .peach-card {
-            background-color: #ffffff;
-            border: 1px solid #ffdbd0;
-            box-shadow: 0 4px 12px rgba(157, 62, 29, 0.05);
-        }
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
+<!DOCTYPE html>
+<html class="light" lang="es" style=""><head>
+		<meta charset="utf-8">
+		<meta content="width=device-width, initial-scale=1.0" name="viewport">
+		<title>Mino - Bitácora de Salud</title>
+		<!-- Fonts -->
+		<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&amp;family=Be+Vietnam+Pro:wght@100..900&amp;display=swap" rel="stylesheet">
+		<!-- Material Symbols -->
+		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+		<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script id="tailwind-config">
+			tailwind.config = {
+	    darkMode: "class",
+	    theme: {
+		extend: {
+		    "colors": {
+			"inverse-primary": "#ffb59e",
+			"primary-fixed-dim": "#ffb59e",
+			"on-tertiary-fixed-variant": "#51443e",
+			"surface-bright": "#faf9f6",
+			"on-tertiary-fixed": "#241914",
+			"secondary-container": "#fed8c4",
+			"tertiary-container": "#81716b",
+			"tertiary": "#685953",
+			"on-surface": "#1a1c1a",
+			"on-error-container": "#93000a",
+			"error": "#ba1a1a",
+			"surface-container-highest": "#e3e2e0",
+			"on-error": "#ffffff",
+			"on-tertiary": "#ffffff",
+			"tertiary-fixed": "#f3ded6",
+			"inverse-on-surface": "#f2f1ee",
+			"on-secondary-fixed-variant": "#5b4133",
+			"secondary-fixed-dim": "#e4bfac",
+			"secondary-fixed": "#ffdbc9",
+			"outline": "#8a726b",
+			"tertiary-fixed-dim": "#d6c3bb",
+			"surface-container-high": "#e9e8e5",
+			"on-tertiary-container": "#fffbff",
+			"on-primary-container": "#fffbff",
+			"primary-container": "#bd5533",
+			"on-surface-variant": "#56423c",
+			"surface-container": "#efeeeb",
+			"surface-container-low": "#f4f3f1",
+			"primary-fixed": "#ffdbd0",
+			"on-background": "#1a1c1a",
+			"secondary": "#745849",
+			"primary": "#9d3e1d",
+			"surface": "#faf9f6",
+			"error-container": "#ffdad6",
+			"surface-dim": "#dbdad7",
+			"background": "#faf9f6",
+			"on-secondary-fixed": "#2a170b",
+			"on-primary-fixed": "#3a0b00",
+			"on-primary-fixed-variant": "#802909",
+			"surface-tint": "#a0401f",
+			"inverse-surface": "#2f312f",
+			"on-secondary-container": "#795c4d",
+			"surface-container-lowest": "#ffffff",
+			"on-secondary": "#ffffff",
+			"on-primary": "#ffffff",
+			"surface-variant": "#e3e2e0",
+			"outline-variant": "#ddc0b8"
+		    },
+		    "borderRadius": {
+			"DEFAULT": "0.25rem",
+			"lg": "0.5rem",
+			"xl": "0.75rem",
+			"full": "9999px"
+		    },
+		    "spacing": {
+			"xl": "32px",
+			"lg": "24px",
+			"xs": "8px",
+			"md": "16px",
+			"base": "4px",
+			"gutter": "16px",
+			"2xl": "48px",
+			"container-padding": "20px",
+			"sm": "12px"
+		    },
+		    "fontFamily": {
+			"headline-md": ["Quicksand"],
+			"body-sm": ["Be Vietnam Pro"],
+			"body-md": ["Be Vietnam Pro"],
+			"label-lg": ["Be Vietnam Pro"],
+			"headline-lg": ["Quicksand"],
+			"label-sm": ["Be Vietnam Pro"],
+			"body-lg": ["Be Vietnam Pro"],
+			"display-lg": ["Quicksand"],
+			"display-lg-mobile": ["Quicksand"]
+		    },
+		    "fontSize": {
+			"headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+			"body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+			"body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+			"label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+			"headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+			"label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+			"body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+			"display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+			"display-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}]
+		    }
+		},
+	    },
+	}
+		</script>
+		<style>
+body {
+	background-color: #faf9f6;
+	color: #1a1c1a;
+	-webkit-tap-highlight-color: transparent;
+}
+	.material-symbols-outlined {
+		font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+		user-select: none;
+	}
+	.active-chip {
+		background-color: #9d3e1d !important;
+		color: #ffffff !important;
+	}
+	.peach-card {
+		background-color: #ffffff;
+		border: 1px solid #ffdbd0;
+		box-shadow: 0 4px 12px rgba(157, 62, 29, 0.05);
+	}
+	.hide-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+		</style>
 
-  <script type="text/javascript">
+		<script type="text/javascript">
 
-    (function(c,l,a,r,i,t,y){
+			(function(c,l,a,r,i,t,y){
 
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+				c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
 
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+				t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
 
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+				y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 
-    })(window, document, "clarity", "script", "x751rsp49v");
+			})(window, document, "clarity", "script", "x751rsp49v");
 
-</script>
-
-
-<!-- Google tag (gtag.js) -->
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-7DS8J4TX7J"></script>
-
-<script>
-
-  window.dataLayer = window.dataLayer || [];
-
-  function gtag(){dataLayer.push(arguments);}
-
-  gtag('js', new Date());
+		</script>
 
 
-  gtag('config', 'G-7DS8J4TX7J');
+		<!-- Google tag (gtag.js) -->
 
-</script>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-7DS8J4TX7J"></script>
 
-</head>
-<body class="font-body-md text-body-md selection:bg-secondary-container">
+		<script>
 
-	<a href="../" class="fixed top-4 left-4 z-[100] w-10 h-10 bg-white/80 backdrop-blur-md border border-gray-200 rounded-full flex items-center justify-center text-[#9d3e1d] shadow-sm hover:bg-[#ffdbd0] transition-colors active:scale-95" aria-label="Volver al inicio">
-  <span class="material-symbols-outlined" style="font-size: 22px;">home</span>
-</a>
+			window.dataLayer = window.dataLayer || [];
 
-<!-- Top App Bar -->
-<header class="fixed top-0 w-full z-50 backdrop-blur-md bg-surface/80 flex justify-between items-center px-gutter h-16 shadow-sm">
-<div class="flex-1"></div>
-<div class="flex-1 text-center">
-<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Mino</h1>
-</div>
-<div class="flex-1 flex justify-end items-center gap-3">
-<button class="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-secondary-container/50 transition-colors active:scale-95 duration-200">
-<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
-<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
-</button>
-<div id="avatar-dueno" class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold shadow-sm">
-                F
-            </div>
-</div>
-</header>
-<!-- Main Canvas -->
-<main class="pt-20 pb-32 px-gutter min-h-screen max-w-md mx-auto">
-<!-- Welcome Section -->
-<section class="mt-4 mb-8">
-<h2 id="saludo-dueno" class="font-display-lg-mobile text-display-lg-mobile text-on-surface leading-tight">¡Hola []!</h2>
-<p id="pregunta-michi" class="font-headline-md text-headline-md text-secondary mt-1">¿Cómo está [] hoy?</p>
-</section>
-<!-- Illustration / Mood Indicator -->
-<div class="relative w-full h-48 mb-8 rounded-3xl overflow-hidden shadow-md group">
-<img alt="Mino" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A cozy indoor scene featuring a beautiful ginger tabby cat sitting gracefully on a soft beige woven rug. The room is bathed in warm, natural afternoon sunlight streaming through a window, creating long soft shadows. The aesthetic is modern organic with clean lines and warm tones, evoking a sense of calm, care, and domestic peace within a feline-friendly home environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2PjL3dibh_VI2RP7LzzfivABTlpDxsIRPUTtmp3LrSUJ-L5BZSmsH_B-IEOqZRQBnlbVUlYodzVZ42M7JoKPDHBy9gDsYqI3quUbwyd9i350u1baqHqoiD0orlDT-5apZrH0IEcUnT9wmkuAOXvPEue54_FxOxcgYmmq0QQfbDScNroQxTTzNz534Yme4wuTu62NCrFMNVAMUpCxt1nYnqj8yAjoB9H1nAb1yoZOQ1LectXw-99f2Fi5MGlFlrqhg2PkyNX7u7s-E">
-<div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
-<div class="absolute bottom-4 left-6">
-<span class="inline-flex items-center gap-2 bg-surface/90 backdrop-blur px-4 py-2 rounded-full shadow-sm">
-<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">favorite</span>
-<span class="text-label-lg text-primary font-bold">Bitácora de hoy</span>
-</span>
-</div>
-</div>
-<!-- Tracking Cards List -->
-<div class="space-y-md">
-<!-- Card 1: Energía -->
-<article class="peach-card p-4 rounded-2xl flex items-center gap-4">
-<div class="w-1/3">
-<h3 class="font-headline-md text-on-surface">Energía</h3>
-<p class="text-label-sm text-on-surface-variant">Nivel de actividad física</p>
-</div>
-<div class="w-2/3 flex justify-between gap-1">
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">bed</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Bajo</span>
-</button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">potted_plant</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Normal</span>
-</button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">bolt</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Alto</span>
-</button>
-</div>
-</article>
-<!-- Card 2: Comida -->
-<article class="peach-card p-4 rounded-2xl flex items-center gap-4">
-<div class="w-1/3">
-<h3 class="font-headline-md text-on-surface">Comida</h3>
-<p class="text-label-sm text-on-surface-variant">Apetito e ingesta</p>
-</div>
-<div class="w-2/3 flex justify-between gap-1">
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">no_meals</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Sin apetito</span>
-</button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">flatware</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Poco</span>
-</button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">restaurant</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Comió bien</span>
-</button>
-</div>
-</article>
-<!-- Card 3: Agua -->
-<article class="peach-card p-4 rounded-2xl flex items-center gap-4">
-<div class="w-1/3">
-<h3 class="font-headline-md text-on-surface">Agua</h3>
-<p class="text-label-sm text-on-surface-variant">Hidratación del día</p>
-</div>
-<div class="w-2/3 flex justify-between gap-1">
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">water_drop</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Poco</span>
-</button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">water_drop</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Normal</span>
-</button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">waves</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Mucho</span>
-</button>
-</div>
-</article>
-<!-- Card 4: Caja de Arena -->
-<article class="peach-card p-4 rounded-2xl flex items-center gap-4">
-<div class="w-1/3">
-<h3 class="font-headline-md text-on-surface">Caja de Arena</h3>
-<p class="text-label-sm text-on-surface-variant">Frecuencia de uso</p>
-</div>
-<div class="w-2/3 flex justify-between gap-1">
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">hourglass_empty</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Poco uso</span>
-</button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">check_circle</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Normal</span>
-</button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">history</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Frecuente</span>
-</button>
-</div>
-</article>
-<!-- Card 5: Ánimo -->
-<article class="peach-card p-4 rounded-2xl flex items-center gap-4">
-<div class="w-1/3">
-<h3 class="font-headline-md text-on-surface">Ánimo</h3>
-<p class="text-label-sm text-on-surface-variant">Estado emocional</p>
-</div>
-<div class="w-2/3 flex justify-between gap-1">
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">sentiment_very_dissatisfied</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Triste</span>
-</button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">sentiment_neutral</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Neutro</span>
-</button>
-<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
-<span class="material-symbols-outlined text-on-secondary-container">mood</span>
-<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Feliz</span>
-</button>
-</div>
-</article>
-<!-- Card 6: Notas -->
-<article class="peach-card p-4 rounded-2xl flex flex-col gap-3">
-  <div class="flex items-center gap-2">
-    <span class="material-symbols-outlined text-on-surface-variant">edit_note</span>
-    <div>
-      <h3 class="font-headline-md text-on-surface">Notas</h3>
-      <p class="text-label-sm text-on-surface-variant">Observaciones del día (Opcional)</p>
-    </div>
-  </div>
-  <textarea id="notas-input" rows="3" placeholder="¿Notaste algo inusual hoy con tu michi? Vómitos, comportamiento extraño..." 
-    class="w-full border border-outline-variant rounded-xl px-4 py-3 text-body-md focus:outline-none focus:border-primary resize-none bg-surface/50 placeholder:text-outline"></textarea>
-</article>
-</div>
-<!-- Action Button -->
-<div class="mt-8">
-<button id="btn-guardar-registro" class="w-full h-14 bg-primary text-on-primary font-headline-md rounded-2xl shadow-[0_8px_24px_rgba(157,62,29,0.2)] hover:bg-primary/90 transition-all active:scale-95">
-                Guardar registro diario
-            </button>
-</div>
-</main>
-<!-- SECCIÓN SALUD / HISTORIAL -->
-<section id="seccion-salud" style="display:none" class="px-gutter pt-20 pb-32">
-  <h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">Historial de salud</h2>
-  <p class="text-body-sm text-on-surface-variant mb-6">Últimos 7 días de <span id="nombre-michi-salud">tu michi</span></p>
+			function gtag(){dataLayer.push(arguments);}
 
-  <!-- Selector de métrica -->
-  <div class="flex gap-2 overflow-x-auto hide-scrollbar mb-6 pb-1">
-    <button onclick="cambiarMetrica('energia')" data-metrica="energia"
-      class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
-      ⚡ Energía
-    </button>
-    <button onclick="cambiarMetrica('comida')" data-metrica="comida"
-      class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
-      🍽️ Comida
-    </button>
-    <button onclick="cambiarMetrica('agua')" data-metrica="agua"
-      class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
-      💧 Agua
-    </button>
-    <button onclick="cambiarMetrica('caja_arena')" data-metrica="caja_arena"
-      class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
-      🪣 Arena
-    </button>
-    <button onclick="cambiarMetrica('animo')" data-metrica="animo"
-      class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
-      😻 Ánimo
-    </button>
-  </div>
-
-  <!-- Gráfica -->
-  <div class="peach-card rounded-2xl p-4">
-    <canvas id="grafica-metrica" height="220"></canvas>
-  </div>
-
-  <!-- Estado vacío -->
-  <div id="grafica-vacia" style="display:none" class="peach-card rounded-2xl p-8 text-center mt-4">
-    <span class="material-symbols-outlined text-4xl text-on-surface-variant">bar_chart</span>
-    <p class="text-body-sm text-on-surface-variant mt-2">Aún no hay registros suficientes.<br>¡Empieza a registrar hoy!</p>
-  </div>
-
-  <div id="feed-notas" class="mt-8 mb-4">
-   </div>
-</section>
-
-<!-- MODAL PERFIL -->
-<div id="modal-perfil" style="display:none" class="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
-    <div class="flex items-center gap-3 mb-6">
-      <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-lg" id="modal-avatar-letra"></div>
-      <div>
-        <p class="font-headline-md text-on-surface" id="modal-nombre-dueno"></p>
-        <p class="text-label-sm text-on-surface-variant" id="modal-email-dueno"></p>
-      </div>
-    </div>
-    <button id="btn-cerrar-sesion" class="w-full border border-error text-error rounded-xl py-3 font-label-lg active:scale-95 transition-transform">
-      Cerrar sesión
-    </button>
-  </div>
-</div>
-
-<!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface rounded-t-xl shadow-[0_-4px_16px_rgba(157,62,29,0.1)]">
-  <!-- Home (Active) -->
-  <a id="tab-home" class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-3 py-1.5 transition-all active:scale-90 cursor-pointer">
-    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
-    <span class="font-label-sm text-label-sm">Home</span>
-  </a>
-  <!-- SweeteIA -->
-  <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 opacity-30 cursor-not-allowed pointer-events-none" >
-    <div class="w-6 h-6 flex items-center justify-center"><img src="../../../src/images/SweeteIcon.png" alt="SweeteIA" class="w-6 h-6 object-contain" style="filter: brightness(0) saturate(100%) invert(33%) sepia(13%) saturate(1584%) hue-rotate(336deg) brightness(94%) contrast(86%);"></div>
-    <span class="font-label-sm text-label-sm">SweeteIA</span>
-  </a>
-  <!-- Salud -->
-  <a id="tab-salud" class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:bg-surface-container-high transition-all active:scale-90 cursor-pointer">
-    <span class="material-symbols-outlined">monitor_heart</span>
-    <span class="font-label-sm text-label-sm">Salud</span>
-  </a>
-  <!-- Calendario (inactivo) -->
-  <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 opacity-30 cursor-not-allowed pointer-events-none">
-    <span class="material-symbols-outlined">calendar_today</span>
-    <span class="font-label-sm text-label-sm">Calendario</span>
-  </a>
-  <!-- Perfil (inactivo) -->
-  <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 opacity-30 cursor-not-allowed pointer-events-none">
-    <span class="material-symbols-outlined">person</span>
-    <span class="font-label-sm text-label-sm">Perfil</span>
-  </a>
-</nav><script>
-        function toggleActive(btn) {
-            // Find sibling buttons in the same container
-            const container = btn.parentElement;
-            const buttons = container.querySelectorAll('button');
-            
-            // If already active, toggle off
-            if (btn.classList.contains('active-chip')) {
-                btn.classList.remove('active-chip');
-                // Reset colors
-                btn.querySelectorAll('span').forEach(s => {
-                    s.classList.remove('text-on-primary');
-                    s.classList.add('text-on-secondary-container');
-                });
-                return;
-            }
-
-            // Remove active state from all others in this row
-            buttons.forEach(b => {
-                b.classList.remove('active-chip');
-                b.querySelectorAll('span').forEach(s => {
-                    s.classList.remove('text-on-primary');
-                    s.classList.add('text-on-secondary-container');
-                });
-            });
-
-            // Set active state for clicked
-            btn.classList.add('active-chip');
-            btn.querySelectorAll('span').forEach(s => {
-                s.classList.remove('text-on-secondary-container');
-                s.classList.add('text-on-primary');
-            });
-        }
-    </script>
+			gtag('js', new Date());
 
 
+			gtag('config', 'G-7DS8J4TX7J');
 
-<style>
-  #modal-fundador {
-    display: none; /* Oculto por defecto */
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(4px);
-  }
+		</script>
+
+	</head>
+	<body class="font-body-md text-body-md selection:bg-secondary-container">
+
+		<a href="../" class="fixed top-4 left-4 z-[100] w-10 h-10 bg-white/80 backdrop-blur-md border border-gray-200 rounded-full flex items-center justify-center text-[#9d3e1d] shadow-sm hover:bg-[#ffdbd0] transition-colors active:scale-95" aria-label="Volver al inicio">
+			<span class="material-symbols-outlined" style="font-size: 22px;">home</span>
+		</a>
+
+		<!-- Top App Bar -->
+		<header class="fixed top-0 w-full z-50 backdrop-blur-md bg-surface/80 flex justify-between items-center px-gutter h-16 shadow-sm">
+			<div class="flex-1"></div>
+			<div class="flex-1 text-center">
+				<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Mino</h1>
+			</div>
+			<div class="flex-1 flex justify-end items-center gap-3">
+				<button class="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-secondary-container/50 transition-colors active:scale-95 duration-200">
+					<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+					<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+				</button>
+				<div id="avatar-dueno" class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold shadow-sm">
+					F
+				</div>
+			</div>
+		</header>
+		<!-- Main Canvas -->
+		<main class="pt-20 pb-32 px-gutter min-h-screen max-w-md mx-auto">
+			<!-- Welcome Section -->
+			<section class="mt-4 mb-8">
+				<h2 id="saludo-dueno" class="font-display-lg-mobile text-display-lg-mobile text-on-surface leading-tight">¡Hola []!</h2>
+				<p id="pregunta-michi" class="font-headline-md text-headline-md text-secondary mt-1">¿Cómo está [] hoy?</p>
+			</section>
+			<!-- Illustration / Mood Indicator -->
+			<div class="relative w-full h-48 mb-8 rounded-3xl overflow-hidden shadow-md group">
+				<img alt="Mino" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A cozy indoor scene featuring a beautiful ginger tabby cat sitting gracefully on a soft beige woven rug. The room is bathed in warm, natural afternoon sunlight streaming through a window, creating long soft shadows. The aesthetic is modern organic with clean lines and warm tones, evoking a sense of calm, care, and domestic peace within a feline-friendly home environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2PjL3dibh_VI2RP7LzzfivABTlpDxsIRPUTtmp3LrSUJ-L5BZSmsH_B-IEOqZRQBnlbVUlYodzVZ42M7JoKPDHBy9gDsYqI3quUbwyd9i350u1baqHqoiD0orlDT-5apZrH0IEcUnT9wmkuAOXvPEue54_FxOxcgYmmq0QQfbDScNroQxTTzNz534Yme4wuTu62NCrFMNVAMUpCxt1nYnqj8yAjoB9H1nAb1yoZOQ1LectXw-99f2Fi5MGlFlrqhg2PkyNX7u7s-E">
+				<div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
+				<div class="absolute bottom-4 left-6">
+					<span class="inline-flex items-center gap-2 bg-surface/90 backdrop-blur px-4 py-2 rounded-full shadow-sm">
+						<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">favorite</span>
+						<span class="text-label-lg text-primary font-bold">Bitácora de hoy</span>
+					</span>
+				</div>
+			</div>
+			<!-- Tracking Cards List -->
+			<div class="space-y-md">
+				<!-- Card 1: Energía -->
+				<article class="peach-card p-4 rounded-2xl flex items-center gap-4">
+					<div class="w-1/3">
+						<h3 class="font-headline-md text-on-surface">Energía</h3>
+						<p class="text-label-sm text-on-surface-variant">Nivel de actividad física</p>
+					</div>
+					<div class="w-2/3 flex justify-between gap-1">
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">bed</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Bajo</span>
+						</button>
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">potted_plant</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Normal</span>
+						</button>
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">bolt</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Alto</span>
+						</button>
+					</div>
+				</article>
+				<!-- Card 2: Comida -->
+				<article class="peach-card p-4 rounded-2xl flex items-center gap-4">
+					<div class="w-1/3">
+						<h3 class="font-headline-md text-on-surface">Comida</h3>
+						<p class="text-label-sm text-on-surface-variant">Apetito e ingesta</p>
+					</div>
+					<div class="w-2/3 flex justify-between gap-1">
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">no_meals</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Sin apetito</span>
+						</button>
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">flatware</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Poco</span>
+						</button>
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">restaurant</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Comió bien</span>
+						</button>
+					</div>
+				</article>
+				<!-- Card 3: Agua -->
+				<article class="peach-card p-4 rounded-2xl flex items-center gap-4">
+					<div class="w-1/3">
+						<h3 class="font-headline-md text-on-surface">Agua</h3>
+						<p class="text-label-sm text-on-surface-variant">Hidratación del día</p>
+					</div>
+					<div class="w-2/3 flex justify-between gap-1">
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">water_drop</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Poco</span>
+						</button>
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">water_drop</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Normal</span>
+						</button>
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">waves</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Mucho</span>
+						</button>
+					</div>
+				</article>
+				<!-- Card 4: Caja de Arena -->
+				<article class="peach-card p-4 rounded-2xl flex items-center gap-4">
+					<div class="w-1/3">
+						<h3 class="font-headline-md text-on-surface">Caja de Arena</h3>
+						<p class="text-label-sm text-on-surface-variant">Frecuencia de uso</p>
+					</div>
+					<div class="w-2/3 flex justify-between gap-1">
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">hourglass_empty</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Poco uso</span>
+						</button>
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">check_circle</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Normal</span>
+						</button>
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">history</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Frecuente</span>
+						</button>
+					</div>
+				</article>
+				<!-- Card 5: Ánimo -->
+				<article class="peach-card p-4 rounded-2xl flex items-center gap-4">
+					<div class="w-1/3">
+						<h3 class="font-headline-md text-on-surface">Ánimo</h3>
+						<p class="text-label-sm text-on-surface-variant">Estado emocional</p>
+					</div>
+					<div class="w-2/3 flex justify-between gap-1">
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">sentiment_very_dissatisfied</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Triste</span>
+						</button>
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">sentiment_neutral</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Neutro</span>
+						</button>
+						<button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-secondary-container/30 hover:bg-secondary-container/50 transition-all active:scale-90 flex-1" onclick="toggleActive(this)">
+							<span class="material-symbols-outlined text-on-secondary-container">mood</span>
+							<span class="text-[10px] font-label-sm leading-none text-on-secondary-container">Feliz</span>
+						</button>
+					</div>
+				</article>
+				<!-- Card 6: Notas -->
+				<article class="peach-card p-4 rounded-2xl flex flex-col gap-3">
+					<div class="flex items-center gap-2">
+						<span class="material-symbols-outlined text-on-surface-variant">edit_note</span>
+						<div>
+							<h3 class="font-headline-md text-on-surface">Notas</h3>
+							<p class="text-label-sm text-on-surface-variant">Observaciones del día (Opcional)</p>
+						</div>
+					</div>
+					<textarea id="notas-input" rows="3" placeholder="¿Notaste algo inusual hoy con tu michi? Vómitos, comportamiento extraño..." 
+									    class="w-full border border-outline-variant rounded-xl px-4 py-3 text-body-md focus:outline-none focus:border-primary resize-none bg-surface/50 placeholder:text-outline"></textarea>
+				</article>
+			</div>
+			<!-- Action Button -->
+			<div class="mt-8">
+				<button id="btn-guardar-registro" class="w-full h-14 bg-primary text-on-primary font-headline-md rounded-2xl shadow-[0_8px_24px_rgba(157,62,29,0.2)] hover:bg-primary/90 transition-all active:scale-95">
+					Guardar registro diario
+				</button>
+			</div>
+		</main>
+		<!-- SECCIÓN SALUD / HISTORIAL -->
+		<section id="seccion-salud" style="display:none" class="px-gutter pt-20 pb-32">
+			<h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">Historial de salud</h2>
+			<p class="text-body-sm text-on-surface-variant mb-6">Últimos 7 días de <span id="nombre-michi-salud">tu michi</span></p>
+
+			<!-- Selector de métrica -->
+			<div class="flex gap-2 overflow-x-auto hide-scrollbar mb-6 pb-1">
+				<button onclick="cambiarMetrica('energia')" data-metrica="energia"
+									    class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
+					⚡ Energía
+				</button>
+				<button onclick="cambiarMetrica('comida')" data-metrica="comida"
+									   class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
+					🍽️ Comida
+				</button>
+				<button onclick="cambiarMetrica('agua')" data-metrica="agua"
+									 class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
+					💧 Agua
+				</button>
+				<button onclick="cambiarMetrica('caja_arena')" data-metrica="caja_arena"
+									       class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
+					🪣 Arena
+				</button>
+				<button onclick="cambiarMetrica('animo')" data-metrica="animo"
+									  class="metrica-btn shrink-0 px-4 py-2 rounded-full text-label-lg border border-outline-variant text-on-surface-variant transition-all active:scale-95">
+					😻 Ánimo
+				</button>
+			</div>
+
+			<!-- Gráfica -->
+			<div class="peach-card rounded-2xl p-4">
+				<canvas id="grafica-metrica" height="220"></canvas>
+			</div>
+
+			<!-- Estado vacío -->
+			<div id="grafica-vacia" style="display:none" class="peach-card rounded-2xl p-8 text-center mt-4">
+				<span class="material-symbols-outlined text-4xl text-on-surface-variant">bar_chart</span>
+				<p class="text-body-sm text-on-surface-variant mt-2">Aún no hay registros suficientes.<br>¡Empieza a registrar hoy!</p>
+			</div>
+
+			<div id="feed-notas" class="mt-8 mb-4">
+			</div>
+		</section>
+
+		<!-- MODAL PERFIL -->
+		<div id="modal-perfil" style="display:none" class="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4">
+			<div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
+				<div class="flex items-center gap-3 mb-6">
+					<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-lg" id="modal-avatar-letra"></div>
+					<div>
+						<p class="font-headline-md text-on-surface" id="modal-nombre-dueno"></p>
+						<p class="text-label-sm text-on-surface-variant" id="modal-email-dueno"></p>
+					</div>
+				</div>
+				<button id="btn-cerrar-sesion" class="w-full border border-error text-error rounded-xl py-3 font-label-lg active:scale-95 transition-transform">
+					Cerrar sesión
+				</button>
+			</div>
+		</div>
+
+		<!-- Bottom Navigation Bar -->
+		<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface rounded-t-xl shadow-[0_-4px_16px_rgba(157,62,29,0.1)]">
+			<!-- Home (Active) -->
+			<a id="tab-home" class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-3 py-1.5 transition-all active:scale-90 cursor-pointer">
+				<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+				<span class="font-label-sm text-label-sm">Home</span>
+			</a>
+			<!-- SweeteIA -->
+			<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 opacity-30 cursor-not-allowed pointer-events-none" >
+				<div class="w-6 h-6 flex items-center justify-center"><img src="../../../src/images/SweeteIcon.png" alt="SweeteIA" class="w-6 h-6 object-contain" style="filter: brightness(0) saturate(100%) invert(33%) sepia(13%) saturate(1584%) hue-rotate(336deg) brightness(94%) contrast(86%);"></div>
+				<span class="font-label-sm text-label-sm">SweeteIA</span>
+			</a>
+			<!-- Salud -->
+			<a id="tab-salud" class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:bg-surface-container-high transition-all active:scale-90 cursor-pointer">
+				<span class="material-symbols-outlined">monitor_heart</span>
+				<span class="font-label-sm text-label-sm">Salud</span>
+			</a>
+			<!-- Calendario (inactivo) -->
+			<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 opacity-30 cursor-not-allowed pointer-events-none">
+				<span class="material-symbols-outlined">calendar_today</span>
+				<span class="font-label-sm text-label-sm">Calendario</span>
+			</a>
+			<!-- Perfil (inactivo) -->
+			<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 opacity-30 cursor-not-allowed pointer-events-none">
+				<span class="material-symbols-outlined">person</span>
+				<span class="font-label-sm text-label-sm">Perfil</span>
+			</a>
+		</nav><script>
+		function toggleActive(btn) {
+			// Find sibling buttons in the same container
+			const container = btn.parentElement;
+			const buttons = container.querySelectorAll('button');
+
+			// If already active, toggle off
+			if (btn.classList.contains('active-chip')) {
+				btn.classList.remove('active-chip');
+				// Reset colors
+				btn.querySelectorAll('span').forEach(s => {
+					s.classList.remove('text-on-primary');
+					s.classList.add('text-on-secondary-container');
+				});
+				return;
+			}
+
+			// Remove active state from all others in this row
+			buttons.forEach(b => {
+				b.classList.remove('active-chip');
+				b.querySelectorAll('span').forEach(s => {
+					s.classList.remove('text-on-primary');
+					s.classList.add('text-on-secondary-container');
+				});
+			});
+
+			// Set active state for clicked
+			btn.classList.add('active-chip');
+			btn.querySelectorAll('span').forEach(s => {
+				s.classList.remove('text-on-secondary-container');
+				s.classList.add('text-on-primary');
+			});
+		}
+	</script>
+
+
+
+	<style>
+#modal-fundador {
+	display: none; /* Oculto por defecto */
+	position: fixed;
+	top: 0; left: 0; width: 100%; height: 100%;
+	background: rgba(0, 0, 0, 0.6);
+	z-index: 9999;
+	justify-content: center;
+	align-items: center;
+	backdrop-filter: blur(4px);
+}
   .modal-box {
-    background: #faf8f5;
-    padding: 30px 25px;
-    border-radius: 20px;
-    text-align: center;
-    width: 85%;
-    max-width: 380px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    font-family: sans-serif;
+	  background: #faf8f5;
+	  padding: 30px 25px;
+	  border-radius: 20px;
+	  text-align: center;
+	  width: 85%;
+	  max-width: 380px;
+	  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+	  font-family: sans-serif;
   }
   .modal-box h3 { 
-    color: #a84227; 
-    font-family: serif; 
-    font-size: 22px;
-    margin-top: 0;
-    margin-bottom: 10px; 
+	  color: #a84227; 
+	  font-family: serif; 
+	  font-size: 22px;
+	  margin-top: 0;
+	  margin-bottom: 10px; 
   }
   .modal-box p { 
-    color: #4a4a4a; 
-    font-size: 15px; 
-    line-height: 1.4;
-    margin-bottom: 25px; 
+	  color: #4a4a4a; 
+	  font-size: 15px; 
+	  line-height: 1.4;
+	  margin-bottom: 25px; 
   }
   .modal-box input {
-    width: 100%; 
-    padding: 14px; 
-    margin-bottom: 15px;
-    border: 1px solid #ddd; 
-    border-radius: 12px;
-    box-sizing: border-box; 
-    background: #fff;
-    font-size: 15px;
+	  width: 100%; 
+	  padding: 14px; 
+	  margin-bottom: 15px;
+	  border: 1px solid #ddd; 
+	  border-radius: 12px;
+	  box-sizing: border-box; 
+	  background: #fff;
+	  font-size: 15px;
   }
   .modal-box input:focus {
-    outline: none;
-    border-color: #a84227;
+	  outline: none;
+	  border-color: #a84227;
   }
   .modal-box button {
-    width: 100%; 
-    padding: 15px; 
-    background: #a84227;
-    color: #fff; 
-    border: none; 
-    border-radius: 12px;
-    font-weight: bold; 
-    font-size: 16px;
-    cursor: pointer;
+	  width: 100%; 
+	  padding: 15px; 
+	  background: #a84227;
+	  color: #fff; 
+	  border: none; 
+	  border-radius: 12px;
+	  font-weight: bold; 
+	  font-size: 16px;
+	  cursor: pointer;
   }
-</style>
-
-<div id="modal-fundador">
-  <div class="modal-box">
-    <h3>¡Registro simulado!</h3>
-    <p>Únete a los 14 dueños fundadores y sé el primero en probar la versión completa de Mino para proteger a tu michi.</p>
-    <input type="email" id="email-input" placeholder="Tu correo electrónico">
-    <button id="btn-unirse">Avisarme cuando esté lista 🐾</button>
-    
-    <button id="btn-dismiss" style="background: transparent; color: #6b5c57; border: none; margin-top: 15px; font-size: 14px; text-decoration: underline; cursor: pointer; width: 100%;">
-      Ya me registré o no deseo probarla
-    </button>
-  </div>
-</div>
-
-<!-- MODAL DE AUTH -->
-<div id="modal-auth" style="display:none" class="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
-    <h2 class="font-headline-lg text-primary mb-1">Bienvenido a Mino 🐾</h2>
-    <p class="text-body-sm text-on-surface-variant mb-6">Inicia sesión para guardar el historial de tu michi</p>
-    
-    <div id="auth-normal">
-      <input id="auth-email" type="email" placeholder="Correo electrónico"
-        class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
-      
-      <div class="relative w-full mb-4">
-        <input id="auth-password" type="password" placeholder="Contraseña"
-          class="w-full border border-outline-variant rounded-xl px-4 py-3 pr-12 text-body-md focus:outline-none focus:border-primary">
-        <button type="button" id="btn-toggle-password" class="absolute inset-y-0 right-0 px-3 flex items-center text-on-surface-variant hover:text-primary transition-colors active:scale-95">
-          <span id="icono-password" class="material-symbols-outlined text-[20px]">visibility</span>
-        </button>
-      </div>
-
-      <button id="btn-login" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg mb-3 active:scale-95 transition-transform">
-        Iniciar sesión
-      </button>
-      <button id="btn-registro-auth" class="w-full border border-primary text-primary rounded-xl py-3 font-label-lg active:scale-95 transition-transform">
-        Crear cuenta
-      </button>
-      
-      <button id="btn-olvide-password" class="w-full text-center text-label-sm text-primary mt-4 underline active:scale-95 transition-transform">
-        ¿Olvidaste tu contraseña?
-      </button>
-
-      <p class="text-[11px] leading-tight text-on-surface-variant mt-4 text-center opacity-80">
-        Al crear tu cuenta, aceptas recibir recordatorios ocasionales para la bitácora de tu michi. Cero spam, lo prometemos.
-      </p>
-    </div>
-
-    <div id="auth-recuperacion" style="display: none;">
-      <p class="text-body-sm text-on-surface-variant mb-4 text-center">Ingresa tu correo para recibir un código de 8 dígitos.</p>
-      
-      <div id="recuperacion-paso-1">
-        <input id="recuperacion-email" type="email" placeholder="Tu correo electrónico"
-          class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
-        <button id="btn-enviar-codigo" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg mb-3 active:scale-95 transition-transform">
-          Enviar código
-        </button>
-      </div>
-
-      <!-- Paso 2: Ingresar código y nueva contraseña -->
-      <div id="recuperacion-paso-2" style="display: none;">
-        <input id="recuperacion-codigo" type="text" placeholder="Código de 8 dígitos" maxlength="8"
-          class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary text-center tracking-widest font-bold">
-        <input id="recuperacion-nueva-password" type="password" placeholder="Escribe tu nueva contraseña"
-          class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
-        <button id="btn-guardar-nueva-password" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg mb-3 active:scale-95 transition-transform">
-          Guardar y entrar
-        </button>
-
-        <!-- PARCHE: BOTÓN REENVIAR -->
-        <div class="text-center mt-2 mb-4">
-          <button id="btn-reenviar-codigo" class="text-label-sm text-primary underline active:scale-95 disabled:opacity-50 disabled:no-underline transition-opacity">
-            No recibí el código. Reenviar.
-          </button>
-          <p id="timer-reenvio" class="text-[11px] text-on-surface-variant hidden mt-1">Por favor espera <span id="segundos-reenvio" class="font-bold">60</span>s para pedir otro.</p>
-        </div>
-      </div>
-
-      <button id="btn-volver-login" class="w-full text-center text-label-sm text-on-surface-variant mt-2 active:scale-95 transition-transform">
-        Volver a inicio de sesión
-      </button>
-    </div>
-
-    <p id="auth-error" class="text-error text-body-sm mt-3 text-center hidden"></p>
-  </div>
-</div>
-
-<!-- MODAL ONBOARDING: NOMBRE DEL GATO -->
-<div id="modal-onboarding" style="display:none" class="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
-    <h2 class="font-headline-lg text-primary mb-1">¡Bienvenido a Mino! 🐾</h2>
-    <p class="text-body-sm text-on-surface-variant mb-4">Cuéntanos sobre tu michi para empezar a cuidarlo.</p>
-    
-    <input id="onboarding-nombre" type="text" placeholder="Nombre de tu gato"
-      class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
-    
-    <input id="onboarding-raza" type="text" placeholder="Raza (opcional)"
-      class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-4 text-body-md focus:outline-none focus:border-primary">
-
-    <div class="bg-primary-fixed/20 p-3 rounded-xl mb-4 border border-primary-fixed">
-      <p class="text-label-sm text-on-surface-variant mb-2"><strong>Reto de 3 días:</strong> Déjanos tu WhatsApp para enviarte un recordatorio y ayudarte a desbloquear el Perfil Base de tu michi.</p>
-      <input id="onboarding-telefono" type="tel" placeholder="WhatsApp (10 dígitos)" maxlength="10"
-        class="w-full border border-outline-variant rounded-xl px-4 py-3 text-body-md focus:outline-none focus:border-primary">
-    </div>
-
-    <button id="btn-guardar-gato" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg active:scale-95 transition-transform">
-      Empezar a cuidar a mi michi
-    </button>
-    <p id="onboarding-error" class="text-error text-body-sm mt-3 text-center hidden"></p>
-  </div>
-</div>
-<script>
-// ============================================
-// CONFIGURACIÓN
-// ============================================
-const API = 'https://mino-backend-vs9z.onrender.com';
-
-// ============================================
-// MAPEO DE CHIPS → VALORES NUMÉRICOS
-// ============================================
-
-
-// ============================================
-// ESTADO GLOBAL
-// ============================================
-let token = localStorage.getItem('mino_token');
-let nombreMichi = localStorage.getItem('mino_nombre_michi') || 'tu michi';
-let nombreDueno = localStorage.getItem('mino_nombre_dueno') || '';
-
-// ============================================
-// HELPERS
-// ============================================
-function authHeaders() {
-  return {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-  };
-}
-
-async function apiGet(path) {
-  const res = await fetch(`${API}${path}`, { headers: authHeaders() });
-  if (!res.ok) throw await res.json();
-  return res.json();
-}
-
-async function apiPost(path, body) {
-  const res = await fetch(`${API}${path}`, {
-    method: 'POST',
-    headers: authHeaders(),
-    body: JSON.stringify(body)
-  });
-  if (!res.ok) throw await res.json();
-  return res.json();
-}
-
-function fechaHoy() {
-  return new Date().toISOString().split('T')[0];
-}
-
-function mostrarToast(mensaje, esError = false) {
-  const toast = document.createElement('div');
-  toast.textContent = mensaje;
-  toast.className = `fixed bottom-24 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-white text-body-sm font-label-lg shadow-lg z-[300] transition-all`;
-  toast.style.backgroundColor = esError ? '#ba1a1a' : '#9d3e1d';
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 2500);
-}
-
-// ============================================
-// CHIPS — leer y preseleccionar
-// ============================================
-
-// toggleActive ya existía en tu HTML, la conservamos igual
-function toggleActive(btn) {
-  // Desactivar otros chips de la misma card
-  const card = btn.closest('article');
-  card.querySelectorAll('button').forEach(b => {
-    b.classList.remove('active-chip');
-  });
-  btn.classList.add('active-chip');
-}
-
-// ============================================
-// MAPEO DE CHIPS → VALORES NUMÉRICOS (CORREGIDO)
-// ============================================
-const TEXTO_A_VALOR = {
-  energia:    { 'Bajo': 1, 'Normal': 2, 'Alto': 3 },
-  comida:     { 'Sin apetito': 1, 'Poco': 2, 'Comió bien': 3 },
-  agua:       { 'Poco': 1, 'Normal': 2, 'Mucho': 3 },
-  caja_arena: { 'Poco uso': 1, 'Normal': 2, 'Frecuente': 3 },
-  animo:      { 'Triste': 1, 'Neutro': 2, 'Feliz': 3 }
-};
-
-function leerChips() {
-  const secciones = {
-    energia:    document.querySelector('article:nth-of-type(1)'),
-    comida:     document.querySelector('article:nth-of-type(2)'),
-    agua:       document.querySelector('article:nth-of-type(3)'),
-    caja_arena: document.querySelector('article:nth-of-type(4)'),
-    animo:      document.querySelector('article:nth-of-type(5)'),
-  };
-	
-  const resultado = {};
-  for (const [metrica, seccion] of Object.entries(secciones)) {
-    const chipActivo = seccion?.querySelector('.active-chip span:last-child');
-    if (chipActivo) {
-      const texto = chipActivo.textContent.trim();
-      // Buscamos el valor dentro de la métrica específica
-      resultado[metrica] = TEXTO_A_VALOR[metrica][texto] ?? 2;
-    }
-  }
-  return resultado;
-}
-
-function preseleccionarChips(registro) {
-  const indiceArticle = { energia: 0, comida: 1, agua: 2, caja_arena: 3, animo: 4 };
-  const valorATexto = {
-    energia:    { 1: 'Bajo', 2: 'Normal', 3: 'Alto' },
-    comida:     { 1: 'Sin apetito', 2: 'Poco', 3: 'Comió bien' },
-    agua:       { 1: 'Poco', 2: 'Normal', 3: 'Mucho' },
-    caja_arena: { 1: 'Poco uso', 2: 'Normal', 3: 'Frecuente' },
-    animo:      { 1: 'Triste', 2: 'Neutro', 3: 'Feliz' },
-  };
-
-  for (const [metrica, idx] of Object.entries(indiceArticle)) {
-    const valor = registro[metrica];
-    if (!valor) continue;
-    const textoEsperado = valorATexto[metrica][valor];
-    const article = document.querySelectorAll('article')[idx];
-    article?.querySelectorAll('button').forEach(btn => {
-      const texto = btn.querySelector('span:last-child')?.textContent.trim();
-      if (texto === textoEsperado) btn.classList.add('active-chip');
-    });
-  }
-
-  const notasInput = document.getElementById('notas-input');
-  if (notasInput && registro.notas) notasInput.value = registro.notas;
-}
-
-// ============================================
-// GUARDAR REGISTRO
-// ============================================
-async function guardarRegistro() {
-  const chips = leerChips();
-  const notas = document.getElementById('notas-input')?.value || '';
-
-  if (Object.keys(chips).length === 0) {
-    mostrarToast('Selecciona al menos un estado', true);
-    return;
-  }
-
-  const btnGuardar = document.getElementById('btn-guardar-registro');
-  btnGuardar.textContent = 'Guardando...';
-  btnGuardar.disabled = true;
-
-  try {
-    await apiPost('/registro', { fecha: fechaHoy(), ...chips, notas });
-    mostrarToast('✅ Registro guardado');
-  } catch (e) {
-    mostrarToast('❌ Error al guardar', true);
-  } finally {
-    btnGuardar.textContent = 'Guardar registro';
-    btnGuardar.disabled = false;
-  }
-}
-
-// ============================================
-// AUTH
-// ============================================
-function mostrarPantallaAuth() {
-  document.getElementById('modal-auth').style.display = 'flex';
-}
-
-function ocultarPantallaAuth() {
-  document.getElementById('modal-auth').style.display = 'none';
-}
-
-async function handleLogin() {
-  const email = document.getElementById('auth-email').value;
-  const password = document.getElementById('auth-password').value;
-  const errorEl = document.getElementById('auth-error');
-  errorEl.classList.add('hidden');
-
-  try {
-    const res = await fetch(`${API}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    token = data.access_token;
-    localStorage.setItem('mino_token', token);
-    ocultarPantallaAuth();
-    await init();
-  } catch {
-    errorEl.textContent = 'Correo o contraseña incorrectos';
-    errorEl.classList.remove('hidden');
-  }
-}
-
-async function handleRegistro() {
-  const email = document.getElementById('auth-email').value;
-  const password = document.getElementById('auth-password').value;
-  const errorEl = document.getElementById('auth-error');
-  errorEl.classList.add('hidden');
-
-  try {
-    await fetch(`${API}/auth/registro`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
-    await handleLogin();
-  } catch {
-    errorEl.textContent = 'Error al crear la cuenta';
-    errorEl.classList.remove('hidden');
-  }
-}
-
-// ============================================
-// INIT
-// ============================================
-async function init() {
-  const saludoDueno = document.getElementById('saludo-dueno');
-  const preguntaMichi = document.getElementById('pregunta-michi');
-  const avatarDueno = document.getElementById('avatar-dueno');
-
-  if (!token) {
-    mostrarPantallaAuth();
-    return;
-  }
-
-  try {
-    const gato = await apiGet('/gato');
-    // Sacar nombre del correo
-const tokenData = JSON.parse(atob(token.split('.')[1]));
-const correo = tokenData.email || '';
-nombreDueno = correo.split('@')[0];
-// Capitalizar primera letra
-nombreDueno = nombreDueno.charAt(0).toUpperCase() + nombreDueno.slice(1);
-localStorage.setItem('mino_nombre_dueno', nombreDueno);
-
-if (saludoDueno) saludoDueno.textContent = `¡Hola ${nombreDueno}!`;
-if (avatarDueno) avatarDueno.textContent = nombreDueno.charAt(0).toUpperCase();
-    nombreMichi = gato.nombre;
-    localStorage.setItem('mino_nombre_michi', nombreMichi);
-
-    if (preguntaMichi) preguntaMichi.textContent = `¿Cómo está ${nombreMichi} hoy?`;
-    if (nombreDueno) {
-      if (saludoDueno) saludoDueno.textContent = `¡Hola ${nombreDueno}!`;
-      if (avatarDueno) avatarDueno.textContent = nombreDueno.charAt(0).toUpperCase();
-    }
-
-    try {
-      const registroHoy = await apiGet(`/registro/${fechaHoy()}`);
-      preseleccionarChips(registroHoy);
-    } catch {
-      // Sin registro hoy, está bien
-    }
-
-  } catch (e) {
-    // 404 = no tiene gato aún → onboarding
-    // 401 = token inválido → login
-    if (e.detail === 'No tienes un gato registrado') {
-      document.getElementById('modal-onboarding').style.display = 'flex';
-    } else {
-      localStorage.removeItem('mino_token');
-      mostrarPantallaAuth();
-    }
-  }
-}
-// ============================================
-// EVENT LISTENERS
-// ============================================
-document.addEventListener('click', function(e) {
-  if (e.target.closest('#btn-guardar-registro')) {
-    guardarRegistro();
-  }
-});
-
-document.getElementById('btn-login')
-  ?.addEventListener('click', handleLogin);
-
-document.getElementById('btn-registro-auth')
-  ?.addEventListener('click', handleRegistro);
-
-// Modal fundador (conservamos el dismiss)
-document.getElementById('btn-dismiss')?.addEventListener('click', () => {
-  document.getElementById('modal-fundador').style.display = 'none';
-});
-
-document.getElementById('btn-guardar-gato')?.addEventListener('click', async () => {
-  const nombre = document.getElementById('onboarding-nombre').value.trim();
-  const raza = document.getElementById('onboarding-raza').value.trim();
-  const telefono = document.getElementById('onboarding-telefono').value.trim(); // <-- NUEVO
-  const errorEl = document.getElementById('onboarding-error');
-
-  if (!nombre) {
-    errorEl.textContent = 'El nombre de tu michi es obligatorio';
-    errorEl.classList.remove('hidden');
-    return;
-  }
-
-  try {
-    // Agregamos el teléfono al JSON que viaja a FastAPI
-    await apiPost('/gato', { 
-      nombre, 
-      raza: raza || null,
-      telefono: telefono || null // <-- NUEVO
-    });
-    
-    document.getElementById('modal-onboarding').style.display = 'none';
-    await init();
-  } catch {
-    errorEl.textContent = 'Error al guardar, intenta de nuevo';
-    errorEl.classList.remove('hidden');
-  }
-});
-// ============================================
-// NAVEGACIÓN HOME ↔ SALUD
-// ============================================
-const seccionHome = document.querySelector('main');
-const seccionSalud = document.getElementById('seccion-salud');
-const tabHome = document.getElementById('tab-home');
-const tabSalud = document.getElementById('tab-salud');
-
-function mostrarHome() {
-  seccionHome.style.display = '';
-  seccionSalud.style.display = 'none';
-  tabHome.classList.add('bg-secondary-container', 'text-on-secondary-container');
-  tabHome.classList.remove('text-on-surface-variant');
-  tabSalud.classList.remove('bg-secondary-container', 'text-on-secondary-container');
-  tabSalud.classList.add('text-on-surface-variant');
-}
-
-function mostrarSalud() {
-  seccionHome.style.display = 'none';
-  seccionSalud.style.display = '';
-  tabSalud.classList.add('bg-secondary-container', 'text-on-secondary-container');
-  tabSalud.classList.remove('text-on-surface-variant');
-  tabHome.classList.remove('bg-secondary-container', 'text-on-secondary-container');
-  tabHome.classList.add('text-on-surface-variant');
-  // Cargar gráfica con métrica default
-  cambiarMetrica('energia');
-  // Actualizar nombre del michi
-  document.getElementById('nombre-michi-salud').textContent = nombreMichi;
-}
-
-tabHome.addEventListener('click', mostrarHome);
-tabSalud.addEventListener('click', mostrarSalud);
-
-// ============================================
-// GRÁFICAS CON CHART.JS
-// ============================================
-let graficaActual = null;
-let metricaActual = 'energia';
-
-const ETIQUETAS_METRICA = {
-  energia: 'Energía', comida: 'Comida',
-  agua: 'Agua', caja_arena: 'Caja de Arena', animo: 'Ánimo'
-};
-
-function cambiarMetrica(metrica) {
-  metricaActual = metrica;
-
-  // Actualizar estilos del selector
-  document.querySelectorAll('.metrica-btn').forEach(btn => {
-    if (btn.dataset.metrica === metrica) {
-      btn.classList.add('bg-primary', 'text-white', 'border-primary');
-      btn.classList.remove('text-on-surface-variant', 'border-outline-variant');
-    } else {
-      btn.classList.remove('bg-primary', 'text-white', 'border-primary');
-      btn.classList.add('text-on-surface-variant', 'border-outline-variant');
-    }
-  });
-
-  cargarGrafica(metrica);
-}
-
-async function cargarGrafica(metrica) {
-  try {
-    const registros = await apiGet('/registros?dias=7');
-
-    const graficaVacia = document.getElementById('grafica-vacia');
-    const canvasEl = document.getElementById('grafica-metrica');
-
-    if (!registros || registros.length === 0) {
-      canvasEl.style.display = 'none';
-      graficaVacia.style.display = '';
-      return;
-    }
-
-    canvasEl.style.display = '';
-    graficaVacia.style.display = 'none';
-
-    // Preparar datos
-    const labels = registros.map(r => {
-      const [, mes, dia] = r.fecha.split('-');
-      return `${dia}/${mes}`;
-    });
-    const valores = registros.map(r => r[metrica] ?? null);
-
-    // --- NUEVO: LÓGICA DEL FEED DE NOTAS ---
-    const feedNotas = document.getElementById('feed-notas');
-    if (feedNotas) {
-      // Limpiamos el contenedor y ponemos el título
-      feedNotas.innerHTML = '<h3 class="font-headline-md text-on-surface mb-4">Diario de observaciones</h3>';
-      
-      // Filtramos solo los registros que traen texto en la nota y los volteamos (del más reciente al más viejo)
-      const registrosConNota = registros.filter(r => r.notas && r.notas.trim() !== '').reverse();
-
-      if (registrosConNota.length === 0) {
-        feedNotas.innerHTML += `
-          <div class="text-center py-4 opacity-70">
-            <span class="material-symbols-outlined text-3xl text-on-surface-variant mb-2">edit_off</span>
-            <p class="text-body-sm text-on-surface-variant">No hay notas en los últimos 7 días.</p>
-          </div>
-        `;
-      } else {
-        // Armamos el HTML para cada nota respetando tu clase .peach-card
-        registrosConNota.forEach(r => {
-          const [, mes, dia] = r.fecha.split('-');
-          const notaHTML = `
-            <article class="peach-card p-4 rounded-2xl flex flex-col gap-2 mb-3">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="material-symbols-outlined text-primary text-[18px]">calendar_today</span>
-                <span class="text-label-sm text-primary font-bold">${dia}/${mes}</span>
-              </div>
-              <p class="text-body-md text-on-surface leading-relaxed">${r.notas}</p>
-            </article>
-          `;
-          feedNotas.innerHTML += notaHTML;
-        });
-      }
-    }
-    // --- FIN DE LA LÓGICA DEL FEED ---
-
-    // Destruir gráfica anterior si existe
-    if (graficaActual) graficaActual.destroy();
-
-    graficaActual = new Chart(canvasEl, {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [{
-          label: ETIQUETAS_METRICA[metrica],
-          data: valores,
-          borderColor: '#9d3e1d',
-          backgroundColor: 'rgba(157, 62, 29, 0.08)',
-          borderWidth: 7, // Línea un poco más gruesa
-          pointBackgroundColor: '#9d3e1d',
-          pointBorderColor: '#ffffff', // Borde blanco para que resalte
-          pointBorderWidth: 2, // Grosor del borde blanco
-          pointRadius: 10, // Puntos más grandes
-          pointHoverRadius: 15, // Aún más grandes al pasar el dedo/mouse
-          fill: true,
-          tension: 0.3,
-          spanGaps: true
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          // Dentro de cargarGrafica(), reemplaza las options.scales.y por:
-y: {
-  min: 1,
-  max: 3,
-  ticks: {
-    stepSize: 1,
-    callback: val => ({ 1: '😿 Bajo', 2: '😐 Normal', 3: '😸 Alto' })[val] || val
-  },
-  grid: { color: 'rgba(0,0,0,0.05)' }
-},
-          x: {
-            grid: { display: false }
-          }
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: ctx => {
-                const emojis = ['', '😿', '😾', '😐', '😸', '😻'];
-                return `${ETIQUETAS_METRICA[metrica]}: ${emojis[ctx.raw] || ctx.raw}`;
-              }
-            }
-          }
-        }
-      }
-    });
-
-  } catch (e) {
-    console.error('Error cargando gráfica:', e);
-  }
-}
-
-// MODAL PERFIL
-document.getElementById('avatar-dueno')?.addEventListener('click', () => {
-  const tokenData = JSON.parse(atob(token.split('.')[1]));
-  document.getElementById('modal-avatar-letra').textContent = nombreDueno.charAt(0).toUpperCase();
-  document.getElementById('modal-nombre-dueno').textContent = nombreDueno;
-  document.getElementById('modal-email-dueno').textContent = tokenData.email || '';
-  document.getElementById('modal-perfil').style.display = 'flex';
-});
-
-document.getElementById('btn-cerrar-sesion')?.addEventListener('click', () => {
-  localStorage.removeItem('mino_token');
-  localStorage.removeItem('mino_nombre_dueno');
-  localStorage.removeItem('mino_nombre_michi');
-  token = null;
-  document.getElementById('modal-perfil').style.display = 'none';
-  mostrarPantallaAuth();
-});
-
-document.getElementById('modal-perfil')?.addEventListener('click', function(e) {
-  if (e.target === this) this.style.display = 'none';
-});
-
-// ============================================
-// UX: MOSTRAR/OCULTAR CONTRASEÑA
-// ============================================
-document.getElementById('btn-toggle-password')?.addEventListener('click', () => {
-  const passwordInput = document.getElementById('auth-password');
-  const iconoElement = document.getElementById('icono-password');
-  
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-    iconoElement.textContent = 'visibility_off'; // Cambia el icono al ojo tachado
-  } else {
-    passwordInput.type = 'password';
-    iconoElement.textContent = 'visibility'; // Vuelve al ojo normal
-  }
-});
-
-// ============================================
-// RECUPERACIÓN DE CONTRASEÑA (OTP)
-// ============================================
-const authNormal = document.getElementById('auth-normal');
-const authRecuperacion = document.getElementById('auth-recuperacion');
-const recPaso1 = document.getElementById('recuperacion-paso-1');
-const recPaso2 = document.getElementById('recuperacion-paso-2');
-const errorAuth = document.getElementById('auth-error');
-
-// Navegación dentro del modal
-document.getElementById('btn-olvide-password')?.addEventListener('click', () => {
-  authNormal.style.display = 'none';
-  authRecuperacion.style.display = 'block';
-  recPaso1.style.display = 'block';
-  recPaso2.style.display = 'none';
-  errorAuth.classList.add('hidden');
-});
-
-document.getElementById('btn-volver-login')?.addEventListener('click', () => {
-  authRecuperacion.style.display = 'none';
-  authNormal.style.display = 'block';
-  errorAuth.classList.add('hidden');
-});
-
-// Paso 1: Solicitar código
-// Función helper para atrapar errores del backend
-async function extraerError(res) {
-  try {
-    const errorData = await res.json();
-    return errorData.detail || 'Ocurrió un error';
-  } catch {
-    return 'Ocurrió un error de conexión';
-  }
-}
-
-// Lógica del temporizador (60 segundos)
-function iniciarTimerReenvio() {
-  const btnReenviar = document.getElementById('btn-reenviar-codigo');
-  const timerText = document.getElementById('timer-reenvio');
-  const spanSegundos = document.getElementById('segundos-reenvio');
-  
-  btnReenviar.disabled = true;
-  timerText.classList.remove('hidden');
-  
-  let segundos = 60;
-  spanSegundos.textContent = segundos;
-  
-  const intervalo = setInterval(() => {
-    segundos--;
-    spanSegundos.textContent = segundos;
-    
-    if (segundos <= 0) {
-      clearInterval(intervalo);
-      btnReenviar.disabled = false;
-      timerText.classList.add('hidden');
-    }
-  }, 1000);
-}
-
-// Paso 1: Solicitar código (Reutilizable para el botón de reenvío)
-async function solicitarCodigoOTP() {
-  const email = document.getElementById('recuperacion-email').value.trim();
-  if (!email) {
-    errorAuth.textContent = 'Ingresa tu correo';
-    errorAuth.classList.remove('hidden');
-    return false;
-  }
-  
-  try {
-    const res = await fetch(`${API}/auth/solicitar-codigo`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
-    });
-    
-    if (!res.ok) {
-      const errorMsg = await extraerError(res);
-      throw new Error(errorMsg);
-    }
-    
-    mostrarToast('Código enviado a tu correo');
-    iniciarTimerReenvio(); // Arranca el bloqueo de 60s
-    return true;
-  } catch (e) {
-    errorAuth.textContent = e.message;
-    errorAuth.classList.remove('hidden');
-    return false;
-  }
-}
-
-// Evento: Clic en primer envío
-document.getElementById('btn-enviar-codigo')?.addEventListener('click', async (e) => {
-  const btn = e.target;
-  btn.textContent = 'Enviando...';
-  btn.disabled = true;
-  
-  const exito = await solicitarCodigoOTP();
-  if (exito) {
-    recPaso1.style.display = 'none';
-    recPaso2.style.display = 'block';
-    errorAuth.classList.add('hidden');
-  }
-  
-  btn.textContent = 'Enviar código';
-  btn.disabled = false;
-});
-
-// Evento: Clic en botón de reenvío
-document.getElementById('btn-reenviar-codigo')?.addEventListener('click', async () => {
-  errorAuth.classList.add('hidden');
-  await solicitarCodigoOTP();
-});
-
-// Paso 2: Enviar código + nueva contraseña
-document.getElementById('btn-guardar-nueva-password')?.addEventListener('click', async () => {
-  const email = document.getElementById('recuperacion-email').value.trim();
-  const codigo = document.getElementById('recuperacion-codigo').value.trim();
-  const nueva_password = document.getElementById('recuperacion-nueva-password').value;
-  
-  if (!codigo || !nueva_password) {
-    errorAuth.textContent = 'Llena todos los campos';
-    errorAuth.classList.remove('hidden');
-    return;
-  }
-
-  const btn = document.getElementById('btn-guardar-nueva-password');
-  btn.textContent = 'Guardando...';
-  btn.disabled = true;
-
-  try {
-    const res = await fetch(`${API}/auth/restablecer-password`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, codigo, nueva_password })
-    });
-    
-    // Si el backend tiró un error (ej. contraseña igual), disparamos el catch con el mensaje
-    if (!res.ok) {
-      const errorMsg = await extraerError(res);
-      throw new Error(errorMsg);
-    }
-    
-    mostrarToast('Contraseña actualizada con éxito');
-    
-    document.getElementById('auth-email').value = email;
-    document.getElementById('auth-password').value = nueva_password;
-    
-    authRecuperacion.style.display = 'none';
-    authNormal.style.display = 'block';
-    
-    await handleLogin();
-    
-  } catch (e) {
-    // Imprime el error exacto que mandó FastAPI ("La nueva contraseña debe ser diferente...", etc.)
-    errorAuth.textContent = e.message; 
-    errorAuth.classList.remove('hidden');
-  } finally {
-    btn.textContent = 'Guardar y entrar';
-    btn.disabled = false;
-  }
-});
-
-init();
-</script>
-</body></html>
+	</style>
+
+	<div id="modal-fundador">
+		<div class="modal-box">
+			<h3>¡Registro simulado!</h3>
+			<p>Únete a los 14 dueños fundadores y sé el primero en probar la versión completa de Mino para proteger a tu michi.</p>
+			<input type="email" id="email-input" placeholder="Tu correo electrónico">
+			<button id="btn-unirse">Avisarme cuando esté lista 🐾</button>
+
+			<button id="btn-dismiss" style="background: transparent; color: #6b5c57; border: none; margin-top: 15px; font-size: 14px; text-decoration: underline; cursor: pointer; width: 100%;">
+				Ya me registré o no deseo probarla
+			</button>
+		</div>
+	</div>
+
+	<!-- MODAL DE AUTH -->
+	<div id="modal-auth" style="display:none" class="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4">
+		<div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
+			<h2 class="font-headline-lg text-primary mb-1">Bienvenido a Mino 🐾</h2>
+			<p class="text-body-sm text-on-surface-variant mb-6">Inicia sesión para guardar el historial de tu michi</p>
+
+			<div id="auth-normal">
+				<input id="auth-email" type="email" placeholder="Correo electrónico"
+								    class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
+
+				<div class="relative w-full mb-4">
+					<input id="auth-password" type="password" placeholder="Contraseña"
+										  class="w-full border border-outline-variant rounded-xl px-4 py-3 pr-12 text-body-md focus:outline-none focus:border-primary">
+					<button type="button" id="btn-toggle-password" class="absolute inset-y-0 right-0 px-3 flex items-center text-on-surface-variant hover:text-primary transition-colors active:scale-95">
+						<span id="icono-password" class="material-symbols-outlined text-[20px]">visibility</span>
+					</button>
+				</div>
+
+				<button id="btn-login" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg mb-3 active:scale-95 transition-transform">
+					Iniciar sesión
+				</button>
+				<button id="btn-registro-auth" class="w-full border border-primary text-primary rounded-xl py-3 font-label-lg active:scale-95 transition-transform">
+					Crear cuenta
+				</button>
+
+				<button id="btn-olvide-password" class="w-full text-center text-label-sm text-primary mt-4 underline active:scale-95 transition-transform">
+					¿Olvidaste tu contraseña?
+				</button>
+
+				<p class="text-[11px] leading-tight text-on-surface-variant mt-4 text-center opacity-80">
+				Al crear tu cuenta, aceptas recibir recordatorios ocasionales para la bitácora de tu michi. Cero spam, lo prometemos.
+				</p>
+			</div>
+
+			<div id="auth-recuperacion" style="display: none;">
+				<p class="text-body-sm text-on-surface-variant mb-4 text-center">Ingresa tu correo para recibir un código de 8 dígitos.</p>
+
+				<div id="recuperacion-paso-1">
+					<input id="recuperacion-email" type="email" placeholder="Tu correo electrónico"
+										    class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
+					<button id="btn-enviar-codigo" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg mb-3 active:scale-95 transition-transform">
+						Enviar código
+					</button>
+				</div>
+
+				<!-- Paso 2: Ingresar código y nueva contraseña -->
+				<div id="recuperacion-paso-2" style="display: none;">
+					<input id="recuperacion-codigo" type="text" placeholder="Código de 8 dígitos" maxlength="8"
+														      class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary text-center tracking-widest font-bold">
+					<input id="recuperacion-nueva-password" type="password" placeholder="Escribe tu nueva contraseña"
+												class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
+					<button id="btn-guardar-nueva-password" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg mb-3 active:scale-95 transition-transform">
+						Guardar y entrar
+					</button>
+
+					<!-- PARCHE: BOTÓN REENVIAR -->
+					<div class="text-center mt-2 mb-4">
+						<button id="btn-reenviar-codigo" class="text-label-sm text-primary underline active:scale-95 disabled:opacity-50 disabled:no-underline transition-opacity">
+							No recibí el código. Reenviar.
+						</button>
+						<p id="timer-reenvio" class="text-[11px] text-on-surface-variant hidden mt-1">Por favor espera <span id="segundos-reenvio" class="font-bold">60</span>s para pedir otro.</p>
+					</div>
+				</div>
+
+				<button id="btn-volver-login" class="w-full text-center text-label-sm text-on-surface-variant mt-2 active:scale-95 transition-transform">
+					Volver a inicio de sesión
+				</button>
+			</div>
+
+			<p id="auth-error" class="text-error text-body-sm mt-3 text-center hidden"></p>
+		</div>
+	</div>
+
+	<!-- MODAL ONBOARDING: NOMBRE DEL GATO -->
+	<div id="modal-onboarding" style="display:none" class="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center p-4">
+		<div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
+			<h2 class="font-headline-lg text-primary mb-1">¡Bienvenido a Mino! 🐾</h2>
+			<p class="text-body-sm text-on-surface-variant mb-4">Cuéntanos sobre tu michi para empezar a cuidarlo.</p>
+
+			<input id="onboarding-nombre" type="text" placeholder="Nombre de tu gato"
+								  class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-3 text-body-md focus:outline-none focus:border-primary">
+
+			<input id="onboarding-raza" type="text" placeholder="Raza (opcional)"
+								class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-4 text-body-md focus:outline-none focus:border-primary">
+
+			<div class="bg-primary-fixed/20 p-3 rounded-xl mb-4 border border-primary-fixed">
+				<p class="text-label-sm text-on-surface-variant mb-2"><strong>Reto de 3 días:</strong> Déjanos tu WhatsApp para enviarte un recordatorio y ayudarte a desbloquear el Perfil Base de tu michi.</p>
+				<input id="onboarding-telefono" type="tel" placeholder="WhatsApp (10 dígitos)" maxlength="10"
+													       class="w-full border border-outline-variant rounded-xl px-4 py-3 text-body-md focus:outline-none focus:border-primary">
+			</div>
+
+			<button id="btn-guardar-gato" class="w-full bg-primary text-white rounded-xl py-3 font-label-lg active:scale-95 transition-transform">
+				Empezar a cuidar a mi michi
+			</button>
+			<p id="onboarding-error" class="text-error text-body-sm mt-3 text-center hidden"></p>
+		</div>
+	</div>
+	<script>
+		// ============================================
+		// CONFIGURACIÓN
+		// ============================================
+		const API = 'https://mino-backend-vs9z.onrender.com';
+
+		// ============================================
+		// MAPEO DE CHIPS → VALORES NUMÉRICOS
+		// ============================================
+
+
+		// ============================================
+		// ESTADO GLOBAL
+		// ============================================
+		let token = localStorage.getItem('mino_token');
+		let nombreMichi = localStorage.getItem('mino_nombre_michi') || 'tu michi';
+		let nombreDueno = localStorage.getItem('mino_nombre_dueno') || '';
+
+		// ============================================
+		// HELPERS
+		// ============================================
+		function authHeaders() {
+			return {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${token}`
+			};
+		}
+
+		async function apiGet(path) {
+			const res = await fetch(`${API}${path}`, { headers: authHeaders() });
+			if (!res.ok) throw await res.json();
+			return res.json();
+		}
+
+		async function apiPost(path, body) {
+			const res = await fetch(`${API}${path}`, {
+				method: 'POST',
+				headers: authHeaders(),
+				body: JSON.stringify(body)
+			});
+			if (!res.ok) throw await res.json();
+			return res.json();
+		}
+
+		function fechaHoy() {
+			return new Date().toISOString().split('T')[0];
+		}
+
+		function mostrarToast(mensaje, esError = false) {
+			const toast = document.createElement('div');
+			toast.textContent = mensaje;
+			toast.className = `fixed bottom-24 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-white text-body-sm font-label-lg shadow-lg z-[300] transition-all`;
+			toast.style.backgroundColor = esError ? '#ba1a1a' : '#9d3e1d';
+			document.body.appendChild(toast);
+			setTimeout(() => toast.remove(), 2500);
+		}
+
+		// ============================================
+		// CHIPS — leer y preseleccionar
+		// ============================================
+
+		// toggleActive ya existía en tu HTML, la conservamos igual
+		function toggleActive(btn) {
+			// Desactivar otros chips de la misma card
+			const card = btn.closest('article');
+			card.querySelectorAll('button').forEach(b => {
+				b.classList.remove('active-chip');
+			});
+			btn.classList.add('active-chip');
+		}
+
+		// ============================================
+		// MAPEO DE CHIPS → VALORES NUMÉRICOS (CORREGIDO)
+		// ============================================
+		const TEXTO_A_VALOR = {
+			energia:    { 'Bajo': 1, 'Normal': 2, 'Alto': 3 },
+			comida:     { 'Sin apetito': 1, 'Poco': 2, 'Comió bien': 3 },
+			agua:       { 'Poco': 1, 'Normal': 2, 'Mucho': 3 },
+			caja_arena: { 'Poco uso': 1, 'Normal': 2, 'Frecuente': 3 },
+			animo:      { 'Triste': 1, 'Neutro': 2, 'Feliz': 3 }
+		};
+
+		function leerChips() {
+			const secciones = {
+				energia:    document.querySelector('article:nth-of-type(1)'),
+				comida:     document.querySelector('article:nth-of-type(2)'),
+				agua:       document.querySelector('article:nth-of-type(3)'),
+				caja_arena: document.querySelector('article:nth-of-type(4)'),
+				animo:      document.querySelector('article:nth-of-type(5)'),
+			};
+
+			const resultado = {};
+			for (const [metrica, seccion] of Object.entries(secciones)) {
+				const chipActivo = seccion?.querySelector('.active-chip span:last-child');
+				if (chipActivo) {
+					const texto = chipActivo.textContent.trim();
+					// Buscamos el valor dentro de la métrica específica
+					resultado[metrica] = TEXTO_A_VALOR[metrica][texto] ?? 2;
+				}
+			}
+			return resultado;
+		}
+
+		function preseleccionarChips(registro) {
+			const indiceArticle = { energia: 0, comida: 1, agua: 2, caja_arena: 3, animo: 4 };
+			const valorATexto = {
+				energia:    { 1: 'Bajo', 2: 'Normal', 3: 'Alto' },
+				comida:     { 1: 'Sin apetito', 2: 'Poco', 3: 'Comió bien' },
+				agua:       { 1: 'Poco', 2: 'Normal', 3: 'Mucho' },
+				caja_arena: { 1: 'Poco uso', 2: 'Normal', 3: 'Frecuente' },
+				animo:      { 1: 'Triste', 2: 'Neutro', 3: 'Feliz' },
+			};
+
+			for (const [metrica, idx] of Object.entries(indiceArticle)) {
+				const valor = registro[metrica];
+				if (!valor) continue;
+				const textoEsperado = valorATexto[metrica][valor];
+				const article = document.querySelectorAll('article')[idx];
+				article?.querySelectorAll('button').forEach(btn => {
+					const texto = btn.querySelector('span:last-child')?.textContent.trim();
+					if (texto === textoEsperado) btn.classList.add('active-chip');
+				});
+			}
+
+			const notasInput = document.getElementById('notas-input');
+			if (notasInput && registro.notas) notasInput.value = registro.notas;
+		}
+
+		// ============================================
+		// GUARDAR REGISTRO
+		// ============================================
+		async function guardarRegistro() {
+			const chips = leerChips();
+			const notas = document.getElementById('notas-input')?.value || '';
+
+			if (Object.keys(chips).length === 0) {
+				mostrarToast('Selecciona al menos un estado', true);
+				return;
+			}
+
+			const btnGuardar = document.getElementById('btn-guardar-registro');
+			btnGuardar.textContent = 'Guardando...';
+			btnGuardar.disabled = true;
+
+			try {
+				await apiPost('/registro', { fecha: fechaHoy(), ...chips, notas });
+				mostrarToast('✅ Registro guardado');
+			} catch (e) {
+				mostrarToast('❌ Error al guardar', true);
+			} finally {
+				btnGuardar.textContent = 'Guardar registro';
+				btnGuardar.disabled = false;
+			}
+		}
+
+		// ============================================
+		// AUTH
+		// ============================================
+		function mostrarPantallaAuth() {
+			document.getElementById('modal-auth').style.display = 'flex';
+		}
+
+		function ocultarPantallaAuth() {
+			document.getElementById('modal-auth').style.display = 'none';
+		}
+
+		async function handleLogin() {
+			const email = document.getElementById('auth-email').value;
+			const password = document.getElementById('auth-password').value;
+			const errorEl = document.getElementById('auth-error');
+			errorEl.classList.add('hidden');
+
+			try {
+				const res = await fetch(`${API}/auth/login`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ email, password })
+				});
+				if (!res.ok) throw new Error();
+				const data = await res.json();
+				token = data.access_token;
+				localStorage.setItem('mino_token', token);
+				ocultarPantallaAuth();
+				await init();
+			} catch {
+				errorEl.textContent = 'Correo o contraseña incorrectos';
+				errorEl.classList.remove('hidden');
+			}
+		}
+
+		async function handleRegistro() {
+			const email = document.getElementById('auth-email').value;
+			const password = document.getElementById('auth-password').value;
+			const errorEl = document.getElementById('auth-error');
+			errorEl.classList.add('hidden');
+
+			try {
+				await fetch(`${API}/auth/registro`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ email, password })
+				});
+				await handleLogin();
+			} catch {
+				errorEl.textContent = 'Error al crear la cuenta';
+				errorEl.classList.remove('hidden');
+			}
+		}
+
+		// ============================================
+		// INIT
+		// ============================================
+		async function init() {
+			const saludoDueno = document.getElementById('saludo-dueno');
+			const preguntaMichi = document.getElementById('pregunta-michi');
+			const avatarDueno = document.getElementById('avatar-dueno');
+
+			if (!token) {
+				mostrarPantallaAuth();
+				return;
+			}
+
+			try {
+				const gato = await apiGet('/gato');
+				// Sacar nombre del correo
+				const tokenData = JSON.parse(atob(token.split('.')[1]));
+				const correo = tokenData.email || '';
+				nombreDueno = correo.split('@')[0];
+				// Capitalizar primera letra
+				nombreDueno = nombreDueno.charAt(0).toUpperCase() + nombreDueno.slice(1);
+				localStorage.setItem('mino_nombre_dueno', nombreDueno);
+
+				if (saludoDueno) saludoDueno.textContent = `¡Hola ${nombreDueno}!`;
+				if (avatarDueno) avatarDueno.textContent = nombreDueno.charAt(0).toUpperCase();
+				nombreMichi = gato.nombre;
+				localStorage.setItem('mino_nombre_michi', nombreMichi);
+
+				if (preguntaMichi) preguntaMichi.textContent = `¿Cómo está ${nombreMichi} hoy?`;
+
+				try {
+					const registroHoy = await apiGet(`/registro/${fechaHoy()}`);
+					preseleccionarChips(registroHoy);
+				} catch {
+					// Sin registro hoy, está bien
+				}
+
+			} catch (e) {
+				// 1. Enviar el error real a tu servidor para que dejes de adivinar
+				fetch('https://mino-backend-vs9z.onrender.com/log-error', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						mensaje: e.message || JSON.stringify(e),
+						contexto: 'Fallo al iniciar modal / buscar gato',
+						usuario_email: correo // Usas la variable que ya extrajiste del token
+					})
+				});
+
+				// 2. Continúa con tu lógica normal de UI
+				if (e.detail === 'No tienes un gato registrado') {
+					document.getElementById('modal-onboarding').style.display = 'flex';
+				} else {
+					localStorage.removeItem('mino_token');
+					mostrarPantallaAuth();
+				}
+			}
+		}
+		// ============================================
+		// EVENT LISTENERS
+		// ============================================
+		document.addEventListener('click', function(e) {
+			if (e.target.closest('#btn-guardar-registro')) {
+				guardarRegistro();
+			}
+		});
+
+		document.getElementById('btn-login')
+			?.addEventListener('click', handleLogin);
+
+		document.getElementById('btn-registro-auth')
+			?.addEventListener('click', handleRegistro);
+
+		// Modal fundador (conservamos el dismiss)
+		document.getElementById('btn-dismiss')?.addEventListener('click', () => {
+			document.getElementById('modal-fundador').style.display = 'none';
+		});
+
+		document.getElementById('btn-guardar-gato')?.addEventListener('click', async () => {
+			const nombre = document.getElementById('onboarding-nombre').value.trim();
+			const raza = document.getElementById('onboarding-raza').value.trim();
+			const telefono = document.getElementById('onboarding-telefono').value.trim();
+			const errorEl = document.getElementById('onboarding-error');
+
+			if (!nombre) {
+				errorEl.textContent = 'El nombre de tu michi es obligatorio';
+				errorEl.classList.remove('hidden');
+				return;
+			}
+
+			try {
+				await apiPost('/gato', { 
+					nombre, 
+					raza: raza || null,
+					telefono: telefono || null
+				});
+
+				document.getElementById('modal-onboarding').style.display = 'none';
+				await init();
+			} catch (e) { // <-- AQUÍ ATRAPAMOS AL CULPABLE
+				// 1. Lo imprimimos en la consola del navegador por si estás depurando local
+				console.error("Fallo al guardar el michi:", e);
+
+				// 2. Opcional: Mandar el error a tu backend para enterarte si pasa en producción
+				fetch('URL_DE_TU_BACKEND/log-error', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+				        	mensaje: e.message || JSON.stringify(e),
+				        	contexto: 'Error POST /gato en onboarding'
+				     	})
+				}).catch(err => console.error("No se pudo enviar el log", err));
+
+				// 3. Le damos feedback real al usuario
+				errorEl.textContent = `Error al guardar: ${e.message || 'Intenta de nuevo'}`;
+				errorEl.classList.remove('hidden');
+			}
+		});
+		// ============================================
+		// NAVEGACIÓN HOME ↔ SALUD
+		// ============================================
+		const seccionHome = document.querySelector('main');
+		const seccionSalud = document.getElementById('seccion-salud');
+		const tabHome = document.getElementById('tab-home');
+		const tabSalud = document.getElementById('tab-salud');
+
+		function mostrarHome() {
+			seccionHome.style.display = '';
+			seccionSalud.style.display = 'none';
+			tabHome.classList.add('bg-secondary-container', 'text-on-secondary-container');
+			tabHome.classList.remove('text-on-surface-variant');
+			tabSalud.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+			tabSalud.classList.add('text-on-surface-variant');
+		}
+
+		function mostrarSalud() {
+			seccionHome.style.display = 'none';
+			seccionSalud.style.display = '';
+			tabSalud.classList.add('bg-secondary-container', 'text-on-secondary-container');
+			tabSalud.classList.remove('text-on-surface-variant');
+			tabHome.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+			tabHome.classList.add('text-on-surface-variant');
+			// Cargar gráfica con métrica default
+			cambiarMetrica('energia');
+			// Actualizar nombre del michi
+			document.getElementById('nombre-michi-salud').textContent = nombreMichi;
+		}
+
+		tabHome.addEventListener('click', mostrarHome);
+		tabSalud.addEventListener('click', mostrarSalud);
+
+		// ============================================
+		// GRÁFICAS CON CHART.JS
+		// ============================================
+		let graficaActual = null;
+		let metricaActual = 'energia';
+
+		const ETIQUETAS_METRICA = {
+			energia: 'Energía', comida: 'Comida',
+			agua: 'Agua', caja_arena: 'Caja de Arena', animo: 'Ánimo'
+		};
+
+		function cambiarMetrica(metrica) {
+			metricaActual = metrica;
+
+			// Actualizar estilos del selector
+			document.querySelectorAll('.metrica-btn').forEach(btn => {
+				if (btn.dataset.metrica === metrica) {
+					btn.classList.add('bg-primary', 'text-white', 'border-primary');
+					btn.classList.remove('text-on-surface-variant', 'border-outline-variant');
+				} else {
+					btn.classList.remove('bg-primary', 'text-white', 'border-primary');
+					btn.classList.add('text-on-surface-variant', 'border-outline-variant');
+				}
+			});
+
+			cargarGrafica(metrica);
+		}
+
+		async function cargarGrafica(metrica) {
+			try {
+				const registros = await apiGet('/registros?dias=7');
+
+				const graficaVacia = document.getElementById('grafica-vacia');
+				const canvasEl = document.getElementById('grafica-metrica');
+
+				if (!registros || registros.length === 0) {
+					canvasEl.style.display = 'none';
+					graficaVacia.style.display = '';
+					return;
+				}
+
+				canvasEl.style.display = '';
+				graficaVacia.style.display = 'none';
+
+				// Preparar datos
+				const labels = registros.map(r => {
+					const [, mes, dia] = r.fecha.split('-');
+					return `${dia}/${mes}`;
+				});
+				const valores = registros.map(r => r[metrica] ?? null);
+
+				// --- NUEVO: LÓGICA DEL FEED DE NOTAS ---
+				const feedNotas = document.getElementById('feed-notas');
+				if (feedNotas) {
+					// Limpiamos el contenedor y ponemos el título
+					feedNotas.innerHTML = '<h3 class="font-headline-md text-on-surface mb-4">Diario de observaciones</h3>';
+
+					// Filtramos solo los registros que traen texto en la nota y los volteamos (del más reciente al más viejo)
+					const registrosConNota = registros.filter(r => r.notas && r.notas.trim() !== '').reverse();
+
+					if (registrosConNota.length === 0) {
+						feedNotas.innerHTML += `
+	  <div class="text-center py-4 opacity-70">
+	    <span class="material-symbols-outlined text-3xl text-on-surface-variant mb-2">edit_off</span>
+	    <p class="text-body-sm text-on-surface-variant">No hay notas en los últimos 7 días.</p>
+	  </div>
+	`;
+					} else {
+						// Armamos el HTML para cada nota respetando tu clase .peach-card
+						registrosConNota.forEach(r => {
+							const [, mes, dia] = r.fecha.split('-');
+							const notaHTML = `
+	    <article class="peach-card p-4 rounded-2xl flex flex-col gap-2 mb-3">
+	      <div class="flex items-center gap-2 mb-1">
+		<span class="material-symbols-outlined text-primary text-[18px]">calendar_today</span>
+		<span class="text-label-sm text-primary font-bold">${dia}/${mes}</span>
+	      </div>
+	      <p class="text-body-md text-on-surface leading-relaxed">${r.notas}</p>
+	    </article>
+	  `;
+							feedNotas.innerHTML += notaHTML;
+						});
+					}
+				}
+				// --- FIN DE LA LÓGICA DEL FEED ---
+
+				// Destruir gráfica anterior si existe
+				if (graficaActual) graficaActual.destroy();
+
+				graficaActual = new Chart(canvasEl, {
+					type: 'line',
+					data: {
+						labels,
+						datasets: [{
+							label: ETIQUETAS_METRICA[metrica],
+							data: valores,
+							borderColor: '#9d3e1d',
+							backgroundColor: 'rgba(157, 62, 29, 0.08)',
+							borderWidth: 7, // Línea un poco más gruesa
+							pointBackgroundColor: '#9d3e1d',
+							pointBorderColor: '#ffffff', // Borde blanco para que resalte
+							pointBorderWidth: 2, // Grosor del borde blanco
+							pointRadius: 10, // Puntos más grandes
+							pointHoverRadius: 15, // Aún más grandes al pasar el dedo/mouse
+							fill: true,
+							tension: 0.3,
+							spanGaps: true
+						}]
+					},
+					options: {
+						responsive: true,
+						scales: {
+							// Dentro de cargarGrafica(), reemplaza las options.scales.y por:
+							y: {
+								min: 1,
+								max: 3,
+								ticks: {
+									stepSize: 1,
+									callback: val => ({ 1: '😿 Bajo', 2: '😐 Normal', 3: '😸 Alto' })[val] || val
+								},
+								grid: { color: 'rgba(0,0,0,0.05)' }
+							},
+							x: {
+								grid: { display: false }
+							}
+						},
+						plugins: {
+							legend: { display: false },
+							tooltip: {
+								callbacks: {
+									label: ctx => {
+										const emojis = ['', '😿', '😾', '😐', '😸', '😻'];
+										return `${ETIQUETAS_METRICA[metrica]}: ${emojis[ctx.raw] || ctx.raw}`;
+									}
+								}
+							}
+						}
+					}
+				});
+
+			} catch (e) {
+				console.error('Error cargando gráfica:', e);
+			}
+		}
+
+		// MODAL PERFIL
+		document.getElementById('avatar-dueno')?.addEventListener('click', () => {
+			const tokenData = JSON.parse(atob(token.split('.')[1]));
+			document.getElementById('modal-avatar-letra').textContent = nombreDueno.charAt(0).toUpperCase();
+			document.getElementById('modal-nombre-dueno').textContent = nombreDueno;
+			document.getElementById('modal-email-dueno').textContent = tokenData.email || '';
+			document.getElementById('modal-perfil').style.display = 'flex';
+		});
+
+		document.getElementById('btn-cerrar-sesion')?.addEventListener('click', () => {
+			localStorage.removeItem('mino_token');
+			localStorage.removeItem('mino_nombre_dueno');
+			localStorage.removeItem('mino_nombre_michi');
+			token = null;
+			document.getElementById('modal-perfil').style.display = 'none';
+			mostrarPantallaAuth();
+		});
+
+		document.getElementById('modal-perfil')?.addEventListener('click', function(e) {
+			if (e.target === this) this.style.display = 'none';
+		});
+
+		// ============================================
+		// UX: MOSTRAR/OCULTAR CONTRASEÑA
+		// ============================================
+		document.getElementById('btn-toggle-password')?.addEventListener('click', () => {
+			const passwordInput = document.getElementById('auth-password');
+			const iconoElement = document.getElementById('icono-password');
+
+			if (passwordInput.type === 'password') {
+				passwordInput.type = 'text';
+				iconoElement.textContent = 'visibility_off'; // Cambia el icono al ojo tachado
+			} else {
+				passwordInput.type = 'password';
+				iconoElement.textContent = 'visibility'; // Vuelve al ojo normal
+			}
+		});
+
+		// ============================================
+		// RECUPERACIÓN DE CONTRASEÑA (OTP)
+		// ============================================
+		const authNormal = document.getElementById('auth-normal');
+		const authRecuperacion = document.getElementById('auth-recuperacion');
+		const recPaso1 = document.getElementById('recuperacion-paso-1');
+		const recPaso2 = document.getElementById('recuperacion-paso-2');
+		const errorAuth = document.getElementById('auth-error');
+
+		// Navegación dentro del modal
+		document.getElementById('btn-olvide-password')?.addEventListener('click', () => {
+			authNormal.style.display = 'none';
+			authRecuperacion.style.display = 'block';
+			recPaso1.style.display = 'block';
+			recPaso2.style.display = 'none';
+			errorAuth.classList.add('hidden');
+		});
+
+		document.getElementById('btn-volver-login')?.addEventListener('click', () => {
+			authRecuperacion.style.display = 'none';
+			authNormal.style.display = 'block';
+			errorAuth.classList.add('hidden');
+		});
+
+		// Paso 1: Solicitar código
+		// Función helper para atrapar errores del backend
+		async function extraerError(res) {
+			try {
+				const errorData = await res.json();
+				return errorData.detail || 'Ocurrió un error';
+			} catch {
+				return 'Ocurrió un error de conexión';
+			}
+		}
+
+		// Lógica del temporizador (60 segundos)
+		function iniciarTimerReenvio() {
+			const btnReenviar = document.getElementById('btn-reenviar-codigo');
+			const timerText = document.getElementById('timer-reenvio');
+			const spanSegundos = document.getElementById('segundos-reenvio');
+
+			btnReenviar.disabled = true;
+			timerText.classList.remove('hidden');
+
+			let segundos = 60;
+			spanSegundos.textContent = segundos;
+
+			const intervalo = setInterval(() => {
+				segundos--;
+				spanSegundos.textContent = segundos;
+
+				if (segundos <= 0) {
+					clearInterval(intervalo);
+					btnReenviar.disabled = false;
+					timerText.classList.add('hidden');
+				}
+			}, 1000);
+		}
+
+		// Paso 1: Solicitar código (Reutilizable para el botón de reenvío)
+		async function solicitarCodigoOTP() {
+			const email = document.getElementById('recuperacion-email').value.trim();
+			if (!email) {
+				errorAuth.textContent = 'Ingresa tu correo';
+				errorAuth.classList.remove('hidden');
+				return false;
+			}
+
+			try {
+				const res = await fetch(`${API}/auth/solicitar-codigo`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ email })
+				});
+
+				if (!res.ok) {
+					const errorMsg = await extraerError(res);
+					throw new Error(errorMsg);
+				}
+
+				mostrarToast('Código enviado a tu correo');
+				iniciarTimerReenvio(); // Arranca el bloqueo de 60s
+				return true;
+			} catch (e) {
+				errorAuth.textContent = e.message;
+				errorAuth.classList.remove('hidden');
+				return false;
+			}
+		}
+
+		// Evento: Clic en primer envío
+		document.getElementById('btn-enviar-codigo')?.addEventListener('click', async (e) => {
+			const btn = e.target;
+			btn.textContent = 'Enviando...';
+			btn.disabled = true;
+
+			const exito = await solicitarCodigoOTP();
+			if (exito) {
+				recPaso1.style.display = 'none';
+				recPaso2.style.display = 'block';
+				errorAuth.classList.add('hidden');
+			}
+
+			btn.textContent = 'Enviar código';
+			btn.disabled = false;
+		});
+
+		// Evento: Clic en botón de reenvío
+		document.getElementById('btn-reenviar-codigo')?.addEventListener('click', async () => {
+			errorAuth.classList.add('hidden');
+			await solicitarCodigoOTP();
+		});
+
+		// Paso 2: Enviar código + nueva contraseña
+		document.getElementById('btn-guardar-nueva-password')?.addEventListener('click', async () => {
+			const email = document.getElementById('recuperacion-email').value.trim();
+			const codigo = document.getElementById('recuperacion-codigo').value.trim();
+			const nueva_password = document.getElementById('recuperacion-nueva-password').value;
+
+			if (!codigo || !nueva_password) {
+				errorAuth.textContent = 'Llena todos los campos';
+				errorAuth.classList.remove('hidden');
+				return;
+			}
+
+			const btn = document.getElementById('btn-guardar-nueva-password');
+			btn.textContent = 'Guardando...';
+			btn.disabled = true;
+
+			try {
+				const res = await fetch(`${API}/auth/restablecer-password`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ email, codigo, nueva_password })
+				});
+
+				// Si el backend tiró un error (ej. contraseña igual), disparamos el catch con el mensaje
+				if (!res.ok) {
+					const errorMsg = await extraerError(res);
+					throw new Error(errorMsg);
+				}
+
+				mostrarToast('Contraseña actualizada con éxito');
+
+				document.getElementById('auth-email').value = email;
+				document.getElementById('auth-password').value = nueva_password;
+
+				authRecuperacion.style.display = 'none';
+				authNormal.style.display = 'block';
+
+				await handleLogin();
+
+			} catch (e) {
+				// Imprime el error exacto que mandó FastAPI ("La nueva contraseña debe ser diferente...", etc.)
+				errorAuth.textContent = e.message; 
+				errorAuth.classList.remove('hidden');
+			} finally {
+				btn.textContent = 'Guardar y entrar';
+				btn.disabled = false;
+			}
+		});
+
+		init();
+	</script>
+	</body></html>
