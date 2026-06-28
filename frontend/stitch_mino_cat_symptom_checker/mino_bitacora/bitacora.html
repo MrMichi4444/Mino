@@ -847,17 +847,16 @@ body {
 				mostrarPantallaAuth();
 				return;
 			}
+    			
+			const tokenData = JSON.parse(atob(token.split('.')[1]));
+			const correo = tokenData.email || '';
+			let nombreDueno = correo.split('@')[0];
+			nombreDueno = nombreDueno.charAt(0).toUpperCase() + nombreDueno.slice(1);
+			localStorage.setItem('mino_nombre_dueno', nombreDueno);
 
 			try {
 				const gato = await apiGet('/gato');
-				// Sacar nombre del correo
-				const tokenData = JSON.parse(atob(token.split('.')[1]));
-				const correo = tokenData.email || '';
-				nombreDueno = correo.split('@')[0];
-				// Capitalizar primera letra
-				nombreDueno = nombreDueno.charAt(0).toUpperCase() + nombreDueno.slice(1);
-				localStorage.setItem('mino_nombre_dueno', nombreDueno);
-
+				
 				if (saludoDueno) saludoDueno.textContent = `¡Hola ${nombreDueno}!`;
 				if (avatarDueno) avatarDueno.textContent = nombreDueno.charAt(0).toUpperCase();
 				nombreMichi = gato.nombre;
