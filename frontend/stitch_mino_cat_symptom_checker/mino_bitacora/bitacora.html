@@ -615,7 +615,7 @@ body {
 								class="w-full border border-outline-variant rounded-xl px-4 py-3 mb-4 text-body-md focus:outline-none focus:border-primary">
 
 			<div class="bg-primary-fixed/20 p-3 rounded-xl mb-4 border border-primary-fixed">
-				<p class="text-label-sm text-on-surface-variant mb-2"><strong>Reto de 3 días:</strong> Déjanos tu WhatsApp para enviarte un recordatorio y ayudarte a desbloquear el Perfil Base de tu michi.</p>
+				<p class="text-label-sm text-on-surface-variant mb-2"><strong>IMPORTANTE</strong> Déjanos tu WhatsApp para enviarte un recordatorio y ayudarte a cuidar a tu michi.</p>
 				<input id="onboarding-telefono" type="tel" placeholder="WhatsApp (10 dígitos)" maxlength="10"
 													       class="w-full border border-outline-variant rounded-xl px-4 py-3 text-body-md focus:outline-none focus:border-primary">
 			</div>
@@ -855,7 +855,9 @@ body {
 			localStorage.setItem('mino_nombre_dueno', nombreDueno);
 
 			try {
+				console.log("Intentando buscar gato en la BD...");
 				const gato = await apiGet('/gato');
+				console.log("¡Gato encontrado!", gato);
 				
 				if (saludoDueno) saludoDueno.textContent = `¡Hola ${nombreDueno}!`;
 				if (avatarDueno) avatarDueno.textContent = nombreDueno.charAt(0).toUpperCase();
@@ -872,6 +874,8 @@ body {
 				}
 
 			} catch (e) {
+				console.error("El backend escupió un error:", e);
+    				console.log("El detalle del error es:", e.detail);
 				// 1. Enviar el error real a tu servidor para que dejes de adivinar
 				fetch('https://mino-backend-vs9z.onrender.com/log-error', {
 					method: 'POST',
@@ -885,10 +889,11 @@ body {
 
 				// 2. Continúa con tu lógica normal de UI
 				if (e.detail === 'No tienes un gato registrado') {
-					document.getElementById('modal-onboarding').style.display = 'flex';
+					console.log("No hay gato. Abriendo modal de onboarding.");
+        				document.getElementById('modal-onboarding').style.display = 'flex';
 				} else {
-					localStorage.removeItem('mino_token');
-					mostrarPantallaAuth();
+					console.log("Error distinto a 404. Mostrando alerta al usuario.");
+        				mostrarToast('Error de conexión. Intenta recargar la página.', true);
 				}
 			}
 		}
